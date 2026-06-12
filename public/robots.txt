@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rrrtx.com/sitemap.xml
+
+Disallow: /dashboard/
+Disallow: /api/

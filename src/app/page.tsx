@@ -6,6 +6,7 @@ import { ProblemSection } from "@/components/ProblemSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { ProcessStrip } from "@/components/ProcessStrip";
 import { FeaturedWork } from "@/components/FeaturedWork";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SecondaryServices } from "@/components/SecondaryServices";
 import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
@@ -22,6 +23,7 @@ export default function Home() {
       <ServicesGrid />
       <ProcessStrip />
       <FeaturedWork />
+      <TestimonialsSection />
       <SecondaryServices />
       <PricingSection />
       <CTASection />

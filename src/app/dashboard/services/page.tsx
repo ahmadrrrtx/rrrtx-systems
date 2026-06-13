@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Plus, Trash, CheckCircle, XCircle } from "lucide-react";
+import { Plus, Trash, CheckCircle, Pencil } from "lucide-react";
 
 interface Service {
   id: number;
@@ -19,6 +19,7 @@ export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Service | null>(null);
   const [formData, setFormData] = useState({
     slug: "",
     title: "",
@@ -47,25 +48,36 @@ export default function ServicesPage() {
     }
   };
 
+  const openEdit = (s: Service) => {
+    setEditing(s);
+    setFormData({
+      slug: s.slug,
+      title: s.title,
+      shortDescription: s.shortDescription || "",
+      iconName: "",
+      isPrimary: s.isPrimary ?? false,
+      isAddon: s.isAddon ?? false,
+      sortOrder: s.sortOrder ?? 0,
+    });
+    setShowForm(true);
+  };
+
+  const resetForm = () => {
+    setEditing(null);
+    setFormData({ slug: "", title: "", shortDescription: "", iconName: "", isPrimary: false, isAddon: false, sortOrder: 0 });
+    setShowForm(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/services", {
-        method: "POST",
+        method: editing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(editing ? { id: editing.id, ...formData } : formData),
       });
       if (res.ok) {
-        setFormData({
-          slug: "",
-          title: "",
-          shortDescription: "",
-          iconName: "",
-          isPrimary: false,
-          isAddon: false,
-          sortOrder: 0,
-        });
-        setShowForm(false);
+        resetForm();
         fetchServices();
       }
     } catch (err) {
@@ -86,6 +98,16 @@ export default function ServicesPage() {
     }
   };
 
+  const deleteService = async (id: number) => {
+    if (!confirm("Delete this service?")) return;
+    try {
+      const res = await fetch(`/api/services?id=${id}`, { method: "DELETE" });
+      if (res.ok) fetchServices();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -95,7 +117,7 @@ export default function ServicesPage() {
             <p className="text-sm text-slate-400">Manage public-facing service offerings.</p>
           </div>
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => { editing ? resetForm() : setShowForm(!showForm); }}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -167,7 +189,7 @@ export default function ServicesPage() {
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
             >
-              Save Service
+              {editing ? "Update Service" : "Save Service"}
             </button>
           </form>
         )}
@@ -208,16 +230,33 @@ export default function ServicesPage() {
                     <p className="text-xs text-slate-500 mt-1">{service.shortDescription}</p>
                   )}
                 </div>
-                <button
-                  onClick={() => toggleActive(service.id, service.isActive)}
-                  className={`p-2 rounded-lg transition-colors ${
-                    service.isActive
-                      ? "text-green-400 hover:bg-green-500/10"
-                      : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"
-                  }`}
-                >
-                  <CheckCircle className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => toggleActive(service.id, service.isActive)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      service.isActive
+                        ? "text-green-400 hover:bg-green-500/10"
+                        : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+                    }`}
+                    title="Toggle Active"
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => openEdit(service)}
+                    className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                    title="Edit"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => deleteService(service.id)}
+                    className="p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

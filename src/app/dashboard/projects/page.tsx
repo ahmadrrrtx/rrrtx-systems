@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ExternalLink, CheckCircle, XCircle, Edit, Trash, Plus } from "lucide-react";
+import { ExternalLink, CheckCircle, XCircle, Edit, Trash, Plus, Pencil } from "lucide-react";
 
 interface Project {
   id: number;
@@ -23,6 +23,7 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
     slug: "",
     title: "",
@@ -53,27 +54,38 @@ export default function ProjectsPage() {
     }
   };
 
+  const openEdit = (p: Project) => {
+    setEditing(p);
+    setFormData({
+      slug: p.slug,
+      title: p.title,
+      clientName: p.clientName || "",
+      industry: p.industry || "",
+      challenge: p.challenge || "",
+      solution: p.solution || "",
+      results: p.results || "",
+      imageUrl: p.imageUrl || "",
+      featured: p.featured ?? false,
+    });
+    setShowForm(true);
+  };
+
+  const resetForm = () => {
+    setEditing(null);
+    setFormData({ slug: "", title: "", clientName: "", industry: "", challenge: "", solution: "", results: "", imageUrl: "", featured: false });
+    setShowForm(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/projects", {
-        method: "POST",
+        method: editing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(editing ? { id: editing.id, ...formData } : formData),
       });
       if (res.ok) {
-        setFormData({
-          slug: "",
-          title: "",
-          clientName: "",
-          industry: "",
-          challenge: "",
-          solution: "",
-          results: "",
-          imageUrl: "",
-          featured: false,
-        });
-        setShowForm(false);
+        resetForm();
         fetchProjects();
       }
     } catch (err) {
@@ -113,7 +125,7 @@ export default function ProjectsPage() {
             <p className="text-sm text-slate-400">Add, edit, or remove case studies.</p>
           </div>
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => { editing ? resetForm() : setShowForm(!showForm); }}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -195,7 +207,7 @@ export default function ProjectsPage() {
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
             >
-              Save Project
+              {editing ? "Update Project" : "Save Project"}
             </button>
           </form>
         )}
@@ -225,6 +237,13 @@ export default function ProjectsPage() {
                       title={project.featured ? "Unfeature" : "Feature"}
                     >
                       <CheckCircle className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => openEdit(project)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                      title="Edit"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => deleteProject(project.id)}

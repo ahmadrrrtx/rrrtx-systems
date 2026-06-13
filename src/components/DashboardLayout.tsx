@@ -13,6 +13,10 @@ import {
   Image as ImageIcon,
   ChevronRight,
   LogOut,
+  Star,
+  Users,
+  DollarSign,
+  Settings,
 } from "lucide-react";
 
 const navItems = [
@@ -20,8 +24,12 @@ const navItems = [
   { href: "/dashboard/leads", icon: Inbox, label: "Leads" },
   { href: "/dashboard/projects", icon: FolderOpen, label: "Portfolio" },
   { href: "/dashboard/services", icon: Layers, label: "Services" },
+  { href: "/dashboard/testimonials", icon: Star, label: "Testimonials" },
+  { href: "/dashboard/team", icon: Users, label: "Team" },
+  { href: "/dashboard/pricing", icon: DollarSign, label: "Pricing" },
   { href: "/dashboard/prompt-bundles", icon: MessageSquare, label: "Prompt Bundles" },
   { href: "/dashboard/assets", icon: ImageIcon, label: "Assets" },
+  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -54,7 +62,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
-
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -75,7 +82,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-
         <div className="p-4 border-t border-white/5">
           <button
             onClick={handleLogout}

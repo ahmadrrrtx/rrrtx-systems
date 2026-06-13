@@ -90,3 +90,38 @@ export const siteSettings = sqliteTable("site_settings", {
   value: text("value"),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const testimonials = sqliteTable("testimonials", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  role: text("role"),
+  company: text("company"),
+  quote: text("quote").notNull(),
+  rating: integer("rating").default(5),
+  imageUrl: text("image_url"),
+  featured: integer("featured", { mode: "boolean" }).default(false),
+  sortOrder: integer("sort_order").default(0),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const teamMembers = sqliteTable("team_members", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  bio: text("bio"),
+  imageUrl: text("image_url"),
+  linkedinUrl: text("linkedin_url"),
+  twitterUrl: text("twitter_url"),
+  sortOrder: integer("sort_order").default(0),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const contentPages = sqliteTable("content_pages", {
+  slug: text("slug").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  metaDescription: text("meta_description"),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

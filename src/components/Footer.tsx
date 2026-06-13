@@ -23,6 +23,8 @@ const footerLinks = {
     { label: "GitHub", href: "https://github.com/ahmadrrrtx" },
     { label: "LinkedIn", href: "#" },
     { label: "Blog", href: "#" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
   ],
 };
 
@@ -51,7 +53,6 @@ export function Footer() {
               Custom ecommerce and AI systems built from scratch for brands that outgrew templates.
             </p>
           </div>
-
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
@@ -73,7 +74,6 @@ export function Footer() {
             </div>
           ))}
         </div>
-
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-slate-600">
             © {new Date().getFullYear()} RRRTX SYSTEMS. All rights reserved.

@@ -7,7 +7,7 @@ import { ThreeScene } from "./ThreeScene";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-20 lg:pt-0">
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-28 lg:pt-32 pb-16 lg:pb-20">
       {/* Three.js background scene */}
       <ThreeScene />
       {/* Top scrim: keeps the logo/navbar area clean so 3D objects fade behind it */}

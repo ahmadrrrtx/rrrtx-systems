@@ -81,9 +81,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // Update this with your real Google Search Console verification code
   verification: {
-    google: "<meta name="google-site-verification" content="9-jRhVByBYlb2jgafUcKOiYgAHckrSkww87NTkR8Uws" />",
+    google: "9-jRhVByBYlb2jgafUcKOiYgAHckrSkww87NTkR8Uws",
   },
   category: "technology",
 };

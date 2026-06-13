@@ -6,7 +6,16 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Check, ArrowRight, Sparkles, HelpCircle } from "lucide-react";
 
-const tiers = [
+type Tier = {
+  name: string;
+  range: string;
+  description: string;
+  features: string[];
+  cta: string;
+  popular: boolean;
+};
+
+const defaultTiers: Tier[] = [
   {
     name: "Discovery & Strategy",
     range: "$500 – $2,500",
@@ -72,7 +81,8 @@ const faqs = [
   },
 ];
 
-export function PricingPageClient() {
+export function PricingPageClient({ items }: { items?: Tier[] }) {
+  const tiers = items && items.length > 0 ? items : defaultTiers;
   return (
     <main className="min-h-screen bg-[#020617]">
       <Navbar />

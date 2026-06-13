@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { ServicesPageClient } from "./services-client";
+import { getPublicServices } from "@/lib/queries";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Custom Ecommerce, AI Automation & Lead Generation Services",
@@ -12,6 +15,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ServicesPage() {
-  return <ServicesPageClient />;
+export default async function ServicesPage() {
+  const dbServices = await getPublicServices();
+  const items = dbServices.map((s) => ({
+    iconName: s.iconName,
+    title: s.title,
+    description: s.shortDescription || s.fullDescription || "",
+    href: `/services/${s.slug}`,
+    tags: [] as string[],
+  }));
+
+  return <ServicesPageClient items={items.length ? items : undefined} />;
 }

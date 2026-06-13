@@ -1,16 +1,13 @@
-import { db } from "@/lib/db";
-import { testimonials } from "@/lib/schema";
-import { eq, and, asc } from "drizzle-orm";
+import { getFeaturedTestimonials } from "@/lib/queries";
 import { SectionWrapper } from "./SectionWrapper";
 import { Star } from "lucide-react";
 
 export async function TestimonialsSection() {
-  const rows = await db
-    .select()
-    .from(testimonials)
-    .where(and(eq(testimonials.isActive, true), eq(testimonials.featured, true)))
-    .orderBy(asc(testimonials.sortOrder));
+  // Safe fetch: returns [] on any error (missing table, DB down) so the build
+  // and the public site never crash.
+  const rows = await getFeaturedTestimonials();
 
+  // If there are no featured testimonials, render nothing (same as before).
   if (rows.length === 0) return null;
 
   return (
@@ -43,6 +40,7 @@ export async function TestimonialsSection() {
               </p>
               <div className="flex items-center gap-3">
                 {t.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={t.imageUrl} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-slate-700" />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold">

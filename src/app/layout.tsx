@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { StructuredData } from "@/components/StructuredData";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SITE_URL } from "@/lib/site-config";
 
 const inter = Inter({
@@ -101,6 +102,7 @@ export default function RootLayout({
         <meta name="color-scheme" content="dark" />
       </head>
       <body className={`${inter.variable} font-sans bg-[#020617] text-white antialiased`}>
+        <GoogleAnalytics />
         <StructuredData />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>

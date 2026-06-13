@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { db } from "@/lib/db";
-import { contentPages } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { getContentPage } from "@/lib/queries";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -20,8 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TermsPage() {
-  const rows = await db.select().from(contentPages).where(eq(contentPages.slug, "terms")).limit(1);
-  const page = rows[0];
+  const page = await getContentPage("terms");
 
   const fallbackTitle = "Terms of Service";
   const fallbackContent =

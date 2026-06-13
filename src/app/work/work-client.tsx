@@ -6,7 +6,18 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ExternalLink, Code } from "lucide-react";
 
-const projects = [
+type WorkItem = {
+  client: string;
+  industry: string;
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  tags: string[];
+  metrics: string;
+};
+
+const defaultProjects: WorkItem[] = [
   {
     client: "Janjua Sports",
     industry: "Ecommerce / DTC",
@@ -42,7 +53,8 @@ const projects = [
   },
 ];
 
-export function WorkPageClient() {
+export function WorkPageClient({ items }: { items?: WorkItem[] }) {
+  const projects = items && items.length > 0 ? items : defaultProjects;
   return (
     <main className="relative min-h-screen bg-[#020617]">
       <Navbar />

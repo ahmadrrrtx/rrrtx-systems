@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ExternalLink, CheckCircle, XCircle, Edit, Trash, Plus, Pencil } from "lucide-react";
+import { ExternalLink, CheckCircle, XCircle, Edit, Trash, Plus, Pencil, Eye, EyeOff } from "lucide-react";
 
 interface Project {
   id: number;
@@ -34,6 +34,7 @@ export default function ProjectsPage() {
     results: "",
     imageUrl: "",
     featured: false,
+    status: "draft",
   });
 
   useEffect(() => {
@@ -66,13 +67,14 @@ export default function ProjectsPage() {
       results: p.results || "",
       imageUrl: p.imageUrl || "",
       featured: p.featured ?? false,
+      status: p.status || "draft",
     });
     setShowForm(true);
   };
 
   const resetForm = () => {
     setEditing(null);
-    setFormData({ slug: "", title: "", clientName: "", industry: "", challenge: "", solution: "", results: "", imageUrl: "", featured: false });
+    setFormData({ slug: "", title: "", clientName: "", industry: "", challenge: "", solution: "", results: "", imageUrl: "", featured: false, status: "draft" });
     setShowForm(false);
   };
 
@@ -99,6 +101,20 @@ export default function ProjectsPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, featured: !featured }),
+      });
+      if (res.ok) fetchProjects();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const togglePublish = async (id: number, status: string) => {
+    try {
+      const next = status === "published" ? "draft" : "published";
+      const res = await fetch("/api/projects", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: next }),
       });
       if (res.ok) fetchProjects();
     } catch (err) {
@@ -203,6 +219,19 @@ export default function ProjectsPage() {
               />
               <label htmlFor="featured" className="text-sm text-slate-300">Featured on homepage</label>
             </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="status" className="text-sm text-slate-300">Status</label>
+              <select
+                id="status"
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan-500/50"
+              >
+                <option value="draft">Draft (hidden)</option>
+                <option value="published">Published (live)</option>
+              </select>
+              <span className="text-xs text-slate-500">Only published projects show on the public site.</span>
+            </div>
             <button
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
@@ -229,6 +258,15 @@ export default function ProjectsPage() {
                     <p className="text-xs text-slate-400">{project.clientName} · {project.industry}</p>
                   </div>
                   <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => togglePublish(project.id, project.status)}
+                      className={`p-1.5 rounded-lg transition-colors ${
+                        project.status === "published" ? "text-green-400 bg-green-500/10" : "text-slate-500 hover:text-white"
+                      }`}
+                      title={project.status === "published" ? "Unpublish" : "Publish"}
+                    >
+                      {project.status === "published" ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    </button>
                     <button
                       onClick={() => toggleFeatured(project.id, project.featured)}
                       className={`p-1.5 rounded-lg transition-colors ${

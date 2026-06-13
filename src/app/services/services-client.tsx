@@ -4,9 +4,19 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ShoppingCart, Bot, Target, RefreshCw, MessageSquare, Search } from "lucide-react";
+import { ArrowRight, ShoppingCart, Bot, Target, RefreshCw, MessageSquare, Search, type LucideIcon } from "lucide-react";
+import { getIcon } from "@/lib/icon-map";
 
-const allServices = [
+type ServiceItem = {
+  icon?: LucideIcon;
+  iconName?: string | null;
+  title: string;
+  description: string;
+  href: string;
+  tags: string[];
+};
+
+const allServices: ServiceItem[] = [
   {
     icon: ShoppingCart,
     title: "Custom Ecommerce",
@@ -51,7 +61,8 @@ const allServices = [
   },
 ];
 
-export function ServicesPageClient() {
+export function ServicesPageClient({ items }: { items?: ServiceItem[] }) {
+  const services = items && items.length > 0 ? items : allServices;
   return (
     <main className="relative min-h-screen bg-[#020617]">
       <Navbar />
@@ -77,7 +88,9 @@ export function ServicesPageClient() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allServices.map((service, i) => (
+            {services.map((service, i) => {
+              const Icon = service.icon || getIcon(service.iconName);
+              return (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -89,7 +102,7 @@ export function ServicesPageClient() {
                   className="group block h-full p-8 rounded-2xl bg-slate-950/40 border border-slate-800/50 hover:border-slate-700/80 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 mb-6">
-                    <service.icon className="w-5 h-5 text-white" />
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">
                     {service.title}
@@ -109,7 +122,8 @@ export function ServicesPageClient() {
                   </span>
                 </Link>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

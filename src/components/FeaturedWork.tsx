@@ -3,9 +3,20 @@
 import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Code, Play } from "lucide-react";
+import { ArrowRight, ExternalLink, Code } from "lucide-react";
 
-const projects = [
+type WorkItem = {
+  client: string;
+  industry: string;
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  tags: string[];
+  metrics: string;
+};
+
+const defaultProjects: WorkItem[] = [
   {
     client: "Janjua Sports",
     industry: "Ecommerce / DTC",
@@ -41,7 +52,8 @@ const projects = [
   },
 ];
 
-export function FeaturedWork() {
+export function FeaturedWork({ items }: { items?: WorkItem[] }) {
+  const projects = items && items.length > 0 ? items : defaultProjects;
   return (
     <SectionWrapper id="work" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">

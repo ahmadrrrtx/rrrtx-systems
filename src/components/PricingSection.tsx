@@ -5,7 +5,16 @@ import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
 import { Check, ArrowRight, Sparkles } from "lucide-react";
 
-const tiers = [
+type Tier = {
+  name: string;
+  range: string;
+  description: string;
+  features: string[];
+  cta: string;
+  popular: boolean;
+};
+
+const defaultTiers: Tier[] = [
   {
     name: "Discovery & Strategy",
     range: "$500 – $2,500",
@@ -52,7 +61,8 @@ const tiers = [
   },
 ];
 
-export function PricingSection() {
+export function PricingSection({ items }: { items?: Tier[] }) {
+  const tiers = items && items.length > 0 ? items : defaultTiers;
   return (
     <SectionWrapper id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">

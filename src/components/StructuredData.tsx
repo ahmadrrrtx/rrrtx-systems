@@ -14,7 +14,7 @@ export function StructuredData() {
       "Premium custom ecommerce and AI automation systems built from scratch. Engineering-first product studio.",
     sameAs: [
       "https://github.com/ahmadrrrtx",
-      "https://www.linkedin.com/in/ahmadrrrtx",
+      "https://www.linkedin.com/company/133734086",
     ],
     contactPoint: {
       "@type": "ContactPoint",

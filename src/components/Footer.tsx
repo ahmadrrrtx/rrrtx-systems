@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { LinkedinIcon, GithubIcon } from "./SocialIcons";
+
+const LINKEDIN_URL = "https://www.linkedin.com/company/133734086";
+const GITHUB_URL = "https://github.com/ahmadrrrtx";
 
 const footerLinks = {
   Services: [
@@ -20,9 +24,8 @@ const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   Resources: [
-    { label: "GitHub", href: "https://github.com/ahmadrrrtx" },
-    { label: "LinkedIn", href: "#" },
-    { label: "Blog", href: "#" },
+    { label: "GitHub", href: GITHUB_URL },
+    { label: "LinkedIn", href: LINKEDIN_URL },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
   ],
@@ -52,6 +55,26 @@ export function Footer() {
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Custom ecommerce and AI systems built from scratch for brands that outgrew templates.
             </p>
+            <div className="flex items-center gap-3 mt-5">
+              <Link
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="RRRTX SYSTEMS on LinkedIn"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-slate-600 transition-colors"
+              >
+                <LinkedinIcon className="w-4 h-4" />
+              </Link>
+              <Link
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="RRRTX SYSTEMS on GitHub"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-slate-600 transition-colors"
+              >
+                <GithubIcon className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([category, links]) => (

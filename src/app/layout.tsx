@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   },
   // Update this with your real Google Search Console verification code
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION",
+    google: "<meta name="google-site-verification" content="9-jRhVByBYlb2jgafUcKOiYgAHckrSkww87NTkR8Uws" />",
   },
   category: "technology",
 };

@@ -3,22 +3,24 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
+import { ThreeScene } from "./ThreeScene";
 
 const pills = ["AI AUTOMATION", "WEBSITES", "LEAD GENERATION"];
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-32 pb-16">
-      {/* Background gradient glows only — clean, no 3D clutter */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-20 lg:pt-0">
+      {/* Three.js background scene */}
+      <ThreeScene />
+      <div className="absolute inset-0 pointer-events-none z-[1]">
         <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start lg:items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           {/* Left Content */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Pills */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -26,7 +28,7 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="flex flex-wrap gap-2"
             >
-              {pills.map((pill) => (
+              {pills.map((pill, i) => (
                 <span
                   key={pill}
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wider uppercase border border-slate-700/80 bg-slate-900/50 text-slate-300"
@@ -90,22 +92,47 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right Visual — clean, no 3D background clutter */}
+          {/* Right Visual */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative hidden lg:block"
           >
-            <div className="relative aspect-[4/3] max-w-[550px] mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-2xl blur-3xl" />
+            <div className="relative aspect-square max-w-[600px] mx-auto">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-3xl" />
               <motion.img
                 src="/assets/hero-holographic-hand.png"
                 alt="AI Systems Visualization"
-                className="relative w-full h-full object-contain rounded-2xl drop-shadow-2xl"
+                className="relative w-full h-full object-contain drop-shadow-2xl"
                 animate={{ y: [0, -12, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               />
+              {/* Floating UI Cards overlay */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute top-10 right-0 glass-card px-4 py-3"
+              >
+                <div className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">AI Automations</div>
+                <div className="text-sm font-semibold text-cyan-400">Workflows that save time</div>
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute top-1/3 -left-4 glass-card px-4 py-3"
+              >
+                <div className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Lead Generation</div>
+                <div className="text-sm font-semibold text-purple-400">Get qualified leads on autopilot</div>
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                className="absolute bottom-20 right-4 glass-card px-4 py-3"
+              >
+                <div className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">High-Converting Websites</div>
+                <div className="text-sm font-semibold text-blue-400">Websites designed to attract & convert</div>
+              </motion.div>
             </div>
           </motion.div>
         </div>

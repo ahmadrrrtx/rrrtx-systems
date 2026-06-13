@@ -1,14 +1,15 @@
 "use client";
 
 import Script from "next/script";
+import { SITE_URL } from "@/lib/site-config";
 
 export function StructuredData() {
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "RRRTX SYSTEMS",
-    url: "https://rrrtx.com",
-    logo: "https://rrrtx.com/assets/rrrtx-logo.png",
+    url: SITE_URL,
+    logo: `${SITE_URL}/assets/rrrtx-logo.png`,
     description:
       "Premium custom ecommerce and AI automation systems built from scratch. Engineering-first product studio.",
     sameAs: [
@@ -19,7 +20,7 @@ export function StructuredData() {
       "@type": "ContactPoint",
       contactType: "sales",
       availableLanguage: ["English"],
-      url: "https://rrrtx.com/contact",
+      url: `${SITE_URL}/contact`,
     },
     areaServed: {
       "@type": "GeoShape",
@@ -31,8 +32,8 @@ export function StructuredData() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "RRRTX SYSTEMS",
-    image: "https://rrrtx.com/assets/rrrtx-logo.png",
-    url: "https://rrrtx.com",
+    image: `${SITE_URL}/assets/rrrtx-logo.png`,
+    url: SITE_URL,
     description:
       "Custom ecommerce websites and AI automation systems built from scratch. Product studio for conversion-focused brands.",
     areaServed: "Global",
@@ -83,10 +84,10 @@ export function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "RRRTX SYSTEMS",
-    url: "https://rrrtx.com",
+    url: SITE_URL,
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://rrrtx.com/search?q={search_term_string}",
+      target: `${SITE_URL}/search?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
   };

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
@@ -11,6 +12,18 @@ import { SecondaryServices } from "@/components/SecondaryServices";
 import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Custom Ecommerce & AI Systems Built to Convert",
+  description:
+    "Premium custom ecommerce websites and AI automation systems built from scratch. Next.js, Python agents, conversion-first engineering. No templates. No limits.",
+  openGraph: {
+    title: "Custom Ecommerce & AI Systems Built to Convert | RRRTX SYSTEMS",
+    description:
+      "Premium custom ecommerce websites and AI automation systems built from scratch. Engineering-first product studio.",
+    url: "/",
+  },
+};
 
 export default function Home() {
   return (

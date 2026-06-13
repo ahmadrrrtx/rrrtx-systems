@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { StructuredData } from "@/components/StructuredData";
+import { SITE_URL } from "@/lib/site-config";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | RRRTX SYSTEMS",
   },
   description:
-    "We build premium custom ecommerce websites and AI automation systems from scratch. Engineering-first product studio for brands that outgrew templates. Custom Next.js, Python agents, and conversion infrastructure.",
+    "Premium custom ecommerce websites and AI automation systems built from scratch. Engineering-first product studio for brands that outgrew templates. Next.js, Python agents, and conversion infrastructure.",
   keywords: [
     "custom ecommerce development",
     "AI automation agency",
@@ -30,21 +31,25 @@ export const metadata: Metadata = {
     "product studio",
     "Vercel deployment",
     "Turso database",
+    "custom website development",
+    "ecommerce website design",
+    "AI business automation",
+    "digital product studio",
   ],
-  authors: [{ name: "RRRTX SYSTEMS", url: "https://rrrtx.com" }],
+  authors: [{ name: "RRRTX SYSTEMS", url: SITE_URL }],
   creator: "RRRTX SYSTEMS",
   publisher: "RRRTX SYSTEMS",
-  metadataBase: new URL("https://rrrtx.com"),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "RRRTX SYSTEMS | Custom Ecommerce & AI Systems Built to Convert",
     description:
-      "We build premium custom ecommerce websites and AI automation systems from scratch. Engineering-first product studio for brands that outgrew templates.",
+      "Premium custom ecommerce websites and AI automation systems built from scratch. Engineering-first product studio for brands that outgrew templates.",
     type: "website",
     locale: "en_US",
-    url: "https://rrrtx.com",
+    url: "/",
     siteName: "RRRTX SYSTEMS",
     images: [
       {
@@ -59,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "RRRTX SYSTEMS | Custom Ecommerce & AI Systems Built to Convert",
     description:
-      "We build premium custom ecommerce websites and AI automation systems from scratch. Engineering-first product studio.",
+      "Premium custom ecommerce websites and AI automation systems built from scratch. Engineering-first product studio.",
     images: ["/assets/og-image.png"],
     creator: "@rrrtx_systems",
   },
@@ -76,6 +81,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // Update this with your real Google Search Console verification code
   verification: {
     google: "YOUR_GOOGLE_VERIFICATION",
   },

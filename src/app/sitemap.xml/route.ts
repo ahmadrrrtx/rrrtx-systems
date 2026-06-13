@@ -1,24 +1,28 @@
 import { db } from "@/lib/db";
 import { services, projects } from "@/lib/schema";
 import { NextResponse } from "next/server";
+import { SITE_URL } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const baseUrl = "https://rrrtx.com";
+  const baseUrl = SITE_URL;
+  const today = new Date().toISOString().split("T")[0];
 
   const staticPages = [
-    { url: `${baseUrl}/`, changefreq: "weekly", priority: 1.0 },
-    { url: `${baseUrl}/work`, changefreq: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/services`, changefreq: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/process`, changefreq: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/pricing`, changefreq: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/about`, changefreq: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/contact`, changefreq: "monthly", priority: 0.9 },
+    { url: `${baseUrl}/`, changefreq: "weekly", priority: 1.0, lastmod: today },
+    { url: `${baseUrl}/work`, changefreq: "weekly", priority: 0.8, lastmod: today },
+    { url: `${baseUrl}/services`, changefreq: "weekly", priority: 0.9, lastmod: today },
+    { url: `${baseUrl}/process`, changefreq: "monthly", priority: 0.7, lastmod: today },
+    { url: `${baseUrl}/pricing`, changefreq: "monthly", priority: 0.8, lastmod: today },
+    { url: `${baseUrl}/about`, changefreq: "monthly", priority: 0.6, lastmod: today },
+    { url: `${baseUrl}/contact`, changefreq: "monthly", priority: 0.9, lastmod: today },
+    { url: `${baseUrl}/privacy`, changefreq: "yearly", priority: 0.3, lastmod: today },
+    { url: `${baseUrl}/terms`, changefreq: "yearly", priority: 0.3, lastmod: today },
   ];
 
-  let servicePages: { url: string; changefreq: string; priority: number }[] = [];
-  let projectPages: { url: string; changefreq: string; priority: number }[] = [];
+  let servicePages: { url: string; changefreq: string; priority: number; lastmod: string }[] = [];
+  let projectPages: { url: string; changefreq: string; priority: number; lastmod: string }[] = [];
 
   try {
     const allServices = await db.select().from(services);
@@ -26,6 +30,7 @@ export async function GET() {
       url: `${baseUrl}/services/${s.slug}`,
       changefreq: "monthly",
       priority: 0.7,
+      lastmod: today,
     }));
 
     const allProjects = await db.select().from(projects);
@@ -33,6 +38,7 @@ export async function GET() {
       url: `${baseUrl}/work/${p.slug}`,
       changefreq: "monthly",
       priority: 0.6,
+      lastmod: today,
     }));
   } catch (e) {
     console.error("Sitemap DB fetch failed, using static pages only:", e);
@@ -46,7 +52,7 @@ ${allPages
   .map(
     (page) => `  <url>
     <loc>${page.url}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
+    <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`

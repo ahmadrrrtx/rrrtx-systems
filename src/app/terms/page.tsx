@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { contentPages } from "@/lib/schema";
 import { eq } from "drizzle-orm";
@@ -6,12 +7,25 @@ import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "Terms of Service for RRRTX SYSTEMS. Understand the terms for using our custom ecommerce and AI automation services.",
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Terms of Service | RRRTX SYSTEMS",
+    description: "Terms and conditions for using RRRTX SYSTEMS services.",
+    url: "/terms",
+  },
+};
+
 export default async function TermsPage() {
   const rows = await db.select().from(contentPages).where(eq(contentPages.slug, "terms")).limit(1);
   const page = rows[0];
 
   const fallbackTitle = "Terms of Service";
-  const fallbackContent = "<p>By using this website and engaging RRRTX SYSTEMS, you agree to the following terms.</p><p>All services are provided on a project or retainer basis with agreed scope and timelines. Payments are handled per the signed proposal.</p><p>Intellectual property is transferred upon final payment unless otherwise agreed.</p><p>For disputes, contact us directly to resolve.</p>";
+  const fallbackContent =
+    "<p>By using this website and engaging RRRTX SYSTEMS, you agree to the following terms.</p><p>All services are provided on a project or retainer basis with agreed scope and timelines. Payments are handled per the signed proposal.</p><p>Intellectual property is transferred upon final payment unless otherwise agreed.</p><p>For disputes, contact us directly to resolve.</p>";
 
   return (
     <main className="relative min-h-screen bg-[#020617]">

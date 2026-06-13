@@ -10,6 +10,8 @@ export function Hero() {
     <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-20 lg:pt-0">
       {/* Three.js background scene */}
       <ThreeScene />
+      {/* Top scrim: keeps the logo/navbar area clean so 3D objects fade behind it */}
+      <div className="absolute top-0 left-0 right-0 h-40 lg:h-48 pointer-events-none z-[2] bg-gradient-to-b from-[#020617] via-[#020617]/70 to-transparent" />
       <div className="absolute inset-0 pointer-events-none z-[1]">
         <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]"/>
         <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"/>

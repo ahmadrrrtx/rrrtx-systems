@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { services, projects, pricingTiers, testimonials, teamMembers, contentPages, posts, siteSettings } from "./schema";
+import { services, projects, pricingTiers, testimonials, teamMembers, contentPages, posts, siteSettings, resources } from "./schema";
 import { eq, and, asc, desc } from "drizzle-orm";
 
 /**
@@ -162,5 +162,20 @@ export async function getSetting<T>(key: string, defaultValue: T): Promise<T> {
   } catch (error) {
     console.error(`getSetting error for key ${key}:`, error);
     return defaultValue;
+  }
+}
+
+export type DbResource = typeof resources.$inferSelect;
+
+export async function getPublicResources(): Promise<DbResource[]> {
+  try {
+    return await db
+      .select()
+      .from(resources)
+      .where(eq(resources.isActive, true))
+      .orderBy(asc(resources.sortOrder));
+  } catch (error) {
+    console.error("getPublicResources error:", error);
+    return [];
   }
 }

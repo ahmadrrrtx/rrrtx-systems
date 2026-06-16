@@ -141,3 +141,52 @@ export const posts = sqliteTable("posts", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const auditSubmissions = sqliteTable("audit_submissions", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  websiteUrl: text("website_url").notNull(),
+  businessType: text("business_type"),
+  helpWith: text("help_with"),
+  scores: text("scores"), // JSON string
+  recommendations: text("recommendations"), // JSON string
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const calculatorSubmissions = sqliteTable("calculator_submissions", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name"),
+  email: text("email"),
+  monthlyLeads: integer("monthly_leads"),
+  conversionRate: real("conversion_rate"),
+  averageValue: real("average_value"),
+  currentRevenue: real("current_revenue"),
+  timeSpentManual: real("time_spent_manual"),
+  costManual: real("cost_manual"),
+  expectedImprovement: real("expected_improvement"),
+  results: text("results"), // JSON string
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const resources = sqliteTable("resources", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  title: text("title").notNull(),
+  description: text("description"),
+  coverImageUrl: text("cover_image_url"),
+  category: text("category"), // PDF, Checklist, Guide, Template
+  fileType: text("file_type"), // PDF, XLSX, DOCX
+  downloadUrl: text("download_url").notNull(),
+  isGated: integer("is_gated", { mode: "boolean" }).default(true),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const gatedLeads = sqliteTable("gated_leads", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  resourceId: integer("resource_id").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

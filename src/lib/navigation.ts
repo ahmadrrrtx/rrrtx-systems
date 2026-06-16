@@ -21,6 +21,15 @@ export const defaultNavLinks: NavLink[] = [
       { label: "SEO & AEO", href: "/services/seo" },
     ],
   },
+  {
+    label: "Tools",
+    href: "#",
+    children: [
+      { label: "Free Audit", href: "/audit" },
+      { label: "ROI Calculator", href: "/roi" },
+      { label: "Resource Downloads", href: "/resources" },
+    ],
+  },
   { label: "Process", href: "/process" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
@@ -42,6 +51,9 @@ export const defaultFooterCompany = [
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
+  { label: "Free Audit", href: "/audit" },
+  { label: "ROI Calculator", href: "/roi" },
+  { label: "Resources", href: "/resources" },
   { label: "Contact", href: "/contact" },
 ];
 

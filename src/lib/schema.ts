@@ -125,3 +125,19 @@ export const contentPages = sqliteTable("content_pages", {
   metaDescription: text("meta_description"),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const posts = sqliteTable("posts", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  coverImageUrl: text("cover_image_url"),
+  tags: text("tags"), // stored as a comma-separated list or JSON array
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  status: text("status").default("draft"), // "draft" or "published"
+  publishedAt: integer("published_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

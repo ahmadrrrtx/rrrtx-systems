@@ -5,6 +5,7 @@ import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { StructuredData } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SITE_URL } from "@/lib/site-config";
+import { ChatbotWidget } from "@/components/ChatbotWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -105,6 +106,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <StructuredData />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <ChatbotWidget />
       </body>
     </html>
   );

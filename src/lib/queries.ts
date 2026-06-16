@@ -1,6 +1,6 @@
 import { db } from "./db";
-import { services, projects, pricingTiers, testimonials, teamMembers, contentPages } from "./schema";
-import { eq, and, asc } from "drizzle-orm";
+import { services, projects, pricingTiers, testimonials, teamMembers, contentPages, posts, siteSettings } from "./schema";
+import { eq, and, asc, desc } from "drizzle-orm";
 
 /**
  * Safe, server-side data fetchers for the PUBLIC site.
@@ -112,5 +112,55 @@ export async function getPublicTeam(): Promise<DbTeamMember[]> {
   } catch (error) {
     console.error("getPublicTeam error:", error);
     return [];
+  }
+}
+
+export type DbPost = typeof posts.$inferSelect;
+
+export async function getPublicPosts(): Promise<DbPost[]> {
+  try {
+    return await db
+      .select()
+      .from(posts)
+      .where(eq(posts.status, "published"))
+      .orderBy(desc(posts.publishedAt));
+  } catch (error) {
+    console.error("getPublicPosts error:", error);
+    return [];
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<DbPost | null> {
+  try {
+    const rows = await db
+      .select()
+      .from(posts)
+      .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
+      .limit(1);
+    return rows[0] || null;
+  } catch (error) {
+    console.error("getPostBySlug error:", error);
+    return null;
+  }
+}
+
+export async function getSetting<T>(key: string, defaultValue: T): Promise<T> {
+  try {
+    const rows = await db
+      .select()
+      .from(siteSettings)
+      .where(eq(siteSettings.key, key))
+      .limit(1);
+    if (rows[0] && rows[0].value !== null) {
+      try {
+        return JSON.parse(rows[0].value) as T;
+      } catch {
+        return rows[0].value as unknown as T;
+      }
+    }
+    return defaultValue;
+  } catch (error) {
+    console.error(`getSetting error for key ${key}:`, error);
+    return defaultValue;
   }
 }

@@ -17,6 +17,7 @@ import {
   Users,
   DollarSign,
   Settings,
+  FileText,
 } from "lucide-react";
 
 const navItems = [
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/dashboard/pricing", icon: DollarSign, label: "Pricing" },
   { href: "/dashboard/prompt-bundles", icon: MessageSquare, label: "Prompt Bundles" },
   { href: "/dashboard/assets", icon: ImageIcon, label: "Assets" },
+  { href: "/dashboard/posts", icon: FileText, label: "Blog" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 

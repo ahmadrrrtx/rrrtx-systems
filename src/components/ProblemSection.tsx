@@ -4,14 +4,26 @@ import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import { X, AlertTriangle } from "lucide-react";
 
-const problems = [
+const defaultProblems = [
   "Your Shopify theme looks like every other store in your niche.",
   "AI chatbots were installed, but they don't actually convert visitors.",
   "Your 'automation' is a mess of Zapier spaghetti that breaks weekly.",
   "You paid for a 'custom' site and got a template with different colors.",
 ];
 
-export function ProblemSection() {
+export function ProblemSection({
+  title,
+  description,
+  bullets,
+}: {
+  title?: string;
+  description?: string;
+  bullets?: string[];
+}) {
+  const activeTitle = title || "Templates Aren't Systems.";
+  const activeDesc = description || "Most agencies sell you a prettier template and call it custom. When you need to scale, integrate, or automate, you hit the same wall every time. You don't need a new theme. You need a system built around your business logic.";
+  const activeBullets = bullets && bullets.length > 0 ? bullets : defaultProblems;
+
   return (
     <SectionWrapper id="problem" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -32,20 +44,17 @@ export function ProblemSection() {
             </motion.div>
 
             <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
-              Templates Aren&apos;t Systems.
+              {activeTitle}
             </h2>
             <p className="text-lg text-slate-400 leading-relaxed">
-              Most agencies sell you a prettier template and call it custom. When
-              you need to scale, integrate, or automate, you hit the same wall
-              every time. You don&apos;t need a new theme. You need a system built
-              around your business logic.
+              {activeDesc}
             </p>
           </div>
 
           <div className="space-y-4">
-            {problems.map((problem, i) => (
+            {activeBullets.map((problem, i) => (
               <motion.div
-                key={i}
+                key={`${problem}-${i}`}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}

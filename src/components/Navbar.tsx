@@ -6,7 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Image from "next/image";
 
-const navLinks = [
+interface NavLink {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+const defaultNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   {
@@ -23,6 +29,7 @@ const navLinks = [
   },
   { label: "Process", href: "/process" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
 ];
 
@@ -30,10 +37,29 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const [navLinks, setNavLinks] = useState<NavLink[]>(defaultNavLinks);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
+    
+    // Fetch custom navigation settings if they exist
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.navbar_links) {
+          try {
+            const parsed = JSON.parse(data.navbar_links);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setNavLinks(parsed);
+            }
+          } catch (e) {
+            console.error("Failed to parse dynamic navbar links", e);
+          }
+        }
+      })
+      .catch((err) => console.error(err));
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

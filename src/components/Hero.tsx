@@ -5,7 +5,26 @@ import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
 import { ThreeScene } from "./ThreeScene";
 
-export function Hero() {
+export function Hero({
+  titleLines,
+  subtitle,
+  ctaText,
+  ctaLink,
+}: {
+  titleLines?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}) {
+  const lines = titleLines
+    ? titleLines.split(",").map((l) => l.trim()).filter(Boolean)
+    : ["We Build", "Systems That", "Attract Leads,", "Close Sales & Scale", "Your Business"];
+
+  const defaultSubtitle = "Custom ecommerce websites and AI systems built to convert. We build premium sites from scratch with dashboards, automations, and AI tools that help your brand sell better, work faster, and scale globally.";
+  const activeSubtitle = subtitle || defaultSubtitle;
+  const activeCtaText = ctaText || "Get Your Free Strategy Call";
+  const activeCtaLink = ctaLink || "/contact";
+
   return (
     <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-28 lg:pt-32 pb-16 lg:pb-20">
       {/* Three.js background scene */}
@@ -27,15 +46,15 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight"
             >
-              <span className="text-white">We Build</span>
-              <br/>
-              <span className="text-white">Systems That</span>
-              <br/>
-              <span className="text-gradient">Attract Leads,</span>
-              <br/>
-              <span className="text-gradient">Close Sales & Scale</span>
-              <br/>
-              <span className="text-white">Your Business</span>
+              {lines.map((line, idx) => {
+                const isGradient = idx === 2 || idx === 3 || /lead|sale|scale|convert|roi/i.test(line);
+                return (
+                  <span key={idx} className={isGradient ? "text-gradient" : "text-white"}>
+                    {line}
+                    {idx < lines.length - 1 && <br />}
+                  </span>
+                );
+              })}
             </motion.h1>
 
             {/* Subheadline */}
@@ -45,9 +64,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.35 }}
               className="text-base lg:text-lg text-slate-400 max-w-xl leading-relaxed"
             >
-              Custom ecommerce websites and AI systems built to convert. We build
-              premium sites from scratch with dashboards, automations, and AI tools
-              that help your brand sell better, work faster, and scale globally.
+              {activeSubtitle}
             </motion.p>
 
             {/* CTAs */}
@@ -58,10 +75,10 @@ export function Hero() {
               className="flex flex-wrap gap-4"
             >
               <Link
-                href="/contact"
+                href={activeCtaLink}
                 className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-900/25 hover:shadow-purple-900/40"
               >
-                Get Your Free Strategy Call
+                {activeCtaText}
                 <ArrowRight className="w-4 h-4"/>
               </Link>
               <Link

@@ -13,7 +13,7 @@ import { SecondaryServices } from "@/components/SecondaryServices";
 import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
-import { getPublicServices, getPublicProjects, getPublicPricing } from "@/lib/queries";
+import { getPublicServices, getPublicProjects, getPublicPricing, getSetting } from "@/lib/queries";
 
 // Read live data on every request so dashboard edits appear immediately.
 export const dynamic = "force-dynamic";
@@ -80,13 +80,35 @@ export default async function Home() {
     popular: false,
   }));
 
+  // Fetch customizable Homepage settings from siteSettings key-value store
+  const heroTitle = await getSetting<string>("hero_title", "");
+  const heroSubtitle = await getSetting<string>("hero_subtitle", "");
+  const heroCtaText = await getSetting<string>("hero_cta_text", "");
+  const heroCtaLink = await getSetting<string>("hero_cta_link", "");
+
+  const problemTitle = await getSetting<string>("problem_title", "");
+  const problemDesc = await getSetting<string>("problem_desc", "");
+  const problemBullets = await getSetting<string[]>("problem_bullets", []);
+
+  const trustedIntegrations = await getSetting<string[]>("trusted_integrations", []);
+  const homepageStats = await getSetting<any[]>("homepage_stats", []);
+
   return (
     <main className="relative">
       <Navbar />
-      <Hero />
-      <TrustBar />
-      <StatsBar />
-      <ProblemSection />
+      <Hero
+        titleLines={heroTitle || undefined}
+        subtitle={heroSubtitle || undefined}
+        ctaText={heroCtaText || undefined}
+        ctaLink={heroCtaLink || undefined}
+      />
+      <TrustBar brands={trustedIntegrations.length ? trustedIntegrations : undefined} />
+      <StatsBar stats={homepageStats.length ? homepageStats : undefined} />
+      <ProblemSection
+        title={problemTitle || undefined}
+        description={problemDesc || undefined}
+        bullets={problemBullets.length ? problemBullets : undefined}
+      />
       <ServicesGrid items={serviceItems.length ? serviceItems : undefined} />
       <ProcessStrip />
       <FeaturedWork items={workItems.length ? workItems : undefined} />

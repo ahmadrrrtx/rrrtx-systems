@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RRRTX SYSTEMS | B2B Operations & AI Automation Playbook</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #090d1f;
+      --border: #1e293b;
+      --text: #cbd5e1;
+      --text-white: #ffffff;
+      --cyan: #06b6d4;
+      --purple: #a855f7;
+      --green: #10b981;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .header {
+      background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(168,85,247,0.15));
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--cyan), var(--purple));
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: 1px;
+    }
+    
+    .logo-sub {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+    
+    .title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+      color: var(--purple);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .desc {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+    }
+    
+    .content {
+      padding: 2.5rem 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-b: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .section-title span {
+      background-color: rgba(168,85,247,0.1);
+      border: 1px solid rgba(168,85,247,0.2);
+      color: var(--purple);
+      font-size: 0.85rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    
+    .checklist {
+      list-style-type: none;
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 1rem;
+      background-color: rgba(15,23,42,0.4);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    
+    .check-item:hover {
+      border-color: rgba(168,85,247,0.3);
+    }
+    
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #475569;
+      border-radius: 4px;
+      margin-top: 3px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    
+    .check-item.checked .checkbox {
+      background-color: var(--green);
+      border-color: var(--green);
+    }
+    
+    .check-item.checked .checkbox::after {
+      content: '✓';
+      color: var(--text-white);
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .item-content {
+      flex-1;
+    }
+    
+    .item-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 0.25rem;
+    }
+    
+    .item-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    
+    .cta-box {
+      margin-top: 3rem;
+      padding: 2rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+      border: 1px solid rgba(168,85,247,0.2);
+      text-align: center;
+    }
+    
+    .cta-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+    }
+    
+    .cta-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 1.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #2563eb, #8b5cf6);
+      color: var(--text-white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(139,92,246,0.25);
+      transition: opacity 0.2s;
+    }
+    
+    .cta-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: #475569;
+    }
+    
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+      .title {
+        font-size: 1.5rem;
+      }
+      .content {
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--cyan)"><path d="M12 2L2 12h3v8h14v-8h3L12 2z"/></svg>
+        <span class="logo-text">RRRTX <span class="logo-sub">Systems</span></span>
+      </div>
+      <h1 class="title">B2B Operations &amp; AI Automation Playbook</h1>
+      <p class="subtitle">Operational Overhead Audit &amp; Blueprint</p>
+      <p class="desc">A structured operational playbook created by RRRTX SYSTEMS architects to map high-friction manual data entries, bypass broken Zapier chains, and deploy custom Python agent nodes.</p>
+    </div>
+    
+    <div class="content">
+      <!-- Section 1 -->
+      <h2 class="section-title">1. Operational Friction Identification <span>12 Points</span></h2>
+      <ul class="checklist">
+        <li class="check-item">
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <h4 class="item-title">Copy-Paste CRM Audit</h4>
+            <p class="item-desc">Track times your team copy-pastes client fields between intake forms, Google Sheets, or Slack channels. Map them for automatic payload dispatches.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <h4 class="item-title">Calendar Booking &amp; Reminder Automation</h4>
+            <p class="item-desc">Verify reminders are automatically sent 24h and 1h before strategy consultation calls, auto-routed with personalized pre-filled inputs.</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Section 2 -->
+      <h2 class="section-title">2. Zapier Spaghetti Elimination <span>10 Points</span></h2>
+      <ul class="checklist">
+        <li class="check-item">
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <h4 class="item-title">Custom Server-Side Webhook Receivers</h4>
+            <p class="item-desc">Transition expensive multi-step Zaps onto lightweight cloud webhook handlers. Carries zero recurring task processing fees.</p>
+          </div>
+        </li>
+        <li class="check-item">
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <h4 class="item-title">Unified error logs setup</h4>
+            <p class="item-desc">Ensure any API update payload changes automatically trigger instant channel notification pings rather than failing silently.</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Section 3 -->
+      <h2 class="section-title">3. Custom AI Agent Deployment <span>8 Points</span></h2>
+      <ul class="checklist">
+        <li class="check-item">
+          <div class="checkbox"></div>
+          <div class="item-content">
+            <h4 class="item-title">Autonomous lead scoring scripts</h4>
+            <p class="item-desc">Deploy persistent background Python agents to automatically crawl client URLs and compile credibility scores prior to consultation bookings.</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- CTA Box -->
+      <div class="cta-box">
+        <h3 class="cta-title">Reclaim 20+ Hours of Free Operational Time</h3>
+        <p class="cta-desc">We build persistent, custom background Python automation systems from scratch. Bypassing rigid SaaS templates, we program custom solutions strictly around your workflows.</p>
+        <a href="https://rrrtx-systems.vercel.app/contact" class="cta-btn">Get Your Custom Automation Roadmap <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>© 2026 RRRTX SYSTEMS. Engineered with purpose.</p>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.check-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('checked');
+      });
+    });
+  </script>
+</body>
+</html>

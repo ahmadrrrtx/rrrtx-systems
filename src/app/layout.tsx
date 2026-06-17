@@ -38,10 +38,10 @@ export const metadata: Metadata = {
     "AI business automation",
     "digital product studio",
   ],
-  authors: [{ name: "RRRTX SYSTEMS", url: https://rrrtx-systems.com/ }],
+  authors: [{ name: "RRRTX SYSTEMS", url: "https://rrrtx-systems.com/" }],
   creator: "RRRTX SYSTEMS",
   publisher: "RRRTX SYSTEMS",
-  metadataBase: new URL(https://rrrtx-systems.com/),
+  metadataBase: new URL("https://rrrtx-systems.com/"),
   alternates: {
     canonical: "/",
   },

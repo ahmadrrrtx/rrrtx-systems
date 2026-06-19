@@ -29,10 +29,80 @@ const defaultStack: StackItem[] = [
   { name: "WhatsApp API", category: "Messaging" },
 ];
 
+const rowMeta = [
+  {
+    label: "Frontend & Framework",
+    sublabel: "The client layer — fast, typed, and interactive",
+  },
+  {
+    label: "Backend & Data",
+    sublabel: "The engine — APIs, databases, and intelligent agents",
+  },
+  {
+    label: "Infrastructure & Tools",
+    sublabel: "The backbone — deployment, security, and integrations",
+  },
+];
+
+function Capsule({ name, category }: { name: string; category: string }) {
+  return (
+    <div className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/60 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-300 cursor-default shrink-0">
+      <span className="text-[13px] font-semibold text-white group-hover:text-cyan-400 transition-colors duration-300 whitespace-nowrap">
+        {name}
+      </span>
+      <span className="hidden sm:inline text-[9px] text-slate-600 uppercase tracking-wider whitespace-nowrap">
+        {category}
+      </span>
+    </div>
+  );
+}
+
+function MarqueeCapsuleRow({
+  items,
+  reverse,
+}: {
+  items: StackItem[];
+  reverse?: boolean;
+}) {
+  const doubled = [...items, ...items];
+  return (
+    <div className="relative overflow-hidden">
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#020617] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#020617] to-transparent z-10 pointer-events-none" />
+      <div
+        className={`flex gap-3 whitespace-nowrap ${
+          reverse ? "animate-marquee-reverse" : "animate-marquee-slow"
+        }`}
+      >
+        {doubled.map((tech, i) => (
+          <Capsule key={`${tech.name}-${i}`} name={tech.name} category={tech.category} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StaticCapsuleRow({ items, delay }: { items: StackItem[]; delay: number }) {
+  return (
+    <div className="flex flex-wrap justify-center gap-3">
+      {items.map((tech, i) => (
+        <motion.div
+          key={tech.name}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: delay + i * 0.05, duration: 0.4 }}
+        >
+          <Capsule name={tech.name} category={tech.category} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 export function TechStack({ items }: { items?: StackItem[] }) {
   const stack = items && items.length > 0 ? items : defaultStack;
 
-  // Split into 3 rows
   const rowSize = Math.ceil(stack.length / 3);
   const rows = [
     stack.slice(0, rowSize),
@@ -40,12 +110,10 @@ export function TechStack({ items }: { items?: StackItem[] }) {
     stack.slice(rowSize * 2),
   ];
 
-  const rowLabels = ["Frontend & Framework", "Backend & Data", "Infrastructure & Tools"];
-
   return (
     <SectionWrapper className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-600/[0.03] rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-blue-600/[0.02] rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -53,50 +121,45 @@ export function TechStack({ items }: { items?: StackItem[] }) {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 mb-4">
             Built With the Right Tools
           </p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white">
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-3">
             Our Stack
           </h2>
+          <p className="text-sm text-slate-500 max-w-lg mx-auto">
+            Every layer is chosen for performance, ownership, and long-term
+            maintainability. No bloat. No vendor lock-in.
+          </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           {rows.map((row, rowIdx) => (
             <div key={rowIdx}>
-              {/* Row label */}
+              {/* Row header */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-800/60 to-transparent" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600 shrink-0">
-                  {rowLabels[rowIdx] || `Layer ${rowIdx + 1}`}
-                </span>
-                <div className="h-[1px] flex-1 bg-gradient-to-l from-slate-800/60 to-transparent" />
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-800/50 to-transparent" />
+                <div className="text-center shrink-0 px-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 block">
+                    {rowMeta[rowIdx]?.label || `Layer ${rowIdx + 1}`}
+                  </span>
+                  <span className="text-[9px] text-slate-700 hidden sm:block">
+                    {rowMeta[rowIdx]?.sublabel || ""}
+                  </span>
+                </div>
+                <div className="h-[1px] flex-1 bg-gradient-to-l from-slate-800/50 to-transparent" />
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3">
-                {row.map((tech, i) => (
-                  <motion.div
-                    key={tech.name}
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: rowIdx * 0.1 + i * 0.05, duration: 0.4 }}
-                    whileHover={{ scale: 1.04, y: -2 }}
-                    className="group relative"
-                  >
-                    <div className="px-5 py-3 rounded-xl bg-slate-950/50 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-300 cursor-default">
-                      {/* Subtle top accent */}
-                      <div className="absolute top-0 left-2 right-2 h-[0.5px] bg-gradient-to-r from-transparent via-slate-700/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                      <div className="text-center">
-                        <div className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors duration-300">
-                          {tech.name}
-                        </div>
-                        <div className="text-[9px] text-slate-600 uppercase tracking-wider mt-0.5">
-                          {tech.category}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Frontend row marquees on desktop, static wrap on mobile */}
+              {rowIdx === 0 ? (
+                <>
+                  <div className="hidden md:block">
+                    <MarqueeCapsuleRow items={row} />
+                  </div>
+                  <div className="md:hidden">
+                    <StaticCapsuleRow items={row} delay={0} />
+                  </div>
+                </>
+              ) : (
+                <StaticCapsuleRow items={row} delay={rowIdx * 0.1} />
+              )}
             </div>
           ))}
         </div>

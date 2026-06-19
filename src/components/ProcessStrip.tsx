@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { SectionWrapper } from "./SectionWrapper";
 import { Search, Code, Rocket, BarChart3 } from "lucide-react";
 
@@ -12,8 +13,9 @@ const steps = [
     description:
       "Deep audit of your current stack, conversion leaks, and automation gaps. We map the real problem before writing a single line of code.",
     color: "text-cyan-400",
-    dotColor: "bg-cyan-400",
-    glowColor: "bg-cyan-500/20",
+    borderColor: "border-cyan-500/30",
+    bgGlow: "from-cyan-500/10 to-cyan-500/0",
+    dotBg: "bg-cyan-400",
   },
   {
     icon: Code,
@@ -22,8 +24,9 @@ const steps = [
     description:
       "Custom architecture from scratch. Your database, your logic, your integrations. No templates. No borrowed themes. Just clean, owned code.",
     color: "text-blue-400",
-    dotColor: "bg-blue-400",
-    glowColor: "bg-blue-500/20",
+    borderColor: "border-blue-500/30",
+    bgGlow: "from-blue-500/10 to-blue-500/0",
+    dotBg: "bg-blue-400",
   },
   {
     icon: Rocket,
@@ -32,8 +35,9 @@ const steps = [
     description:
       "Edge-deployed on Vercel, Cloud Run, or your infrastructure. Fast, global, and ready to scale from day one.",
     color: "text-purple-400",
-    dotColor: "bg-purple-400",
-    glowColor: "bg-purple-500/20",
+    borderColor: "border-purple-500/30",
+    bgGlow: "from-purple-500/10 to-purple-500/0",
+    dotBg: "bg-purple-400",
   },
   {
     icon: BarChart3,
@@ -42,20 +46,157 @@ const steps = [
     description:
       "We measure what matters. Conversion rates, system uptime, lead quality. Then we tune until the numbers speak louder than the design.",
     color: "text-pink-400",
-    dotColor: "bg-pink-400",
-    glowColor: "bg-pink-500/20",
+    borderColor: "border-pink-500/30",
+    bgGlow: "from-pink-500/10 to-pink-500/0",
+    dotBg: "bg-pink-400",
   },
 ];
 
+function DesktopProcess() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <div ref={ref} className="hidden lg:block relative">
+      {/* Connector path — a single SVG line that animates in */}
+      <div className="absolute top-[40px] left-0 right-0 h-[2px] z-0">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <svg
+            className="w-full h-[2px] overflow-visible"
+            preserveAspectRatio="none"
+          >
+            <motion.line
+              x1="12.5%"
+              y1="1"
+              x2="87.5%"
+              y2="1"
+              stroke="url(#processGrad)"
+              strokeWidth="1"
+              strokeDasharray="6 4"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={inView ? { pathLength: 1, opacity: 1 } : {}}
+              transition={{ duration: 1.8, ease: "easeInOut", delay: 0.2 }}
+            />
+            <defs>
+              <linearGradient id="processGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="rgb(34 211 238)" stopOpacity="0.4" />
+                <stop offset="33%" stopColor="rgb(96 165 250)" stopOpacity="0.4" />
+                <stop offset="66%" stopColor="rgb(168 85 247)" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="rgb(244 114 182)" stopOpacity="0.4" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-4 gap-8 relative z-10">
+        {steps.map((step, i) => (
+          <motion.div
+            key={step.title}
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{
+              delay: 0.3 + i * 0.2,
+              duration: 0.55,
+              ease: "easeOut",
+            }}
+            className="relative group"
+          >
+            {/* Node circle */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                {/* Outer ring */}
+                <div
+                  className={`w-[52px] h-[52px] rounded-full border ${step.borderColor} bg-[#020617] flex items-center justify-center transition-all duration-500 group-hover:border-opacity-80`}
+                >
+                  {/* Inner glow ring */}
+                  <div
+                    className={`w-9 h-9 rounded-full bg-gradient-to-b ${step.bgGlow} flex items-center justify-center`}
+                  >
+                    <step.icon className={`w-4 h-4 ${step.color}`} />
+                  </div>
+                </div>
+                {/* Ambient glow */}
+                <div
+                  className={`absolute -inset-2 rounded-full ${step.dotBg} opacity-0 group-hover:opacity-[0.08] blur-xl transition-opacity duration-700`}
+                />
+              </div>
+            </div>
+
+            {/* Card */}
+            <div className="text-center">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 block mb-2">
+                Step {step.number}
+              </span>
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-white/90 transition-colors">
+                {step.title}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed max-w-[260px] mx-auto">
+                {step.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MobileProcess() {
+  return (
+    <div className="lg:hidden relative">
+      {/* Vertical connector */}
+      <div className="absolute left-[23px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-cyan-500/20 via-purple-500/20 to-pink-500/20" />
+
+      <div className="space-y-8">
+        {steps.map((step, i) => (
+          <motion.div
+            key={step.title}
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1, duration: 0.5 }}
+            className="relative flex gap-5 group"
+          >
+            {/* Node */}
+            <div className="relative shrink-0">
+              <div
+                className={`w-12 h-12 rounded-full border ${step.borderColor} bg-[#020617] flex items-center justify-center z-10 relative`}
+              >
+                <step.icon className={`w-4 h-4 ${step.color}`} />
+              </div>
+            </div>
+
+            <div className="flex-1 pt-1">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 block mb-1">
+                Step {step.number}
+              </span>
+              <h3 className="text-base font-bold text-white mb-1.5">
+                {step.title}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ProcessStrip() {
   return (
-    <SectionWrapper id="process" className="py-24 lg:py-32 relative overflow-hidden">
+    <SectionWrapper
+      id="process"
+      className="py-24 lg:py-32 relative overflow-hidden"
+    >
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-cyan-500/[0.03] rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-cyan-500/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-purple-400 mb-4">
             Our Process
           </p>
@@ -64,88 +205,8 @@ export function ProcessStrip() {
           </h2>
         </div>
 
-        {/* Desktop timeline layout */}
-        <div className="hidden lg:block relative">
-          {/* Connection line */}
-          <div className="absolute top-[52px] left-[calc(12.5%+20px)] right-[calc(12.5%+20px)] h-[1px]">
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-              className="h-full bg-gradient-to-r from-cyan-500/30 via-purple-500/30 to-pink-500/30 origin-left"
-            />
-          </div>
-
-          <div className="grid lg:grid-cols-4 gap-6">
-            {steps.map((step, i) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 + i * 0.15, duration: 0.5 }}
-                className="relative group"
-              >
-                {/* Node dot on timeline */}
-                <div className="flex justify-center mb-6">
-                  <div className="relative">
-                    <div className="w-8 h-8 rounded-full border-2 border-slate-800 bg-[#020617] flex items-center justify-center z-10 relative group-hover:border-slate-600 transition-colors duration-300">
-                      <div className={`w-2.5 h-2.5 rounded-full ${step.dotColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-                    </div>
-                    {/* Node glow */}
-                    <div className={`absolute inset-0 ${step.glowColor} rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                  </div>
-                </div>
-
-                <div className="p-6 rounded-2xl bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-300 group-hover:-translate-y-1">
-                  <div className={`text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-3`}>
-                    Step {step.number}
-                  </div>
-                  <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-900/80 border border-slate-800/60 mb-4 group-hover:border-slate-700 transition-colors`}>
-                    <step.icon className={`w-4 h-4 ${step.color}`} />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile/Tablet: vertical timeline */}
-        <div className="lg:hidden relative">
-          {/* Vertical connection line */}
-          <div className="absolute left-[19px] top-0 bottom-0 w-[1px] bg-gradient-to-b from-cyan-500/20 via-purple-500/20 to-pink-500/20" />
-
-          <div className="space-y-6">
-            {steps.map((step, i) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="relative flex gap-5 group"
-              >
-                {/* Node */}
-                <div className="relative shrink-0 mt-6">
-                  <div className="w-10 h-10 rounded-full border-2 border-slate-800 bg-[#020617] flex items-center justify-center z-10 relative group-hover:border-slate-600 transition-colors">
-                    <step.icon className={`w-4 h-4 ${step.color}`} />
-                  </div>
-                </div>
-
-                <div className="flex-1 p-5 rounded-xl bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-300">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-2">
-                    Step {step.number}
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        <DesktopProcess />
+        <MobileProcess />
       </div>
     </SectionWrapper>
   );

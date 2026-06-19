@@ -13,9 +13,16 @@ import { SecondaryServices } from "@/components/SecondaryServices";
 import { TechStack } from "@/components/TechStack";
 import { PricingSection } from "@/components/PricingSection";
 import { AboutPreview } from "@/components/AboutPreview";
+import { BlogTeaser } from "@/components/BlogTeaser";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
-import { getPublicServices, getPublicProjects, getPublicPricing, getSetting } from "@/lib/queries";
+import {
+  getPublicServices,
+  getPublicProjects,
+  getPublicPricing,
+  getPublicPosts,
+  getSetting,
+} from "@/lib/queries";
 
 // Read live data on every request so dashboard edits appear immediately.
 export const dynamic = "force-dynamic";
@@ -64,7 +71,7 @@ export default async function Home() {
       image: p.imageUrl || "/assets/hero-core-visual.png",
       link: "/work",
       tags: [],
-      metrics: metricsStr || (p.results || ""),
+      metrics: metricsStr || p.results || "",
     };
   });
 
@@ -82,6 +89,9 @@ export default async function Home() {
     popular: false,
   }));
 
+  // Published blog posts for the teaser (dashboard-driven via Blog manager)
+  const dbPosts = await getPublicPosts();
+
   // Fetch customizable Homepage settings from siteSettings key-value store
   const heroTitle = await getSetting<string>("hero_title", "");
   const heroSubtitle = await getSetting<string>("hero_subtitle", "");
@@ -95,10 +105,13 @@ export default async function Home() {
   const trustedIntegrations = await getSetting<string[]>("trusted_integrations", []);
   const homepageStats = await getSetting<any[]>("homepage_stats", []);
 
-  // New: Tech stack from dashboard
-  const techStack = await getSetting<{ name: string; category: string }[]>("tech_stack", []);
+  // Tech stack from dashboard
+  const techStack = await getSetting<{ name: string; category: string }[]>(
+    "tech_stack",
+    []
+  );
 
-  // New: About section from dashboard
+  // About section from dashboard
   const aboutHeading = await getSetting<string>("about_heading", "");
   const aboutDescription = await getSetting<string>("about_description", "");
 
@@ -111,7 +124,9 @@ export default async function Home() {
         ctaText={heroCtaText || undefined}
         ctaLink={heroCtaLink || undefined}
       />
-      <TrustBar brands={trustedIntegrations.length ? trustedIntegrations : undefined} />
+      <TrustBar
+        brands={trustedIntegrations.length ? trustedIntegrations : undefined}
+      />
       <StatsBar stats={homepageStats.length ? homepageStats : undefined} />
       <ProblemSection
         title={problemTitle || undefined}
@@ -130,6 +145,7 @@ export default async function Home() {
         description={aboutDescription || undefined}
       />
       <PricingSection items={pricingItems.length ? pricingItems : undefined} />
+      <BlogTeaser posts={dbPosts.slice(0, 3)} />
       <CTASection />
       <Footer />
     </main>

@@ -66,8 +66,14 @@ export function PricingSection({ items }: { items?: Tier[] }) {
 
   return (
     <SectionWrapper id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
+      {/* Background image — human + robot handshake */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-600/[0.04] rounded-full blur-[120px]" />
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.04]"
+          style={{ backgroundImage: "url('/assets/pricing-handshake.png')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-600/[0.03] rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -93,12 +99,9 @@ export function PricingSection({ items }: { items?: Tier[] }) {
               viewport={{ once: true }}
               transition={{ delay: i * 0.12, duration: 0.5 }}
               className={`relative flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 ${
-                tier.popular
-                  ? "shadow-xl shadow-purple-900/10"
-                  : ""
+                tier.popular ? "shadow-xl shadow-purple-900/10" : ""
               }`}
             >
-              {/* Border & background */}
               <div
                 className={`absolute inset-0 rounded-2xl ${
                   tier.popular
@@ -107,7 +110,6 @@ export function PricingSection({ items }: { items?: Tier[] }) {
                 }`}
               />
 
-              {/* Popular top glow */}
               {tier.popular && (
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
               )}
@@ -156,7 +158,6 @@ export function PricingSection({ items }: { items?: Tier[] }) {
           ))}
         </div>
 
-        {/* Trust line below pricing */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -41,7 +41,7 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
   const activeHeading = heading || "We Build Systems. Not Websites.";
   const activeDescription =
     description ||
-    "RRRTX SYSTEMS is an engineering-first product studio that builds custom ecommerce platforms and AI automation systems from scratch. No templates, no vendor lock-in, no borrowed themes — just clean architecture, real business logic, and full ownership of everything we deliver. We partner with founders and operators who've outgrown templates and need systems that actually convert visitors into revenue.";
+    "RRRTX SYSTEMS is an engineering-first product studio that builds custom ecommerce platforms and AI automation systems from scratch. We don't resell themes or rebrand templates — we architect production-grade systems with real business logic, clean databases, and edge deployments that you own completely. We partner with founders, operators, and scaling brands who need infrastructure that converts, automates, and grows with them.";
 
   return (
     <SectionWrapper id="about" className="py-24 lg:py-32 relative overflow-hidden">
@@ -91,18 +91,25 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
               {activeDescription}
             </motion.p>
 
-            {/* Signal badge */}
+            {/* Availability + credibility signal */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.22 }}
-              className="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-950/50 border border-slate-800/30 mb-8"
+              className="flex flex-col sm:flex-row gap-3 mb-8"
             >
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[11px] text-slate-400 font-medium">
-                Currently accepting new project engagements
-              </span>
+              <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-950/50 border border-slate-800/30">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] text-slate-400 font-medium">
+                  Currently accepting new engagements
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-950/50 border border-slate-800/30">
+                <span className="text-[11px] text-slate-400 font-medium">
+                  🌍 Working globally &middot; async-first
+                </span>
+              </div>
             </motion.div>
 
             <motion.div

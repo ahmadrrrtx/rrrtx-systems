@@ -14,6 +14,7 @@ import { TechStack } from "@/components/TechStack";
 import { PricingSection } from "@/components/PricingSection";
 import { AboutPreview } from "@/components/AboutPreview";
 import { BlogTeaser } from "@/components/BlogTeaser";
+import { ToolsCapsules } from "@/components/ToolsCapsules";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import {
@@ -40,7 +41,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // Primary services for the homepage grid; fall back to defaults inside the component.
   const dbServices = await getPublicServices({ primaryOnly: true });
   const serviceItems = dbServices.map((s) => ({
     title: s.title,
@@ -49,7 +49,6 @@ export default async function Home() {
     iconName: s.iconName,
   }));
 
-  // Featured published projects for the homepage; fall back to defaults if none.
   const dbProjects = await getPublicProjects({ featuredOnly: true });
   const workItems = dbProjects.map((p) => {
     let metricsStr = "";
@@ -75,7 +74,6 @@ export default async function Home() {
     };
   });
 
-  // Active pricing tiers; fall back to defaults if none.
   const dbPricing = await getPublicPricing();
   const pricingItems = dbPricing.map((t) => ({
     name: t.title,
@@ -89,10 +87,8 @@ export default async function Home() {
     popular: false,
   }));
 
-  // Published blog posts for the teaser (dashboard-driven via Blog manager)
   const dbPosts = await getPublicPosts();
 
-  // Fetch customizable Homepage settings from siteSettings key-value store
   const heroTitle = await getSetting<string>("hero_title", "");
   const heroSubtitle = await getSetting<string>("hero_subtitle", "");
   const heroCtaText = await getSetting<string>("hero_cta_text", "");
@@ -105,13 +101,11 @@ export default async function Home() {
   const trustedIntegrations = await getSetting<string[]>("trusted_integrations", []);
   const homepageStats = await getSetting<any[]>("homepage_stats", []);
 
-  // Tech stack from dashboard
   const techStack = await getSetting<{ name: string; category: string }[]>(
     "tech_stack",
     []
   );
 
-  // About section from dashboard
   const aboutHeading = await getSetting<string>("about_heading", "");
   const aboutDescription = await getSetting<string>("about_description", "");
 
@@ -145,6 +139,7 @@ export default async function Home() {
         description={aboutDescription || undefined}
       />
       <PricingSection items={pricingItems.length ? pricingItems : undefined} />
+      <ToolsCapsules />
       <BlogTeaser posts={dbPosts.slice(0, 3)} />
       <CTASection />
       <Footer />

@@ -64,12 +64,15 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">
             What We Build
           </p>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3">
             Built for Revenue. Not Decoration.
           </h2>
+          <p className="text-sm text-slate-500 max-w-lg mx-auto">
+            Every system we ship is engineered to convert, automate, and scale — from day one.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, i) => {
             const Icon = service.iconName
               ? getIcon(service.iconName)
@@ -80,42 +83,46 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
             return (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.5 }}
               >
                 <Link
                   href={service.href}
-                  className="group relative block h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
+                  className="group relative block h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-950/50"
                 >
-                  {/* Background with glass effect */}
-                  <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm border border-slate-800/50 rounded-2xl group-hover:border-slate-600/60 transition-colors duration-500" />
+                  {/* Glass background */}
+                  <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm border border-slate-800/40 rounded-2xl group-hover:border-slate-700/50 transition-colors duration-500" />
 
-                  {/* Top gradient line */}
-                  <div className={`absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r ${gradient} opacity-30 group-hover:opacity-60 transition-opacity duration-500`} />
+                  {/* Top gradient accent line */}
+                  <div
+                    className={`absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r ${gradient} opacity-20 group-hover:opacity-50 transition-opacity duration-500 rounded-full`}
+                  />
 
                   {/* Hover glow */}
-                  <div className={`absolute -top-20 left-1/2 -translate-x-1/2 w-[200px] h-[200px] bg-gradient-to-br ${gradient} rounded-full blur-[80px] opacity-0 group-hover:opacity-[0.06] transition-opacity duration-700`} />
+                  <div
+                    className={`absolute -top-24 left-1/2 -translate-x-1/2 w-[240px] h-[240px] bg-gradient-to-br ${gradient} rounded-full blur-[100px] opacity-0 group-hover:opacity-[0.05] transition-opacity duration-700`}
+                  />
 
-                  <div className="relative p-8">
-                    {/* Icon with glow */}
-                    <div className="relative mb-6">
+                  <div className="relative p-8 lg:p-9 flex flex-col h-full">
+                    {/* Step number + icon row */}
+                    <div className="flex items-center justify-between mb-7">
                       <div
                         className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-500`}
                       >
                         <Icon className="w-5 h-5 text-white" />
                       </div>
-                      <div
-                        className={`absolute inset-0 w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`}
-                      />
+                      <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-700 group-hover:text-slate-500 transition-colors">
+                        0{i + 1}
+                      </span>
                     </div>
 
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
                       {service.title}
                     </h3>
 
-                    <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                    <p className="text-sm text-slate-400 leading-relaxed mb-6 flex-1">
                       {service.description}
                     </p>
 
@@ -124,17 +131,20 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
                       {details.map((detail) => (
                         <span
                           key={detail}
-                          className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider rounded bg-slate-900/80 text-slate-500 border border-slate-800/50"
+                          className="px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider rounded-md bg-slate-900/60 text-slate-500 border border-slate-800/40 group-hover:border-slate-700/50 transition-colors"
                         >
                           {detail}
                         </span>
                       ))}
                     </div>
 
-                    <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 group-hover:text-cyan-400 transition-colors duration-300">
-                      Learn more{" "}
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
+                    {/* CTA */}
+                    <div className="pt-5 border-t border-slate-800/30">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 group-hover:text-cyan-400 transition-colors duration-300">
+                        Explore service
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
+                    </div>
                   </div>
                 </Link>
               </motion.div>

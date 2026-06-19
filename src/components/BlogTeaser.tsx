@@ -9,10 +9,8 @@ function estimateReadTime(content: string): number {
 }
 
 export function BlogTeaser({ posts }: { posts: DbPost[] }) {
-  // If no published posts, render nothing
   if (!posts || posts.length === 0) return null;
 
-  // Show at most 3
   const visible = posts.slice(0, 3);
 
   return (
@@ -54,22 +52,20 @@ export function BlogTeaser({ posts }: { posts: DbPost[] }) {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="group block rounded-2xl bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-300 overflow-hidden"
+                className="group block rounded-2xl bg-slate-950/40 border border-slate-800/30 hover:border-slate-700/50 transition-all duration-300 overflow-hidden hover:-translate-y-0.5"
               >
-                {/* Cover image */}
                 {post.coverImageUrl && (
                   <div className="relative aspect-[2/1] overflow-hidden">
                     <img
                       src={post.coverImageUrl}
                       alt={post.title}
-                      className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-[1.03] transition-all duration-500"
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-85 group-hover:scale-[1.03] transition-all duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#020617] to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent" />
                   </div>
                 )}
 
                 <div className="p-5">
-                  {/* Tags */}
                   {post.tags && (
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {post.tags
@@ -78,7 +74,7 @@ export function BlogTeaser({ posts }: { posts: DbPost[] }) {
                         .map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider rounded bg-slate-900/80 text-slate-500 border border-slate-800/50"
+                            className="px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider rounded bg-slate-900/80 text-slate-500 border border-slate-800/40"
                           >
                             {tag.trim()}
                           </span>

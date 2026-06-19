@@ -50,7 +50,7 @@ export default function SettingsPage() {
 
   // Tab 4: Trusted Integrations
   const [integrations, setIntegrations] = useState<string[]>([]);
-  const availableIntegrations = ["Next.js", "React", "Node.js", "Python", "Vercel", "Google", "Google Cloud", "Stripe", "Supabase", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"];
+  const availableIntegrations = ["Next.js", "React", "Node.js", "Python", "Three.js", "Vercel", "Google Cloud", "Stripe", "Supabase", "SQLite", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"];
 
   // Tab 5: Stats & Counters
   const [statsList, setStatsList] = useState<{ icon: string; value: number; suffix: string; label: string }[]>([]);
@@ -128,7 +128,7 @@ export default function SettingsPage() {
         if (data.trusted_integrations) {
           try { setIntegrations(JSON.parse(data.trusted_integrations)); } catch {}
         } else {
-          setIntegrations(["Next.js", "React", "Node.js", "Python", "Vercel", "Google", "Google Cloud", "Stripe", "Supabase", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"]);
+          setIntegrations(["Next.js", "React", "Node.js", "Python", "Three.js", "Vercel", "Google Cloud", "Stripe", "Supabase", "SQLite", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"]);
         }
 
         if (data.homepage_stats) {

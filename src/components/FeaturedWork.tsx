@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Code } from "lucide-react";
+import { ArrowRight, ExternalLink, Code, TrendingUp } from "lucide-react";
 
 type WorkItem = {
   client: string;
@@ -54,10 +54,11 @@ const defaultProjects: WorkItem[] = [
 
 export function FeaturedWork({ items }: { items?: WorkItem[] }) {
   const projects = items && items.length > 0 ? items : defaultProjects;
+
   return (
     <SectionWrapper id="work" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-cyan-500/[0.03] rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -78,28 +79,29 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
           </Link>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {projects.map((project, i) => (
+        {/* Asymmetric grid: first card large, remaining smaller */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Hero card — first project gets full-width left column */}
+          {projects.length > 0 && (
             <motion.div
-              key={project.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/50 hover:border-slate-700/80 transition-all"
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 lg:row-span-2"
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
+              <div className="relative aspect-[16/10] lg:aspect-auto lg:h-[55%] overflow-hidden">
                 <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                  src={projects[0].image}
+                  alt={projects[0].title}
+                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent" />
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
+                  {projects[0].tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-black/40 backdrop-blur-sm text-slate-300 border border-white/10"
+                      className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-black/50 backdrop-blur-sm text-slate-300 border border-white/10"
                     >
                       {tag}
                     </span>
@@ -107,39 +109,107 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                 </div>
               </div>
 
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
+              <div className="p-6 lg:p-8">
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-purple-400">
-                    {project.industry}
+                    {projects[0].industry}
                   </span>
-                  <span className="text-[10px] text-slate-500">{project.client}</span>
+                  <span className="text-[10px] text-slate-500">{projects[0].client}</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
-                  {project.title}
+                <h3 className="text-xl lg:text-2xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                  {projects[0].title}
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed mb-4">
-                  {project.description}
+                <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                  {projects[0].description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-300">
-                    {project.metrics}
-                  </span>
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-300">
+                    <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+                    {projects[0].metrics}
+                  </div>
                   <Link
-                    href={project.link}
+                    href={projects[0].link}
                     target="_blank"
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors"
                   >
-                    {project.link.includes("github") ? (
+                    {projects[0].link.includes("github") ? (
                       <Code className="w-3.5 h-3.5" />
                     ) : (
                       <ExternalLink className="w-3.5 h-3.5" />
                     )}
-                    {project.link.includes("github") ? "View Code" : "Live Site"}
+                    {projects[0].link.includes("github") ? "View Code" : "Live Site"}
                   </Link>
                 </div>
               </div>
             </motion.div>
-          ))}
+          )}
+
+          {/* Remaining cards stacked on the right */}
+          <div className="flex flex-col gap-6">
+            {projects.slice(1).map((project, i) => (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 + (i + 1) * 0.1, duration: 0.5 }}
+                className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 flex flex-col sm:flex-row"
+              >
+                {/* Thumbnail */}
+                <div className="relative w-full sm:w-48 aspect-[16/10] sm:aspect-auto shrink-0 overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#020617]/80 hidden sm:block" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/80 to-transparent sm:hidden" />
+                </div>
+
+                <div className="p-5 flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-purple-400">
+                      {project.industry}
+                    </span>
+                    <span className="text-[10px] text-slate-500">{project.client}</span>
+                  </div>
+                  <h3 className="text-base font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-3 line-clamp-2">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {project.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider rounded bg-slate-900/80 text-slate-500 border border-slate-800/50"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                      <TrendingUp className="w-3 h-3 text-cyan-400" />
+                      <span className="truncate">{project.metrics}</span>
+                    </div>
+                    <Link
+                      href={project.link}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors shrink-0"
+                    >
+                      {project.link.includes("github") ? (
+                        <Code className="w-3.5 h-3.5" />
+                      ) : (
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      )}
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </SectionWrapper>

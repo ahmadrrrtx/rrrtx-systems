@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
-import { Check, ArrowRight, Sparkles } from "lucide-react";
+import { Check, ArrowRight, Sparkles, Shield } from "lucide-react";
 
 type Tier = {
   name: string;
@@ -63,10 +63,11 @@ const defaultTiers: Tier[] = [
 
 export function PricingSection({ items }: { items?: Tier[] }) {
   const tiers = items && items.length > 0 ? items : defaultTiers;
+
   return (
     <SectionWrapper id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-600/[0.04] rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -90,52 +91,82 @@ export function PricingSection({ items }: { items?: Tier[] }) {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.12 }}
-              className={`relative flex flex-col rounded-2xl p-8 ${
+              transition={{ delay: i * 0.12, duration: 0.5 }}
+              className={`relative flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 ${
                 tier.popular
-                  ? "bg-gradient-to-b from-slate-900/80 to-slate-950/80 border border-purple-500/30 shadow-lg shadow-purple-900/10"
-                  : "bg-slate-950/40 border border-slate-800/50"
+                  ? "shadow-xl shadow-purple-900/10"
+                  : ""
               }`}
             >
+              {/* Border & background */}
+              <div
+                className={`absolute inset-0 rounded-2xl ${
+                  tier.popular
+                    ? "bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-purple-500/25"
+                    : "bg-slate-950/40 border border-slate-800/40"
+                }`}
+              />
+
+              {/* Popular top glow */}
               {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-[10px] font-bold uppercase tracking-wider text-white">
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+              )}
+
+              {tier.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-purple-900/30">
                     <Sparkles className="w-3 h-3" /> Most Popular
                   </span>
                 </div>
               )}
 
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-white mb-1">{tier.name}</h3>
-                <p className="text-sm text-slate-400">{tier.description}</p>
+              <div className="relative p-8 flex flex-col flex-1">
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold text-white mb-1">{tier.name}</h3>
+                  <p className="text-sm text-slate-400">{tier.description}</p>
+                </div>
+
+                <div className="mb-6 pb-6 border-b border-slate-800/40">
+                  <span className="text-3xl font-bold text-white">{tier.range}</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-sm text-slate-300">
+                      <div className="mt-0.5 shrink-0 w-5 h-5 rounded-md bg-cyan-500/10 flex items-center justify-center">
+                        <Check className="w-3 h-3 text-cyan-400" />
+                      </div>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/contact"
+                  className={`inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold rounded-xl transition-all duration-300 ${
+                    tier.popular
+                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40"
+                      : "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white bg-slate-900/30 hover:bg-slate-900/50"
+                  }`}
+                >
+                  {tier.cta} <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-
-              <div className="mb-6">
-                <span className="text-3xl font-bold text-white">{tier.range}</span>
-              </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-slate-300">
-                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href="/contact"
-                className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg transition-all ${
-                  tier.popular
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-purple-900/20"
-                    : "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white bg-slate-900/30"
-                }`}
-              >
-                {tier.cta} <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
             </motion.div>
           ))}
         </div>
+
+        {/* Trust line below pricing */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="flex items-center justify-center gap-2 mt-10 text-xs text-slate-500"
+        >
+          <Shield className="w-3.5 h-3.5 text-cyan-500/60" />
+          All engagements include transparent scope, milestone deliverables, and full code ownership.
+        </motion.div>
       </div>
     </SectionWrapper>
   );

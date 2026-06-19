@@ -95,7 +95,14 @@ html {
 }
 
 @utility animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 25s linear infinite;
+}
+
+@utility line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @utility animate-fade-up {

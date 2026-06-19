@@ -10,7 +10,9 @@ import { FeaturedWork } from "@/components/FeaturedWork";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { SecondaryServices } from "@/components/SecondaryServices";
+import { TechStack } from "@/components/TechStack";
 import { PricingSection } from "@/components/PricingSection";
+import { AboutPreview } from "@/components/AboutPreview";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { getPublicServices, getPublicProjects, getPublicPricing, getSetting } from "@/lib/queries";
@@ -19,7 +21,7 @@ import { getPublicServices, getPublicProjects, getPublicPricing, getSetting } fr
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Custom Ecommerce & AI Systems Built to Convert",
+  title: "Custom Ecommerce & AI Systems Built to Convert | RRRTX SYSTEMS",
   description:
     "Premium custom ecommerce websites and AI automation systems built from scratch. Next.js, Python agents, conversion-first engineering. No templates. No limits.",
   openGraph: {
@@ -93,6 +95,13 @@ export default async function Home() {
   const trustedIntegrations = await getSetting<string[]>("trusted_integrations", []);
   const homepageStats = await getSetting<any[]>("homepage_stats", []);
 
+  // New: Tech stack from dashboard
+  const techStack = await getSetting<{ name: string; category: string }[]>("tech_stack", []);
+
+  // New: About section from dashboard
+  const aboutHeading = await getSetting<string>("about_heading", "");
+  const aboutDescription = await getSetting<string>("about_description", "");
+
   return (
     <main className="relative">
       <Navbar />
@@ -115,6 +124,11 @@ export default async function Home() {
       <TestimonialsSection />
       <TeamSection />
       <SecondaryServices />
+      <TechStack items={techStack.length ? techStack : undefined} />
+      <AboutPreview
+        heading={aboutHeading || undefined}
+        description={aboutDescription || undefined}
+      />
       <PricingSection items={pricingItems.length ? pricingItems : undefined} />
       <CTASection />
       <Footer />

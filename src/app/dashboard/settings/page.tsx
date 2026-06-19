@@ -22,7 +22,7 @@ const availableIcons = {
 };
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<"security" | "general" | "homepage" | "integrations" | "stats" | "chatbot">("general");
+  const [activeTab, setActiveTab] = useState<"security" | "general" | "homepage" | "integrations" | "stats" | "chatbot" | "techstack" | "about">("general");
   
   // Tab 1: Security (Password Change)
   const [currentPassword, setCurrentPassword] = useState("");
@@ -50,13 +50,21 @@ export default function SettingsPage() {
 
   // Tab 4: Trusted Integrations
   const [integrations, setIntegrations] = useState<string[]>([]);
-  const availableIntegrations = ["Vercel", "Google", "Stripe", "Visa", "Mastercard", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare"];
+  const availableIntegrations = ["Next.js", "React", "Node.js", "Python", "Vercel", "Google", "Google Cloud", "Stripe", "Supabase", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"];
 
   // Tab 5: Stats & Counters
   const [statsList, setStatsList] = useState<{ icon: string; value: number; suffix: string; label: string }[]>([]);
   const [newStat, setNewStat] = useState({ icon: "Rocket", value: 10, suffix: "+", label: "" });
 
-  // Tab 6: Chatbot Settings
+  // Tab 6: Tech Stack
+  const [techStack, setTechStack] = useState<{ name: string; category: string }[]>([]);
+  const [newTech, setNewTech] = useState({ name: "", category: "" });
+
+  // Tab 7: About Section
+  const [aboutHeading, setAboutHeading] = useState("");
+  const [aboutDescription, setAboutDescription] = useState("");
+
+  // Tab 8: Chatbot Settings
   const [chatbotEnabled, setChatbotEnabled] = useState(true);
   const [chatbotName, setChatbotName] = useState("RRRTX Guide");
   const [chatbotWelcome, setChatbotWelcome] = useState("");
@@ -120,7 +128,7 @@ export default function SettingsPage() {
         if (data.trusted_integrations) {
           try { setIntegrations(JSON.parse(data.trusted_integrations)); } catch {}
         } else {
-          setIntegrations(["Vercel", "Google", "Stripe", "Visa", "Mastercard", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare"]);
+          setIntegrations(["Next.js", "React", "Node.js", "Python", "Vercel", "Google", "Google Cloud", "Stripe", "Supabase", "WhatsApp", "Make", "GitHub", "Turso", "Cloudflare", "TypeScript", "Tailwind"]);
         }
 
         if (data.homepage_stats) {
@@ -134,6 +142,34 @@ export default function SettingsPage() {
             { icon: "Globe", value: 5, suffix: "+", label: "Countries Served" }
           ]);
         }
+
+        if (data.tech_stack) {
+          try { setTechStack(JSON.parse(data.tech_stack)); } catch {}
+        } else {
+          setTechStack([
+            { name: "Next.js", category: "Framework" },
+            { name: "React", category: "Frontend" },
+            { name: "TypeScript", category: "Language" },
+            { name: "Tailwind CSS", category: "Styling" },
+            { name: "Framer Motion", category: "Animation" },
+            { name: "Node.js", category: "Runtime" },
+            { name: "Python", category: "AI & Scripts" },
+            { name: "Turso", category: "Database" },
+            { name: "Drizzle ORM", category: "ORM" },
+            { name: "PostgreSQL", category: "Database" },
+            { name: "Vercel", category: "Hosting" },
+            { name: "Cloudflare", category: "CDN" },
+            { name: "GitHub", category: "Version Control" },
+            { name: "Stripe", category: "Payments" },
+            { name: "WhatsApp API", category: "Messaging" },
+          ]);
+        }
+
+        if (data.about_heading) setAboutHeading(data.about_heading);
+        else setAboutHeading("We Build Systems. Not Websites.");
+
+        if (data.about_description) setAboutDescription(data.about_description);
+        else setAboutDescription("RRRTX SYSTEMS is an engineering-first product studio that builds custom ecommerce platforms and AI automation systems from scratch. No templates, no vendor lock-in, no borrowed themes — just clean architecture, real business logic, and full ownership of everything we deliver.");
 
         if (data.chatbot_enabled) setChatbotEnabled(data.chatbot_enabled === "true");
         else setChatbotEnabled(true);
@@ -198,6 +234,9 @@ export default function SettingsPage() {
         problem_bullets: JSON.stringify(problemBullets),
         trusted_integrations: JSON.stringify(integrations),
         homepage_stats: JSON.stringify(statsList),
+        tech_stack: JSON.stringify(techStack),
+        about_heading: aboutHeading,
+        about_description: aboutDescription,
         chatbot_enabled: chatbotEnabled ? "true" : "false",
         chatbot_name: chatbotName,
         chatbot_welcome: chatbotWelcome,
@@ -306,6 +345,8 @@ export default function SettingsPage() {
             { id: "homepage", label: "Homepage Copy" },
             { id: "integrations", label: "Trusted Integrations" },
             { id: "stats", label: "Stats & Counters" },
+            { id: "techstack", label: "Tech Stack" },
+            { id: "about", label: "About Section" },
             { id: "chatbot", label: "Chatbot Assistant" },
             { id: "security", label: "Password & Security" },
           ].map((tab) => (
@@ -629,6 +670,127 @@ export default function SettingsPage() {
         )}
 
         {/* Tab Content: Chatbot Settings */}
+        {/* Tab Content: Tech Stack */}
+        {activeTab === "techstack" && (
+          <div className="p-6 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-6">
+            <div>
+              <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-1">Tech Stack Section</h2>
+              <p className="text-xs text-slate-400">Manage the technologies displayed in the &quot;Our Stack&quot; section on the homepage.</p>
+            </div>
+
+            {/* Current items */}
+            <div className="space-y-2">
+              {techStack.map((tech, idx) => (
+                <div key={idx} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800/60">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className="text-sm font-medium text-white truncate">{tech.name}</span>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-wider">{tech.category}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        if (idx > 0) {
+                          const updated = [...techStack];
+                          [updated[idx - 1], updated[idx]] = [updated[idx], updated[idx - 1]];
+                          setTechStack(updated);
+                        }
+                      }}
+                      disabled={idx === 0}
+                      className="text-slate-400 hover:text-white disabled:opacity-30 text-xs"
+                    >↑</button>
+                    <button
+                      onClick={() => {
+                        if (idx < techStack.length - 1) {
+                          const updated = [...techStack];
+                          [updated[idx], updated[idx + 1]] = [updated[idx + 1], updated[idx]];
+                          setTechStack(updated);
+                        }
+                      }}
+                      disabled={idx === techStack.length - 1}
+                      className="text-slate-400 hover:text-white disabled:opacity-30 text-xs"
+                    >↓</button>
+                    <button
+                      onClick={() => setTechStack(techStack.filter((_, i) => i !== idx))}
+                      className="text-red-400/60 hover:text-red-400 transition-colors"
+                    >
+                      <Trash className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Add new */}
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Technology Name</label>
+                <input
+                  placeholder="e.g. Next.js"
+                  value={newTech.name}
+                  onChange={(e) => setNewTech({ ...newTech, name: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-white text-xs focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Category</label>
+                <input
+                  placeholder="e.g. Framework"
+                  value={newTech.category}
+                  onChange={(e) => setNewTech({ ...newTech, category: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-white text-xs focus:outline-none"
+                />
+              </div>
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!newTech.name) return;
+                    setTechStack([...techStack, { name: newTech.name, category: newTech.category || "Tool" }]);
+                    setNewTech({ name: "", category: "" });
+                  }}
+                  disabled={!newTech.name}
+                  className="px-4 py-1.5 text-xs font-semibold text-white bg-slate-900 border border-slate-800 hover:border-slate-600 disabled:opacity-50 rounded transition-all inline-flex items-center gap-1.5"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab Content: About Section */}
+        {activeTab === "about" && (
+          <div className="p-6 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-6">
+            <div>
+              <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-1">About Section (Homepage)</h2>
+              <p className="text-xs text-slate-400">Edit the about preview section shown on the homepage. This is SEO/AEO-critical content.</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Heading</label>
+              <input
+                placeholder="We Build Systems. Not Websites."
+                value={aboutHeading}
+                onChange={(e) => setAboutHeading(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+              />
+              <p className="text-[10px] text-slate-600 mt-1">Tip: Use a period to split into gradient styling (e.g. &quot;We Build Systems. Not Websites.&quot;)</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
+              <textarea
+                rows={4}
+                placeholder="RRRTX SYSTEMS is an engineering-first..."
+                value={aboutDescription}
+                onChange={(e) => setAboutDescription(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 resize-y"
+              />
+              <p className="text-[10px] text-slate-600 mt-1">Keep this concise, credible, and conversion-focused. This appears on the homepage before pricing.</p>
+            </div>
+          </div>
+        )}
+
         {activeTab === "chatbot" && (
           <div className="p-6 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-6">
             <div>

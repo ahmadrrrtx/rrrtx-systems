@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRO Checklist — RRRTX SYSTEMS</title>
+<meta name="description" content="50+ point conversion rate optimization checklist. Interactive, auto-saves progress. Covers speed, mobile, checkout, copy, CTAs, trust, analytics." />
+<style>
+  :root {
+    --bg: #020617;
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.14);
+    --text: #ffffff;
+    --text-dim: #94a3b8;
+    --text-dimmer: #64748b;
+    --cyan: rgb(34, 211, 238);
+    --blue: rgb(96, 165, 250);
+    --purple: rgb(168, 85, 247);
+    --pink: rgb(244, 114, 182);
+    --green: rgb(74, 222, 128);
+    --grad: linear-gradient(135deg, var(--cyan), var(--blue), var(--purple), var(--pink));
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: -2; pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 80%);
+  }
+  body::after {
+    content: ''; position: fixed; top: -20%; left: 50%;
+    transform: translateX(-50%); width: 1200px; height: 800px;
+    background: radial-gradient(circle, rgba(96,165,250,0.15), rgba(168,85,247,0.08) 40%, transparent 70%);
+    z-index: -1; pointer-events: none; filter: blur(60px);
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(20px); background: rgba(2,6,23,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .logo img { height: 38px; display: block; }
+  .nav-links { display: flex; gap: 28px; align-items: center; font-size: 14px; }
+  .nav-links a { color: var(--text-dim); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+  .nav-cta {
+    padding: 10px 20px; border: 1px solid var(--border-2); border-radius: 8px;
+    background: rgba(255,255,255,0.04); transition: all 0.2s; font-weight: 500;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.08); border-color: var(--cyan); }
+  @media (max-width: 880px) { .nav-links { display: none; } }
+  .hero { padding: 70px 0 30px; text-align: center; }
+  .eyebrow {
+    display: inline-block; padding: 6px 14px; border: 1px solid var(--border-2);
+    border-radius: 999px; font-size: 13px; color: var(--text-dim);
+    background: rgba(255,255,255,0.03); margin-bottom: 24px;
+  }
+  .eyebrow .dot {
+    display: inline-block; width: 6px; height: 6px; background: var(--blue);
+    border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; vertical-align: middle;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+  h1 { font-size: clamp(30px, 5vw, 50px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 14px; }
+  h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: var(--text-dim); max-width: 640px; margin: 0 auto; font-size: 16px; }
+  .progress-wrap {
+    position: sticky; top: 73px; z-index: 40;
+    backdrop-filter: blur(20px); background: rgba(2,6,23,0.85);
+    border-bottom: 1px solid var(--border); padding: 16px 0;
+  }
+  .progress-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .progress-info { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+  .progress-info strong { color: var(--text); font-size: 16px; font-weight: 700; }
+  .progress-bar {
+    flex: 1; min-width: 200px; height: 8px;
+    background: rgba(255,255,255,0.06); border-radius: 999px;
+    overflow: hidden; position: relative;
+  }
+  .progress-fill {
+    height: 100%; background: var(--grad); background-size: 200% 100%;
+    border-radius: 999px; width: 0%;
+    transition: width 0.4s ease;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+  .progress-actions { display: flex; gap: 8px; }
+  .action-btn {
+    padding: 8px 14px; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-2); border-radius: 8px;
+    color: var(--text-dim); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .action-btn:hover { color: var(--text); border-color: var(--cyan); }
+  .action-btn.primary { background: var(--grad); color: #020617; border-color: transparent; }
+  .checklist { padding: 30px 0 80px; }
+  .section {
+    margin-bottom: 40px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 26px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h2 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-head h2 .num {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--grad); color: #020617;
+    font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .section-count { font-size: 13px; color: var(--text-dimmer); font-weight: 500; }
+  .section-count strong { color: var(--cyan); }
+  .items { padding: 8px 0; }
+  .item {
+    display: flex; align-items: start; gap: 14px;
+    padding: 16px 26px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s; cursor: pointer;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: rgba(255,255,255,0.02); }
+  .item.checked { opacity: 0.55; }
+  .item.checked .item-text { text-decoration: line-through; }
+  .checkbox {
+    flex-shrink: 0; width: 22px; height: 22px;
+    border: 2px solid var(--border-2); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px; transition: all 0.2s;
+  }
+  .item:hover .checkbox { border-color: var(--cyan); }
+  .item.checked .checkbox { background: var(--green); border-color: var(--green); }
+  .checkbox svg {
+    width: 14px; height: 14px; fill: none; stroke: #020617;
+    stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .item.checked .checkbox svg { opacity: 1; }
+  .item-text { flex: 1; }
+  .item-text strong {
+    display: block; font-size: 15px; font-weight: 600;
+    color: var(--text); margin-bottom: 4px;
+  }
+  .item-text span.hint {
+    display: block; font-size: 13px; color: var(--text-dimmer); line-height: 1.5;
+  }
+  .priority {
+    flex-shrink: 0; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 4px 8px; border-radius: 6px; font-weight: 700; margin-top: 2px;
+  }
+  .priority.high { background: rgba(244,114,182,0.15); color: var(--pink); border: 1px solid rgba(244,114,182,0.3); }
+  .priority.med { background: rgba(168,85,247,0.15); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+  .priority.low { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+  .score-card {
+    margin: 30px 0; padding: 32px;
+    background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(168,85,247,0.08));
+    border: 1px solid var(--border-2); border-radius: 16px; text-align: center;
+  }
+  .score-card h3 { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+  .score-card p { color: var(--text-dim); font-size: 14px; margin-bottom: 20px; }
+  .score-num {
+    font-size: 64px; font-weight: 800;
+    background: var(--grad); -webkit-background-clip: text;
+    background-clip: text; color: transparent;
+    line-height: 1; margin: 16px 0;
+  }
+  .score-grade {
+    display: inline-block; padding: 8px 16px;
+    background: rgba(255,255,255,0.06); border-radius: 8px;
+    font-size: 14px; font-weight: 600; color: var(--text);
+  }
+  footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--text-dimmer); font-size: 13px; }
+  footer a { color: var(--cyan); }
+  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer img { height: 24px; opacity: 0.7; }
+  @media (max-width: 720px) {
+    .section-head { padding: 16px 20px; }
+    .item { padding: 14px 20px; gap: 12px; }
+    .score-card { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="index.html" class="logo"><img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Resources</a>
+      <a href="prompts.html">Prompts</a>
+      <a href="checklist.html" class="active">Checklist</a>
+      <a href="agent-template.html">Agent</a>
+      <a href="https://rrrtx-systems.com/contact" class="nav-cta">Get Strategy Call →</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>FREE CRO AUDIT — AUTO-SAVES PROGRESS</div>
+    <h1>The <span class="grad">Conversion Checklist</span><br/>We Use for Clients.</h1>
+    <p>50+ items across 7 critical sections. Click any box — your progress saves locally. Walk through your site and check off everything you find.</p>
+  </div>
+</section>
+
+<div class="progress-wrap">
+  <div class="container progress-row">
+    <div class="progress-info">
+      <strong id="progressPct">0%</strong>
+      <span><span id="doneCount">0</span> / <span id="totalCount">50</span> complete</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-actions">
+      <button class="action-btn" id="resetBtn">↻ Reset</button>
+      <button class="action-btn primary" id="exportBtn">↓ Export</button>
+    </div>
+  </div>
+</div>
+
+<section class="checklist">
+  <div class="container">
+
+    <div class="section" data-section="speed">
+      <div class="section-head">
+        <h2><span class="num">1</span> Site Speed & Performance</h2>
+        <div class="section-count"><strong id="speedDone">0</strong> / 8 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="speed-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Page loads in under 3 seconds on 3G</strong><span class="hint">Test with Chrome DevTools throttling. Google penalizes pages over 3s.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="speed-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Largest Contentful Paint (LCP) under 2.5s</strong><span class="hint">Core Web Vitals — affects Google ranking. Check PageSpeed Insights.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="speed-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>First Input Delay (FID) under 100ms</strong><span class="hint">How fast your site responds to clicks. Critical for checkout flows.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="speed-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Cumulative Layout Shift (CLS) under 0.1</strong><span class="hint">Pages shouldn't jump around while loading. Annoying + looks broken.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="speed-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Images compressed & in modern format (WebP/AVIF)</strong><span class="hint">Use Next.js Image, Squoosh, or TinyPNG. Each MB = ~5% conversion loss.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="speed-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Critical CSS inlined, JS deferred</strong><span class="hint">Render-blocking scripts kill first paint. Audit with Lighthouse.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="speed-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>CDN enabled (Cloudflare/Vercel/Fastly)</strong><span class="hint">Serves assets from the closest edge to the user. Free tier is enough for most.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="speed-8"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Lighthouse score above 90 (all categories)</strong><span class="hint">Run audit weekly. Anything below 90 has measurable business impact.</span></div><span class="priority high">High</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="mobile">
+      <div class="section-head">
+        <h2><span class="num">2</span> Mobile UX</h2>
+        <div class="section-count"><strong id="mobileDone">0</strong> / 8 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="mobile-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Tap targets at least 44x44 pixels</strong><span class="hint">Apple HIG standard. Smaller = rage taps, missed clicks, accidental exits.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="mobile-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>No horizontal scroll on any page</strong><span class="hint">Test every breakpoint: 320px, 375px, 414px, 768px.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="mobile-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Font size at least 16px for body</strong><span class="hint">Smaller = users pinch-zoom = bounce. 16px is the accessibility floor.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="mobile-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Forms use correct input types (tel, email, number)</strong><span class="hint">Triggers the right keyboard on mobile. Huge UX win for conversion.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="mobile-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Sticky CTA visible without scrolling</strong><span class="hint">Bottom bar on product/checkout pages. Mobile users scroll fast.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="mobile-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Apple Pay / Google Pay offered</strong><span class="hint">Reduces checkout steps by 60%+ on mobile. Stripe supports both in 1 line.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="mobile-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>No intrusive interstitials blocking content</strong><span class="hint">Google penalty + user rage. Use exit-intent or scroll-trigger instead.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="mobile-8"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Tested on real devices (not just emulator)</strong><span class="hint">BrowserStack, physical devices, or friends' phones. Emulators miss 30% of bugs.</span></div><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="atf">
+      <div class="section-head">
+        <h2><span class="num">3</span> Above-the-Fold Copy</h2>
+        <div class="section-count"><strong id="atfDone">0</strong> / 7 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="atf-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Headline communicates specific value (not generic)</strong><span class="hint">"The fastest way to ship code" beats "Empowering developers worldwide".</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="atf-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Subheadline clarifies who it's for + outcome</strong><span class="hint">"For DTC brands doing $1M-$10M/yr who need sub-2s stores."</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="atf-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Primary CTA above the fold (visible without scroll)</strong><span class="hint">Don't make people hunt for the next step.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="atf-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Trust bar visible (logos, ratings, stats)</strong><span class="hint">"Trusted by 5,000+ teams" / "4.9★ on G2" — instant credibility.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="atf-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Hero image shows product in use (not just logo)</strong><span class="hint">Show transformation, not abstract gradients. People buy outcomes.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="atf-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>5-second test: stranger understands the offer</strong><span class="hint">Show your hero to 5 people for 5 seconds. Ask "what does this do?"</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="atf-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>No jargon in headline (5th-grade reading level)</strong><span class="hint">Hemingway App or read it aloud. If you stumble, it's too complex.</span></div><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="trust">
+      <div class="section-head">
+        <h2><span class="num">4</span> Trust & Social Proof</h2>
+        <div class="section-count"><strong id="trustDone">0</strong> / 7 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="trust-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Customer logos or "as seen in" press bar</strong><span class="hint">Even 3 logos from recognizable brands beats 20 unknown ones.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="trust-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Real testimonials with photos + names + roles</strong><span class="hint">"Sarah, Marketing Director at Acme" > "Great product!" — Anonymous.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="trust-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Specific numbers, not "many" or "lots"</strong><span class="hint">"15,247 customers" > "thousands of customers". Specificity = believability.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="trust-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Security badges near checkout (SSL, payment icons)</strong><span class="hint">Especially for new visitors. Familiar logos (Visa, MC, PayPal) reduce anxiety.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="trust-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Money-back guarantee or free trial mentioned</strong><span class="hint">Risk reversal is the #1 conversion lever. Make it obvious.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="trust-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Reviews/testimonials linked to verifiable source</strong><span class="hint">Link to Trustpilot, G2, LinkedIn recommendation. Verifiable = credible.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="trust-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>"As featured in" press logos (TechCrunch, Forbes, etc.)</strong><span class="hint">Even small publications add credibility. Aim for 3-5 recognizable ones.</span></div><span class="priority low">Low</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="copy">
+      <div class="section-head">
+        <h2><span class="num">5</span> Copy & Messaging</h2>
+        <div class="section-count"><strong id="copyDone">0</strong> / 7 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="copy-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Features translated to benefits everywhere</strong><span class="hint">"Fast loading" → "Get to checkout in 2 seconds". Always outcome > input.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="copy-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>No fluff words (amazing, revolutionary, world-class)</strong><span class="hint">Specific beats superlative. "10x faster" > "amazingly fast".</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="copy-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Second-person voice ("you", not "we" or "users")</strong><span class="hint">"Your store will load in 2s" > "Our customers enjoy fast speeds".</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="copy-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Each page has one clear primary action</strong><span class="hint">Multiple CTAs = no CTA. Pick one and make it unmissable.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="copy-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Objections addressed on the same page</strong><span class="hint">FAQ section, comparison table, or objection-handling blocks. Don't make them hunt.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="copy-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Urgency/scarcity is REAL (not fake)</strong><span class="hint">"3 left in stock" only if true. Fake urgency kills trust permanently.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="copy-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Headline + subheadline tested with real users</strong><span class="hint">5-user usability test (Nielsen Norman) catches 85% of issues for $0.</span></div><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="checkout">
+      <div class="section-head">
+        <h2><span class="num">6</span> Checkout Flow</h2>
+        <div class="section-count"><strong id="checkoutDone">0</strong> / 7 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="checkout-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Guest checkout available (no forced account)</strong><span class="hint">Forced account creation = 25-30% cart abandonment. Always offer guest.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="checkout-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Address autocomplete (Google Places or similar)</strong><span class="hint">Reduces typos, speeds up checkout, fewer failed deliveries.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="checkout-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Multiple payment methods (card, PayPal, BNPL, Apple Pay)</strong><span class="hint">Each missing payment method = lost sales for that segment. Add them.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="checkout-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Total cost shown early (no surprise shipping at end)</strong><span class="hint">Hidden costs are the #1 cart abandonment reason. Show shipping estimator on cart page.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="checkout-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Trust signals near payment button (SSL, return policy)</strong><span class="hint">"Secure checkout" + lock icon + "30-day returns" = last-mile confidence.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="checkout-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Progress indicator (Step 2 of 3)</strong><span class="hint">Reduces uncertainty. People abandon when they don't know how much longer.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="checkout-7"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Error messages are specific + helpful</strong><span class="hint">"Card declined — try another card" not "Payment failed". Show the fix.</span></div><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div class="section" data-section="analytics">
+      <div class="section-head">
+        <h2><span class="num">7</span> Analytics & Tracking</h2>
+        <div class="section-count"><strong id="analyticsDone">0</strong> / 6 complete</div>
+      </div>
+      <div class="items">
+        <div class="item" data-id="analytics-1"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>GA4 or Plausible installed correctly</strong><span class="hint">Verify events fire. Most installs are broken — check your own data.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="analytics-2"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Conversion events tracked (sign-up, purchase, lead)</strong><span class="hint">Without events, you're flying blind. Set up the goal first.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="analytics-3"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Heatmap tool installed (Hotjar, Microsoft Clarity — free)</strong><span class="hint">See where people actually click, scroll, rage-click. Free insight.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="analytics-4"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Funnel analysis setup (visit → cart → checkout → purchase)</strong><span class="hint">Know your drop-off rate at each step. Optimize the worst one first.</span></div><span class="priority high">High</span></div>
+        <div class="item" data-id="analytics-5"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>A/B testing tool ready (VWO, Optimizely, or built-in)</strong><span class="hint">Without testing, you're guessing. Even simple A/B beats no testing.</span></div><span class="priority med">Med</span></div>
+        <div class="item" data-id="analytics-6"><div class="checkbox"><svg viewBox="0 0 16 16"><polyline points="3,8 7,12 13,4"/></svg></div><div class="item-text"><strong>Weekly review scheduled (15 min, same day each week)</strong><span class="hint">Data without review is just numbers. Schedule it like a meeting.</span></div><span class="priority med">Med</span></div>
+      </div>
+    </div>
+
+    <div class="score-card" id="scoreCard">
+      <h3>Your Conversion Audit Score</h3>
+      <p>Complete the checklist to see your grade</p>
+      <div class="score-num" id="scoreNum">0%</div>
+      <div class="score-grade" id="scoreGrade">Start checking items to begin</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container row">
+    <img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" />
+    <div>© 2026 RRRTX SYSTEMS · <a href="https://rrrtx-systems.com">rrrtx-systems.com</a> · Built by engineers, not templates.</div>
+    <div><a href="https://rrrtx-systems.com/contact">Want us to fix these for you?</a></div>
+  </div>
+</footer>
+
+<script>
+  const STORAGE_KEY = 'rrrtx-cro-checklist-v1';
+  const items = document.querySelectorAll('.item');
+  const totalCount = items.length;
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) {}
+
+  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  function updateProgress() {
+    let done = 0;
+    Object.values(state).forEach(v => { if (v) done++; });
+    const pct = Math.round((done / totalCount) * 100);
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('doneCount').textContent = done;
+    document.getElementById('totalCount').textContent = totalCount;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('scoreNum').textContent = pct + '%';
+    ['speed','mobile','atf','trust','copy','checkout','analytics'].forEach(sec => {
+      const secItems = document.querySelectorAll(`[data-section="${sec}"] .item`);
+      let secDone = 0;
+      secItems.forEach(it => { if (state[it.dataset.id]) secDone++; });
+      const el = document.getElementById(sec + 'Done');
+      if (el) el.textContent = secDone;
+    });
+    const gradeEl = document.getElementById('scoreGrade');
+    if (done === 0) gradeEl.textContent = 'Start checking items to begin';
+    else if (pct < 30) gradeEl.textContent = '🚨 Critical — Major revenue leaks likely';
+    else if (pct < 60) gradeEl.textContent = '⚠️ Below Average — Fix high-priority items first';
+    else if (pct < 80) gradeEl.textContent = '👍 Solid Foundation — Polish to reach top tier';
+    else if (pct < 95) gradeEl.textContent = '🔥 Conversion Machine — Industry-leading';
+    else gradeEl.textContent = '🏆 Perfect — You\'re in the top 1%';
+  }
+
+  items.forEach(it => {
+    const id = it.dataset.id;
+    if (state[id]) it.classList.add('checked');
+    it.addEventListener('click', () => {
+      it.classList.toggle('checked');
+      state[id] = it.classList.contains('checked');
+      save();
+      updateProgress();
+    });
+  });
+  updateProgress();
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (!confirm('Reset all progress? This cannot be undone.')) return;
+    state = {};
+    save();
+    items.forEach(it => it.classList.remove('checked'));
+    updateProgress();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    let text = 'RRRTX SYSTEMS — CRO Audit Report\n';
+    text += 'Generated: ' + new Date().toLocaleString() + '\n';
+    text += '='.repeat(50) + '\n\n';
+    const sections = ['speed','mobile','atf','trust','copy','checkout','analytics'];
+    let total = 0, done = 0;
+    sections.forEach(sec => {
+      const secEl = document.querySelector(`[data-section="${sec}"]`);
+      const title = secEl.querySelector('h2').textContent.trim().replace(/^\d+\s*/, '');
+      text += '\n## ' + title + '\n';
+      secEl.querySelectorAll('.item').forEach(it => {
+        total++;
+        const checked = state[it.dataset.id];
+        if (checked) done++;
+        const t = it.querySelector('strong').textContent;
+        const p = it.querySelector('.priority')?.textContent || '';
+        text += (checked ? '[✓] ' : '[ ] ') + t + ' (' + p + ')\n';
+      });
+    });
+    text += '\n' + '='.repeat(50) + '\n';
+    text += 'SCORE: ' + done + ' / ' + total + ' (' + Math.round(done/total*100) + '%)\n';
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rrrtx-cro-audit.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ec139b29255b2e',t:'MTc4MTk3MjE3Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

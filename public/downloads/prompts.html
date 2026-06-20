@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Prompt Library for Ecommerce — RRRTX SYSTEMS</title>
+<meta name="description" content="40+ tested AI prompts for ecommerce: product descriptions, ads, emails, SEO, CRO, customer support. Copy-paste ready." />
+<style>
+  :root {
+    --bg: #020617;
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.14);
+    --text: #ffffff;
+    --text-dim: #94a3b8;
+    --text-dimmer: #64748b;
+    --cyan: rgb(34, 211, 238);
+    --blue: rgb(96, 165, 250);
+    --purple: rgb(168, 85, 247);
+    --pink: rgb(244, 114, 182);
+    --grad: linear-gradient(135deg, var(--cyan), var(--blue), var(--purple), var(--pink));
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: -2; pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 80%);
+  }
+  body::after {
+    content: ''; position: fixed; top: -20%; left: 50%;
+    transform: translateX(-50%); width: 1200px; height: 800px;
+    background: radial-gradient(circle, rgba(34,211,238,0.15), rgba(168,85,247,0.08) 40%, transparent 70%);
+    z-index: -1; pointer-events: none; filter: blur(60px);
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(20px); background: rgba(2,6,23,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .logo img { height: 38px; display: block; }
+  .nav-links { display: flex; gap: 28px; align-items: center; font-size: 14px; }
+  .nav-links a { color: var(--text-dim); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+  .nav-cta {
+    padding: 10px 20px; border: 1px solid var(--border-2); border-radius: 8px;
+    background: rgba(255,255,255,0.04); transition: all 0.2s; font-weight: 500;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.08); border-color: var(--cyan); }
+  @media (max-width: 880px) { .nav-links { display: none; } }
+  .hero { padding: 80px 0 40px; text-align: center; }
+  .eyebrow {
+    display: inline-block; padding: 6px 14px; border: 1px solid var(--border-2);
+    border-radius: 999px; font-size: 13px; color: var(--text-dim);
+    background: rgba(255,255,255,0.03); margin-bottom: 24px;
+  }
+  .eyebrow .dot {
+    display: inline-block; width: 6px; height: 6px; background: var(--cyan);
+    border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; vertical-align: middle;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+  h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; }
+  h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: var(--text-dim); max-width: 640px; margin: 0 auto; font-size: 17px; }
+  .toolbar {
+    position: sticky; top: 73px; z-index: 40;
+    backdrop-filter: blur(20px); background: rgba(2,6,23,0.7);
+    padding: 16px 0; border-bottom: 1px solid var(--border); margin-bottom: 32px;
+  }
+  .search-wrap { display: flex; gap: 12px; align-items: center; }
+  .search-input {
+    flex: 1; padding: 12px 16px; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-2); border-radius: 10px;
+    color: var(--text); font-size: 14px; font-family: inherit; outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--cyan); }
+  .search-input::placeholder { color: var(--text-dimmer); }
+  .counter { font-size: 13px; color: var(--text-dimmer); white-space: nowrap; }
+  .categories { padding: 24px 0 12px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+  .categories::-webkit-scrollbar { display: none; }
+  .chip {
+    padding: 8px 16px; border: 1px solid var(--border-2); border-radius: 999px;
+    background: rgba(255,255,255,0.02); font-size: 13px;
+    color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    white-space: nowrap; font-family: inherit;
+  }
+  .chip:hover { color: var(--text); }
+  .chip.active { background: var(--grad); background-size: 200% 200%; color: #020617; border-color: transparent; font-weight: 600; }
+  .prompts { padding: 24px 0 80px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+  .prompt {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; transition: all 0.3s; display: flex; flex-direction: column;
+  }
+  .prompt:hover { border-color: var(--border-2); transform: translateY(-2px); }
+  .prompt.hidden { display: none; }
+  .prompt-head { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; gap: 12px; }
+  .prompt-cat { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); font-weight: 600; }
+  .prompt h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px; line-height: 1.3; }
+  .prompt-body {
+    font-size: 13.5px; color: var(--text-dim);
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    white-space: pre-wrap; line-height: 1.6; flex: 1;
+    max-height: 280px; overflow-y: auto;
+  }
+  .prompt-body::-webkit-scrollbar { width: 6px; }
+  .prompt-body::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+  .copy-btn {
+    margin-top: 14px; padding: 10px 14px;
+    background: rgba(255,255,255,0.06); border: 1px solid var(--border-2);
+    border-radius: 8px; color: var(--text); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); }
+  .copy-btn.copied { background: var(--cyan); color: #020617; border-color: var(--cyan); }
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 14px 24px; background: var(--cyan); color: #020617;
+    border-radius: 12px; font-weight: 700; font-size: 14px;
+    box-shadow: 0 20px 50px rgba(34,211,238,0.4);
+    transition: transform 0.3s ease; z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--text-dimmer); font-size: 13px; }
+  footer a { color: var(--cyan); }
+  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer img { height: 24px; opacity: 0.7; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } .hero { padding: 50px 0 30px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="index.html" class="logo"><img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Resources</a>
+      <a href="prompts.html" class="active">Prompts</a>
+      <a href="checklist.html">Checklist</a>
+      <a href="agent-template.html">Agent</a>
+      <a href="https://rrrtx-systems.com/contact" class="nav-cta">Get Strategy Call →</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>FREE PROMPT LIBRARY — V2.4</div>
+    <h1>40+ <span class="grad">Ecommerce AI Prompts</span><br/>Built by Engineers.</h1>
+    <p>Copy-paste tested prompts for product copy, ads, emails, SEO, support, and CRO. Works with ChatGPT, Claude, Gemini — anywhere.</p>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="container">
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="search" placeholder="Search prompts (e.g. 'product description', 'cold email', 'Facebook ad')..." />
+      <div class="counter" id="counter">40 prompts</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="categories" id="categories">
+    <button class="chip active" data-cat="all">All</button>
+    <button class="chip" data-cat="product">Product Copy</button>
+    <button class="chip" data-cat="ads">Ad Copy</button>
+    <button class="chip" data-cat="email">Email</button>
+    <button class="chip" data-cat="seo">SEO / AEO</button>
+    <button class="chip" data-cat="support">Support</button>
+    <button class="chip" data-cat="social">Social Media</button>
+    <button class="chip" data-cat="cro">CRO / Landing</button>
+    <button class="chip" data-cat="analytics">Analytics</button>
+  </div>
+</div>
+
+<section class="prompts">
+  <div class="container">
+    <div class="grid" id="grid">
+
+      <div class="prompt" data-cat="product" data-keywords="product description ecommerce copywriting">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>High-Converting Product Description</h3>
+        <pre class="prompt-body">Write a 150-word product description for [PRODUCT NAME].
+
+Target audience: [AUDIENCE]
+Tone: [PROFESSIONAL / CASUAL / LUXURY / PLAYFUL]
+Price point: $[PRICE]
+
+Structure:
+1. Hook (1 sentence) — focus on the transformation, not the product
+2. 3 key benefits (bullet points) — feature → outcome → emotion
+3. Objection handler (1 sentence) — address the #1 reason people don't buy
+4. CTA (1 sentence) — urgency + scarcity without being sleazy
+
+Rules:
+- No fluff words: "amazing", "incredible", "revolutionary"
+- Use sensory language if physical product
+- Include 1 specific number or stat
+- Write at a 6th-grade reading level</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="product" data-keywords="product title seo ecommerce listing">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>SEO Product Title Generator</h3>
+        <pre class="prompt-body">Generate 10 product title variations for [PRODUCT].
+
+Requirements:
+- Length: 60-150 characters
+- Front-load the primary keyword
+- Include: [BRAND] + [PRODUCT TYPE] + [KEY FEATURE] + [USE CASE]
+- Avoid: ALL CAPS, special characters, emoji
+- Make it scannable for Google Shopping
+
+Output as a numbered list with character count next to each.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="product" data-keywords="product comparison alternatives competitors">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>"Why We're Different" Comparison</h3>
+        <pre class="prompt-body">Write a comparison table (markdown format) showing how [OUR PRODUCT] compares to typical alternatives in [CATEGORY].
+
+Rows: 5-7 features that matter most to [TARGET BUYER]
+Columns: [OUR PRODUCT] vs [TYPICAL COMPETITOR] vs [CHEAPER ALTERNATIVE]
+
+Rules:
+- Be honest — don't exaggerate
+- Highlight 2-3 features where we genuinely win
+- Acknowledge 1 feature where competitors might be better (builds trust)
+- End with one line: why the difference matters</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="product" data-keywords="bullet points features benefits">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>Bullet Points That Sell</h3>
+        <pre class="prompt-body">Take this product: [PRODUCT NAME + DESCRIPTION]
+
+Generate 7 bullet points using this framework:
+- [BENEFIT] — [PROOF/SOCIAL] — [EMOTIONAL PAYOFF]
+
+Example: "All-day comfort — 12,000+ 5-star reviews — walk through your day pain-free"
+
+Rules:
+- Lead with the benefit, not the feature
+- Each bullet must stand alone
+- Vary sentence length (1 short, 1 long, repeat)
+- Max 18 words per bullet</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="product" data-keywords="brand voice tone of voice guidelines">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>Brand Voice Document</h3>
+        <pre class="prompt-body">Create a brand voice guide for [BRAND].
+
+Section 1: Brand personality
+- We are like: [3 famous brands or people]
+- We are NOT like: [3 brands we want to distance from]
+
+Section 2: Voice attributes (pick 3-4, define each):
+- [e.g., Confident but not arrogant]
+- [e.g., Technical but not jargon-heavy]
+
+Section 3: Tone variations by context
+- Website copy:
+- Social media:
+- Customer support:
+- Sales calls:
+
+Section 4: Words we use / words we avoid
+- Use: [10 words]
+- Avoid: [10 words]
+
+Section 5: 5 example sentences showing the voice in action.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="product" data-keywords="launch announcement product release">
+        <div class="prompt-head"><span class="prompt-cat">Product Copy</span></div>
+        <h3>Product Launch Announcement</h3>
+        <pre class="prompt-body">Write a product launch announcement for [PRODUCT/FEATURE].
+
+Audience: [WHO]
+Channels: [EMAIL / SOCIAL / BLOG / PRESS]
+
+Generate:
+
+**Email to existing customers** (under 250 words):
+- Subject line
+- What changed (1 sentence)
+- Why it matters (2 sentences)
+- How to use it (1 sentence + link)
+- "Reply with questions" CTA
+
+**Blog post** (500 words):
+- Problem it solves
+- How it works (3 steps)
+- Visual suggestion
+- CTA
+
+**Social posts** (5 variations):
+- LinkedIn (authority angle)
+- Twitter (curiosity angle)
+- Instagram (story angle)
+- TikTok script (15-second demo)
+- Reddit/HN (technical depth)
+
+**Press release** (300 words, formal tone)</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="ads" data-keywords="facebook ad meta paid social">
+        <div class="prompt-head"><span class="prompt-cat">Ad Copy</span></div>
+        <h3>Facebook / Meta Ad — 5 Variations</h3>
+        <pre class="prompt-body">Generate 5 Facebook ad variations for [PRODUCT/OFFER].
+
+Each variation must use a different angle:
+1. Problem-focused (lead with the pain point)
+2. Story-driven (micro-story of a customer)
+3. Direct-response (price + offer + urgency)
+4. Social proof (heavy on testimonials/results)
+5. Curiosity-driven (tease a result without revealing)
+
+Format each as:
+- Primary text (125 chars max for above-the-fold visibility)
+- Headline (40 chars max)
+- Description (30 chars max)
+- CTA button recommendation</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="ads" data-keywords="google ads ppc search ad">
+        <div class="prompt-head"><span class="prompt-cat">Ad Copy</span></div>
+        <h3>Google Search Ad — RSA Builder</h3>
+        <pre class="prompt-body">Build a Google Responsive Search Ad for [PRODUCT/SERVICE].
+
+Target keyword: [KEYWORD]
+Landing page: [URL OFFER]
+
+Generate:
+- 15 headlines (max 30 chars each):
+  - 5 with keyword variations
+  - 3 with benefits
+  - 3 with CTAs
+  - 2 with proof/authority
+  - 2 with urgency
+- 4 descriptions (max 90 chars each):
+  - 1 with feature list
+  - 1 with offer/promo
+  - 1 with social proof
+  - 1 with CTA
+
+Pin headlines: H1=brand, H2=keyword, H3=CTA</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="ads" data-keywords="tiktok ad ugc video script">
+        <div class="prompt-head"><span class="prompt-cat">Ad Copy</span></div>
+        <h3>TikTok / Reels UGC Script</h3>
+        <pre class="prompt-body">Write a 30-second UGC-style TikTok script for [PRODUCT].
+
+Format:
+- [0-3s] HOOK — pattern interrupt, must stop the scroll
+- [3-8s] PROBLEM — relatable, specific
+- [8-18s] SOLUTION — product in action, real demo
+- [18-25s] PROOF — quick result or testimonial
+- [25-30s] CTA — where to buy, code, urgency
+
+Tone: Conversational, like a friend telling a friend.
+Include on-screen text suggestions in [brackets].
+Add 3 alternative hooks at the bottom.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="ads" data-keywords="google shopping pmax ecommerce feed">
+        <div class="prompt-head"><span class="prompt-cat">Ad Copy</span></div>
+        <h3>Google Shopping Feed Optimization</h3>
+        <pre class="prompt-body">Review this product feed and rewrite titles, descriptions, and product types for [CATEGORY].
+
+For each product, optimize for:
+- Title: Brand + Product Type + Key Attribute + Use Case (max 150 chars)
+- Description: Top 3 benefits + 1 proof point (max 5000 chars)
+- Product type: Most specific Google taxonomy category
+
+Output as a CSV-ready table with columns: id, title, description, product_type, google_product_category</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="ads" data-keywords="retargeting remarketing ecommerce">
+        <div class="prompt-head"><span class="prompt-cat">Ad Copy</span></div>
+        <h3>Retargeting Ad Sequence</h3>
+        <pre class="prompt-body">Build a 5-ad retargeting sequence for people who visited [PRODUCT PAGE] but didn't buy.
+
+Day 1: "Still thinking about it?" — soft reminder, no pressure
+Day 3: Social proof — best review, real customer photo
+Day 5: Objection handler — "Here's what people were worried about"
+Day 7: Urgency — limited stock / price increase notice
+Day 10: Last chance — best offer you'll see
+
+For each ad:
+- Headline (under 40 chars)
+- Body (under 125 chars)
+- CTA
+- Why this angle works
+
+Frequency cap: don't show more than 1x/day per user.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="email" data-keywords="cold email outreach b2b sales">
+        <div class="prompt-head"><span class="prompt-cat">Email</span></div>
+        <h3>Cold Email That Gets Replies</h3>
+        <pre class="prompt-body">Write a cold email to [PROSPECT NAME/COMPANY] about [YOUR OFFER].
+
+Constraints:
+- Subject line: 4-6 words, no caps, no clickbait
+- Body: under 75 words
+- One specific compliment about their business (not generic)
+- One clear pain point you noticed
+- One specific result you've delivered for similar clients
+- One soft ask (15-min call, not a demo)
+
+Generate 3 subject line variations.
+Write in first-person, conversational tone.
+No emojis, no exclamation marks.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="email" data-keywords="welcome email sequence onboarding">
+        <div class="prompt-head"><span class="prompt-cat">Email</span></div>
+        <h3>5-Email Welcome Sequence</h3>
+        <pre class="prompt-body">Build a 5-email welcome sequence for new subscribers of [BRAND].
+
+Email 1 (Day 0): Deliver [LEAD MAGNET] + set expectations
+Email 2 (Day 2): Origin story — why we exist
+Email 3 (Day 4): Best-performing content from archive
+Email 4 (Day 7): Customer transformation story
+Email 5 (Day 10): Soft pitch to [CORE OFFER]
+
+For each email provide:
+- Subject line (with emoji option)
+- Preview text
+- Body copy (under 250 words)
+- One CTA</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="email" data-keywords="abandoned cart recovery ecommerce">
+        <div class="prompt-head"><span class="prompt-cat">Email</span></div>
+        <h3>Abandoned Cart — 3-Touch Recovery</h3>
+        <pre class="prompt-body">Write a 3-email abandoned cart sequence for [PRODUCT].
+
+Email 1 (1 hour): "You left this behind" — soft reminder + product image
+Email 2 (24 hours): Objection handler — address top 3 buying hesitations
+Email 3 (72 hours): Urgency — free shipping / discount / low-stock alert
+
+Each email under 150 words.
+Each must include: product name, image suggestion, one clear CTA, P.S. line.
+Tone: Helpful, not pushy.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="email" data-keywords="newsletter content weekly">
+        <div class="prompt-head"><span class="prompt-cat">Email</span></div>
+        <h3>Weekly Newsletter Skeleton</h3>
+        <pre class="prompt-body">Build a weekly newsletter for [NICHE] subscribers.
+
+Sections:
+1. Subject line (curiosity-driven, under 8 words)
+2. Preview text (1 line, complements subject)
+3. Opening — 2 sentences, conversational, NOT "Hi [First Name]"
+4. Main piece (300-500 words) — one specific insight from this week
+5. "Quick hits" — 3-5 bullet links to outside content
+6. Personal note — 1 sentence, behind-the-scenes
+7. CTA — aligned with current offer
+
+Voice: [BRAND VOICE]
+Avoid: Generic intros, recycled content, "Hope you're well"</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="email" data-keywords="reactivation winback dormant">
+        <div class="prompt-head"><span class="prompt-cat">Email</span></div>
+        <h3>Reactivation / Win-back Email</h3>
+        <pre class="prompt-body">Write a 3-email reactivation sequence for subscribers who haven't opened in [90 / 180 / 365] days.
+
+Email 1 (Day 0): "We miss you" — value-first, no pitch
+Email 2 (Day 7): "Here's what's new" — best content from the gap
+Email 3 (Day 14): "Should we say goodbye?" — breakup email, last chance
+
+Goal of sequence: Either re-engage OR clean the list.
+
+Rules:
+- Under 150 words each
+- No guilt-tripping
+- No desperate discounts
+- Email 3 must include one-click unsubscribe link AND "stay subscribed" option</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="seo keyword research search">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>Keyword Cluster Builder</h3>
+        <pre class="prompt-body">For the topic [TOPIC], build a complete keyword cluster:
+
+Pillar page (1): High-volume parent keyword
+Cluster posts (8-10): Supporting long-tail keywords
+
+For each keyword provide:
+- Search intent (informational / commercial / transactional / navigational)
+- Estimated difficulty (low / medium / high)
+- Word count recommendation for the article
+- 3 questions users ask that the article should answer
+- 1 internal linking opportunity
+
+Format as a table I can paste into a spreadsheet.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="aeo answer engine optimization chatgpt perplexity">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>Answer Engine Optimization (AEO) Brief</h3>
+        <pre class="prompt-body">Optimize this page [URL/TOPIC] for AI search engines (ChatGPT, Perplexity, Google AI Overviews).
+
+Generate:
+1. 5 "answer-first" headings — phrased as questions
+2. 40-word direct answer for each (citable by AI)
+3. 3 FAQ entries with schema markup (JSON-LD)
+4. 2 statistics or quotes to include (boosts citation chance)
+5. 1 comparison table structure (AEO loves tables)
+6. List of entities/concepts to mention (boosts semantic relevance)
+
+Goal: Be the source AI engines cite when answering [TARGET QUERY].</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="meta description title tag">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>Meta Tags Generator</h3>
+        <pre class="prompt-body">For this page: [URL or TOPIC]
+
+Generate:
+- 3 title tag variations (50-60 chars, keyword + benefit + emotion)
+- 3 meta description variations (140-155 chars, include CTA)
+- 5 H1 alternatives
+- 5 H2 subheading options
+- Open Graph title (60 chars)
+- Open Graph description (200 chars)
+- Twitter Card copy (200 chars)
+
+Rules:
+- Front-load primary keyword
+- Include a number or specific benefit
+- Match search intent for [TARGET KEYWORD]</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="blog post outline article structure">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>SEO Blog Outline</h3>
+        <pre class="prompt-body">Create a complete blog outline for [TARGET KEYWORD].
+
+Structure:
+- Title (curiosity + keyword, under 60 chars)
+- Meta description (under 155 chars)
+- H1
+- Intro hook (2-3 sentences, promise + stakes)
+- 5-7 H2 sections, each with:
+  - 3-4 H3 sub-points
+  - 1 specific example or stat
+  - 1 internal link opportunity
+- FAQ section (5 questions, AEO-optimized)
+- Conclusion with single CTA
+
+Word count target: [1500 / 2500 / 4000]
+Tone: [EXPERT / CONVERSATIONAL / AUTHORITATIVE]</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="schema markup structured data json">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>Schema Markup Generator</h3>
+        <pre class="prompt-body">Generate JSON-LD schema markup for [PAGE TYPE: product / article / local business / FAQ / event].
+
+Required fields for [PAGE TYPE]:
+[List your page specifics]
+
+Also include:
+- Organization schema (for the site)
+- BreadcrumbList schema
+- Any relevant extensions (FAQ, HowTo, Review, AggregateRating)
+
+Output as ready-to-paste JSON-LD blocks with comments explaining each section.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="seo" data-keywords="competitor analysis content gap">
+        <div class="prompt-head"><span class="prompt-cat">SEO / AEO</span></div>
+        <h3>Competitor Content Gap</h3>
+        <pre class="prompt-body">Compare [OUR SITE] against [3 COMPETITOR URLS] for the topic [TOPIC].
+
+Build a content gap table with:
+
+| Topic | Our Coverage | Competitor 1 | Competitor 2 | Competitor 3 | Priority |
+|-------|--------------|--------------|--------------|--------------|----------|
+
+Then:
+- Top 5 topics we should write (high demand, low competition)
+- Top 3 topics to improve (we rank 5-10, push to top 3)
+- Top 1 topic to delete or merge (underperforming)
+- Internal linking opportunities we missed
+- "Skyscraper" content upgrade idea (1 specific post to 10x)</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="support" data-keywords="customer support response ticket">
+        <div class="prompt-head"><span class="prompt-cat">Support</span></div>
+        <h3>Customer Support Reply</h3>
+        <pre class="prompt-body">A customer wrote: [PASTE CUSTOMER MESSAGE]
+
+Write a reply that:
+1. Acknowledges their specific issue (not generic)
+2. Apologizes without making excuses
+3. Explains what happened (if relevant)
+4. States the exact fix or next step
+5. Provides timeline
+6. Asks if there's anything else
+
+Tone: Empathetic but confident. Use first-person. Max 150 words.
+Do NOT use: "I understand your frustration", "We take this seriously" (overused).
+If refund needed: pre-authorize up to $[AMOUNT] without escalation.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="support" data-keywords="objection handling sales saas">
+        <div class="prompt-head"><span class="prompt-cat">Support</span></div>
+        <h3>Objection Handler — 10 Common</h3>
+        <pre class="prompt-body">For [OUR PRODUCT/SERVICE — $[PRICE]], generate responses to these 10 objections:
+
+1. "Too expensive"
+2. "Need to think about it"
+3. "Already using [COMPETITOR]"
+4. "Not the right time"
+5. "Need to talk to my team"
+6. "Doesn't have feature X"
+7. "Can I get a discount?"
+8. "Burned by similar tool before"
+9. "Why should I trust you?"
+10. "I'll do it myself"
+
+For each:
+- The real concern behind the objection
+- A response that validates + re-frames + moves forward
+- A follow-up question</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="support" data-keywords="knowledge base faq help docs">
+        <div class="prompt-head"><span class="prompt-cat">Support</span></div>
+        <h3>FAQ Page Builder</h3>
+        <pre class="prompt-body">Build a FAQ section for [PRODUCT/SERVICE] targeting the top 15 questions customers ask.
+
+Group into categories:
+- Getting Started
+- Billing & Pricing
+- Features & Usage
+- Troubleshooting
+- Account & Security
+
+For each Q:
+- Question phrased exactly as customers ask it
+- Answer under 80 words
+- Include 1 link to deeper documentation
+- End with: "Still need help? Contact us →"
+
+Format as: <details>/<summary> HTML or ready-to-paste markdown.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="support" data-keywords="chatbot training rag knowledge base">
+        <div class="prompt-head"><span class="prompt-cat">Support</span></div>
+        <h3>AI Chatbot Knowledge Base</h3>
+        <pre class="prompt-body">Structure our help documentation so an AI chatbot can answer questions accurately.
+
+For each topic, provide:
+- Topic name
+- 5 questions customers actually ask (in their words)
+- Canonical answer (under 80 words, conversational)
+- 2 follow-up questions the bot should ask
+- Escalation trigger (when to hand to human)
+- Source link
+
+Topics to cover:
+- Getting started
+- Account & billing
+- Common how-tos (top 10)
+- Troubleshooting (top 5 errors)
+- Refunds & cancellations
+- Integrations
+
+Output as JSON the bot can ingest.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="social" data-keywords="linkedin post thought leadership">
+        <div class="prompt-head"><span class="prompt-cat">Social Media</span></div>
+        <h3>LinkedIn Post — Authority Builder</h3>
+        <pre class="prompt-body">Write a LinkedIn post about [TOPIC] that positions me as a thought leader.
+
+Format (1,200-1,500 chars):
+- Line 1: Pattern-interrupt hook (no "I'm excited to announce")
+- Line 2-4: Set up the contrarian or non-obvious insight
+- Line 5-15: The actual insight — short paragraphs, line breaks every 1-2 sentences
+- Line 16-20: One specific example or story (real numbers if possible)
+- Line 21-23: Counter-argument + your response
+- Line 24: Clear takeaway
+- Line 25: Question to drive comments
+
+Rules:
+- No hashtags in the body (1-3 at the end max)
+- No "Agree?" "Thoughts?" "Like if..."
+- Sound like a human, not a guru</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="social" data-keywords="twitter x thread viral">
+        <div class="prompt-head"><span class="prompt-cat">Social Media</span></div>
+        <h3>Twitter / X Thread</h3>
+        <pre class="prompt-body">Turn this idea into a viral Twitter thread: [IDEA/TOPIC]
+
+Format: 8-12 tweets
+- Tweet 1: Hook with promise (under 250 chars)
+- Tweets 2-10: One idea per tweet, each ending with "→" or emoji
+- Tweet 11: Recap of all points
+- Tweet 12: CTA (follow / RT / save / link)
+
+Rules:
+- Each tweet must stand alone (people screenshot single tweets)
+- Use line breaks within tweets for emphasis
+- Number tweets (1/, 2/, 3/...)
+- Final tweet: "If this was useful, RT the first tweet so others find it"</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="social" data-keywords="instagram caption reels">
+        <div class="prompt-head"><span class="prompt-cat">Social Media</span></div>
+        <h3>Instagram Caption + Hashtag Set</h3>
+        <pre class="prompt-body">For this Instagram post about [TOPIC], write:
+
+Caption (under 150 words):
+- Line 1: Hook (first 125 chars are visible above "more")
+- Line 2-3: Story or context
+- Middle: Value / insight / behind-the-scenes
+- Last line: Question or CTA
+
+Hashtags (30 max):
+- 5 large (500K+ posts)
+- 10 medium (50K-500K posts)
+- 10 niche (under 50K posts)
+- 5 branded (your unique tag)
+
+Organize: hashtags go in first comment, NOT caption.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="social" data-keywords="youtube script video description">
+        <div class="prompt-head"><span class="prompt-cat">Social Media</span></div>
+        <h3>YouTube Video Script — Hook + Structure</h3>
+        <pre class="prompt-body">Write a YouTube script for a [DURATION]-minute video on [TOPIC].
+
+Structure:
+- [0:00-0:15] HOOK: Most surprising result or claim (must earn the watch)
+- [0:15-0:45] CONTEXT: Why this matters right now
+- [0:45-2:00] SECTION 1: First main point with example
+- [2:00-4:00] SECTION 2: Second main point with example
+- [4:00-6:00] SECTION 3: Third main point
+- [6:00-7:00] RECAP + CTA: Subscribe / comment / next video
+
+Include:
+- 3 B-roll suggestions per section
+- 2 on-screen text overlays
+- Thumbnail title (under 6 words)
+- Description with timestamps + keywords</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="social" data-keywords="twitter x hook tweet single">
+        <div class="prompt-head"><span class="prompt-cat">Social Media</span></div>
+        <h3>Single-Tweet Hooks</h3>
+        <pre class="prompt-body">Generate 10 single-tweet hooks for [TOPIC/NICHE].
+
+Each hook must:
+- Be under 240 characters
+- Stand alone (no thread)
+- Make a specific, defensible claim
+- Avoid: "Here's why", "Thread:", "I learned"
+- Trigger curiosity or controversy
+
+Mix angles:
+- 3 contrarian takes
+- 2 specific numbers
+- 2 predictions
+- 2 confessions / mistakes
+- 1 unexpected analogy
+
+Include a one-line CTA for each (subtle, not salesy).</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="landing page hero headline">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>Landing Page Hero — Above the Fold</h3>
+        <pre class="prompt-body">Build the above-the-fold section for a landing page selling [PRODUCT/SERVICE].
+
+Target visitor: [AUDIENCE]
+Awareness level: [Unaware / Problem-aware / Solution-aware / Product-aware / Most-aware]
+
+Generate:
+- 5 headline variations (under 12 words each):
+  - 1 benefit-driven
+  - 1 curiosity-driven
+  - 1 contrarian
+  - 1 specificity-driven (with number)
+  - 1 question
+- 3 subheadlines (under 25 words each, expand the promise)
+- 2 CTA button texts (2-4 words, action + outcome)
+- Trust bar: 5 elements (logos, stats, ratings)
+- 1 hero image/visual suggestion
+
+Rules: No "Welcome to", no jargon, no feature lists in headline.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="cta call to action button">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>CTA Button Copy — 20 Variations</h3>
+        <pre class="prompt-body">Generate 20 variations of a CTA button for [OFFER/CONTEXT].
+
+Mix these angles:
+- Direct command (Get, Start, Try)
+- Outcome-focused (Get [RESULT])
+- Risk-reversal (Try Free, No Card)
+- Urgency (Claim Now, Today Only)
+- Curiosity (See How, Show Me)
+- Identity-based (For [AUDIENCE])
+
+For each variation:
+- Button text (2-4 words)
+- Why it works (1 sentence)
+- Best context to use it</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="testimonial review social proof">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>Testimonial / Case Study Page</h3>
+        <pre class="prompt-body">Build a case study layout for [CLIENT NAME + RESULT].
+
+Sections:
+1. Hero: Client logo + headline result ("[METRIC] in [TIMEFRAME]")
+2. Before: 3 specific problems they faced (with numbers)
+3. After: 3 specific outcomes (with numbers)
+4. Quote: Pull-quote from the client, 2-3 sentences
+5. Process: 3-4 steps we took, what we built
+6. Visuals: 3 image suggestions (dashboard, before/after, team)
+7. Related results: 2 mini case studies with same offer
+
+Use this framework for the headline:
+"[CLIENT] went from [BEFORE STATE] to [AFTER STATE] in [TIMEFRAME] by [METHOD]."</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="pricing page tier comparison">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>Pricing Page Builder</h3>
+        <pre class="prompt-body">Build a 3-tier pricing page for [PRODUCT/SERVICE].
+
+Tier 1: Starter — $[PRICE]/mo
+- For: [AUDIENCE 1]
+- 5 features (real, not fluff)
+- 1 limitation that's actually a feature
+
+Tier 2: Growth — $[PRICE]/mo (recommended)
+- For: [AUDIENCE 2]
+- 8 features (all of Starter + 3 more)
+- Highlight as "Most Popular"
+
+Tier 3: Scale — $[PRICE]/mo
+- For: [AUDIENCE 3]
+- 10 features (all of Growth + 2 more)
+- White-glove language
+
+For each tier:
+- One-sentence positioning
+- Best-for description
+- "What you get" bullet list
+- "What you don't get" honesty line
+- CTA button text</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="form conversion lead capture">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>Lead Form — Field Optimization</h3>
+        <pre class="prompt-body">Review this lead form [DESCRIBE FORM] and optimize it.
+
+Audit each field:
+- Is this field really needed? (cut anything that doesn't qualify)
+- Can I infer this instead of asking? (use enrichment)
+- Is the label clear or clever?
+- Does the placeholder add value or confuse?
+- Are validation messages helpful?
+
+Suggest:
+- Optimal field order (low-friction first)
+- Smart defaults where possible
+- Progressive profiling strategy for returning visitors
+- 3 multi-step form split options
+- Trust signals to add near the form
+
+Goal: Increase form completion by 20-40%.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="cro" data-keywords="checkout cart ecommerce flow">
+        <div class="prompt-head"><span class="prompt-cat">CRO / Landing</span></div>
+        <h3>Checkout Flow Optimizer</h3>
+        <pre class="prompt-body">Audit this checkout flow [DESCRIBE STEPS] and find 5 friction points.
+
+For each friction point:
+- Where it happens (step + field/element)
+- Why it causes drop-off (specific reason)
+- The fix (what to test)
+- Expected impact (% completion rate lift)
+- How to measure it (event to track)
+
+Then suggest:
+- Guest checkout as default (vs forced account)
+- Address autocomplete integration
+- Payment options to add (Apple Pay, Google Pay, BNPL)
+- Trust signals at each step
+- Progress indicator design
+
+Output as a prioritized backlog.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="analytics" data-keywords="analytics ga4 tracking events">
+        <div class="prompt-head"><span class="prompt-cat">Analytics</span></div>
+        <h3>GA4 Event Tracking Plan</h3>
+        <pre class="prompt-body">Build a complete GA4 event tracking plan for [BUSINESS TYPE].
+
+For each event, provide:
+- Event name (snake_case)
+- Trigger (specific user action)
+- Parameters to send (with example values)
+- Why it matters (business question answered)
+- Recommended report/looker studio view
+
+Categories to cover:
+- Page views & scrolls
+- Form interactions (start, field_complete, submit)
+- Ecommerce (view_item, add_to_cart, begin_checkout, purchase)
+- Engagements (video_play, file_download, outbound_click)
+- Custom conversions for [BUSINESS GOAL]
+
+Output as a Notion-ready table.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="analytics" data-keywords="dashboard reporting kpi metrics">
+        <div class="prompt-head"><span class="prompt-cat">Analytics</span></div>
+        <h3>Weekly Metrics Report</h3>
+        <pre class="prompt-body">Build my weekly business review using these metrics:
+- [METRIC 1]: [CURRENT VALUE]
+- [METRIC 2]: [CURRENT VALUE]
+- [METRIC 3]: [CURRENT VALUE]
+
+Generate a 1-page weekly report template with:
+
+Top section (the 3 numbers that matter most):
+- This week vs last week
+- % change
+- One-line diagnosis if declining, celebration if growing
+
+Middle section:
+- 3 things that worked this week
+- 3 things that didn't
+- 1 hypothesis to test next week
+
+Bottom section:
+- North star metric progress (this month vs goal)
+- Cash & runway update
+- Top customer feedback from this week
+
+Make it skimmable in 60 seconds.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="analytics" data-keywords="cohort analysis retention churn">
+        <div class="prompt-head"><span class="prompt-cat">Analytics</span></div>
+        <h3>Cohort Analysis Insights</h3>
+        <pre class="prompt-body">Analyze this customer cohort data: [PASTE CSV/COHORT TABLE]
+
+Generate insights in this format:
+1. **Headline finding** (one sentence, the most important takeaway)
+2. **Pattern** (what you're seeing — retention curve shape, segments)
+3. **Hypothesis** (why this is happening — be specific)
+4. **Testable action** (one experiment to run next week)
+5. **Counter-evidence** (what could disprove this hypothesis)
+
+Repeat for the top 3 patterns you see.
+End with one strategic question to investigate further.</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+      <div class="prompt" data-cat="analytics" data-keywords="ab test experimentation hypothesis">
+        <div class="prompt-head"><span class="prompt-cat">Analytics</span></div>
+        <h3>A/B Test Hypothesis Builder</h3>
+        <pre class="prompt-body">Generate 5 A/B test hypotheses for [PAGE/FUNNEL].
+
+For each hypothesis, fill this template:
+
+**Because** [we observed this from data/analytics]
+**We believe** [changing X to Y]
+**For** [this audience segment]
+**Will result in** [this metric moving X%]
+**We'll know we've succeeded when** [we see this in the data]
+
+Tests should be:
+- One variable only (multivariate = different experiment)
+- Measurable in [TIMEFRAME]
+- Big enough impact to be worth shipping
+- Backed by data, not opinion
+
+Rank by: ICE score (Impact × Confidence × Ease)</pre>
+        <button class="copy-btn">📋 Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast">✓ Copied to clipboard</div>
+
+<footer>
+  <div class="container row">
+    <img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" />
+    <div>© 2026 RRRTX SYSTEMS · <a href="https://rrrtx-systems.com">rrrtx-systems.com</a> · Built by engineers, not templates.</div>
+    <div><a href="https://rrrtx-systems.com/contact">Need a custom build?</a></div>
+  </div>
+</footer>
+
+<script>
+  const search = document.getElementById('search');
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.prompt');
+  const counter = document.getElementById('counter');
+  let activeCat = 'all';
+
+  function filterCards() {
+    const q = search.value.toLowerCase().trim();
+    let visible = 0;
+    cards.forEach(c => {
+      const cat = c.dataset.cat;
+      const kw = c.dataset.keywords || '';
+      const text = c.textContent.toLowerCase();
+      const catMatch = activeCat === 'all' || cat === activeCat;
+      const qMatch = !q || text.includes(q) || kw.includes(q);
+      if (catMatch && qMatch) {
+        c.classList.remove('hidden');
+        visible++;
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+    counter.textContent = visible + ' prompt' + (visible === 1 ? '' : 's');
+  }
+
+  search.addEventListener('input', filterCards);
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCat = chip.dataset.cat;
+      filterCards();
+    });
+  });
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.previousElementSibling.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch(e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copied!';
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = '📋 Copy Prompt';
+        toast.classList.remove('show');
+      }, 2000);
+    });
+  });
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ec12bd3b285b2e',t:'MTc4MTk3MjEzNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

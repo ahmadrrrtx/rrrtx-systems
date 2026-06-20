@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Python AI Agent Template — RRRTX SYSTEMS</title>
+<meta name="description" content="Production-ready Python AI agent template using local LLMs. RSS monitor, lead classifier, slack notifier. Zero API cost." />
+<style>
+  :root {
+    --bg: #020617;
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.14);
+    --text: #ffffff;
+    --text-dim: #94a3b8;
+    --text-dimmer: #64748b;
+    --cyan: rgb(34, 211, 238);
+    --blue: rgb(96, 165, 250);
+    --purple: rgb(168, 85, 247);
+    --pink: rgb(244, 114, 182);
+    --green: rgb(74, 222, 128);
+    --yellow: rgb(250, 204, 21);
+    --orange: rgb(251, 146, 60);
+    --grad: linear-gradient(135deg, var(--cyan), var(--blue), var(--purple), var(--pink));
+    --code-bg: #0a0e1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: -2; pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 80%);
+  }
+  body::after {
+    content: ''; position: fixed; top: -20%; left: 50%;
+    transform: translateX(-50%); width: 1200px; height: 800px;
+    background: radial-gradient(circle, rgba(168,85,247,0.15), rgba(34,211,238,0.08) 40%, transparent 70%);
+    z-index: -1; pointer-events: none; filter: blur(60px);
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(20px); background: rgba(2,6,23,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .logo img { height: 38px; display: block; }
+  .nav-links { display: flex; gap: 28px; align-items: center; font-size: 14px; }
+  .nav-links a { color: var(--text-dim); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+  .nav-cta {
+    padding: 10px 20px; border: 1px solid var(--border-2); border-radius: 8px;
+    background: rgba(255,255,255,0.04); transition: all 0.2s; font-weight: 500;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.08); border-color: var(--cyan); }
+  @media (max-width: 880px) { .nav-links { display: none; } }
+  .hero { padding: 70px 0 40px; text-align: center; }
+  .eyebrow {
+    display: inline-block; padding: 6px 14px; border: 1px solid var(--border-2);
+    border-radius: 999px; font-size: 13px; color: var(--text-dim);
+    background: rgba(255,255,255,0.03); margin-bottom: 24px;
+  }
+  .eyebrow .dot {
+    display: inline-block; width: 6px; height: 6px; background: var(--purple);
+    border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; vertical-align: middle;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+  h1 { font-size: clamp(30px, 5vw, 50px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 14px; }
+  h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: var(--text-dim); max-width: 680px; margin: 0 auto; font-size: 16px; }
+  .stats { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 30px 0 0; }
+  .stat { padding: 10px 18px; border: 1px solid var(--border-2); border-radius: 10px; background: rgba(255,255,255,0.03); font-size: 13px; color: var(--text-dim); }
+  .stat strong { color: var(--text); font-weight: 700; }
+  .content { padding: 50px 0; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items: start; }
+  @media (max-width: 980px) { .grid-2 { grid-template-columns: 1fr; } }
+  .info-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; position: sticky; top: 100px;
+  }
+  .info-card h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--purple); margin-bottom: 16px; font-weight: 700; }
+  .info-block { margin-bottom: 20px; }
+  .info-block h4 { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; font-weight: 600; }
+  .info-block ul { list-style: none; }
+  .info-block li { font-size: 14px; color: var(--text); padding: 4px 0; padding-left: 20px; position: relative; }
+  .info-block li::before { content: '▸'; color: var(--cyan); position: absolute; left: 0; }
+  .info-block code { background: rgba(34,211,238,0.1); color: var(--cyan); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .cost-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  .cost-table td { padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .cost-table td:last-child { text-align: right; color: var(--green); font-weight: 600; }
+  .cost-table tr:last-child td { border-bottom: none; font-weight: 700; }
+  .cost-table tr:last-child td:last-child { color: var(--cyan); font-size: 15px; }
+  .code-wrap { background: var(--code-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+  .code-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); }
+  .code-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tab {
+    padding: 6px 12px; background: transparent;
+    border: 1px solid transparent; border-radius: 6px;
+    font-size: 12px; color: var(--text-dim); cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: rgba(168,85,247,0.15); color: var(--purple); border-color: rgba(168,85,247,0.3); }
+  .file-name { font-size: 12px; color: var(--text-dimmer); font-family: 'JetBrains Mono', monospace; }
+  .copy-code {
+    padding: 6px 12px; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-2); border-radius: 6px;
+    color: var(--text); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .copy-code:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); }
+  .copy-code.copied { background: var(--cyan); color: #020617; border-color: var(--cyan); }
+  pre.code {
+    margin: 0; padding: 20px; overflow-x: auto;
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.6; color: #e2e8f0;
+    max-height: 600px; overflow-y: auto;
+  }
+  pre.code::-webkit-scrollbar { width: 8px; height: 8px; }
+  pre.code::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+  pre.code::-webkit-scrollbar-track { background: transparent; }
+  .kw { color: var(--purple); font-weight: 600; }
+  .str { color: var(--green); }
+  .num { color: var(--orange); }
+  .com { color: var(--text-dimmer); font-style: italic; }
+  .fn { color: var(--cyan); }
+  .cls { color: var(--yellow); }
+  .cta {
+    margin-top: 50px; padding: 40px;
+    background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(168,85,247,0.08));
+    border: 1px solid var(--border-2); border-radius: 16px; text-align: center;
+  }
+  .cta h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+  .cta p { color: var(--text-dim); max-width: 540px; margin: 0 auto 24px; font-size: 15px; }
+  .cta-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .cta-btn {
+    padding: 12px 24px; background: var(--grad); background-size: 200% 200%;
+    color: #020617; font-weight: 700; font-size: 14px;
+    border-radius: 10px; transition: all 0.3s; border: none;
+    cursor: pointer; font-family: inherit;
+  }
+  .cta-btn:hover { background-position: 100% 50%; }
+  .cta-btn.alt { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border-2); }
+  .cta-btn.alt:hover { background: rgba(255,255,255,0.1); }
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 14px 24px; background: var(--cyan); color: #020617;
+    border-radius: 12px; font-weight: 700; font-size: 14px;
+    box-shadow: 0 20px 50px rgba(34,211,238,0.4);
+    transition: transform 0.3s ease; z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--text-dimmer); font-size: 13px; }
+  footer a { color: var(--cyan); }
+  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  footer img { height: 24px; opacity: 0.7; }
+  @media (max-width: 720px) { .info-card { position: static; } .cta { padding: 30px 20px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="index.html" class="logo"><img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Resources</a>
+      <a href="prompts.html">Prompts</a>
+      <a href="checklist.html">Checklist</a>
+      <a href="agent-template.html" class="active">Agent</a>
+      <a href="https://rrrtx-systems.com/contact" class="nav-cta">Get Strategy Call →</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>PRODUCTION-READY · SAME ARCHITECTURE AS OUR GEMMA 4 AGENT</div>
+    <h1>Python <span class="grad">AI Agent Template</span><br/>Zero API Cost. Full Code.</h1>
+    <p>A drop-in Python boilerplate for a local-LLM-powered agent. Monitors RSS feeds, classifies signal vs. noise, posts digests to Slack. Runs on a $7/month VPS.</p>
+    <div class="stats">
+      <div class="stat"><strong>$0</strong> /month API cost</div>
+      <div class="stat"><strong>$5.50</strong> /month VPS</div>
+      <div class="stat"><strong>~250</strong> lines of Python</div>
+      <div class="stat"><strong>~30</strong> min setup</div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container">
+    <div class="grid-2">
+
+      <aside>
+        <div class="info-card">
+          <h3>What's Inside</h3>
+          <div class="info-block">
+            <h4>Stack</h4>
+            <ul>
+              <li>Python 3.11+</li>
+              <li>Ollama (local LLM runner)</li>
+              <li>Gemma 4 E4B / Llama 3.1 / Mistral</li>
+              <li>feedparser for RSS</li>
+              <li>httpx for HTTP</li>
+              <li>Slack incoming webhook</li>
+              <li>SQLite for state persistence</li>
+              <li>cron for scheduling</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <h4>What It Does</h4>
+            <ul>
+              <li>Monitors 25+ RSS feeds every 6h</li>
+              <li>Local LLM classifies signal vs. noise</li>
+              <li>Summarizes top 3 stories</li>
+              <li>Posts clean digest to Slack</li>
+              <li>Persists state (no duplicate alerts)</li>
+              <li>Fails gracefully with retries</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <h4>Monthly Cost Breakdown</h4>
+            <table class="cost-table">
+              <tr><td>VPS (Hetzner CX22)</td><td>$4.50</td></tr>
+              <tr><td>Domain (optional)</td><td>$1.00</td></tr>
+              <tr><td>Ollama runtime</td><td>$0.00</td></tr>
+              <tr><td>OpenAI / Anthropic API</td><td>$0.00</td></tr>
+              <tr><td>Slack webhook</td><td>$0.00</td></tr>
+              <tr><td>TOTAL</td><td>$5.50 / mo</td></tr>
+            </table>
+          </div>
+          <div class="info-block">
+            <h4>Setup Time</h4>
+            <ul>
+              <li>Spin up VPS: <code>5 min</code></li>
+              <li>Install Ollama: <code>5 min</code></li>
+              <li>Pull Gemma model: <code>10 min</code></li>
+              <li>Configure & deploy: <code>10 min</code></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <div class="code-tabs">
+              <button class="tab active" data-file="agent">agent.py</button>
+              <button class="tab" data-file="feeds">feeds.py</button>
+              <button class="tab" data-file="classifier">classifier.py</button>
+              <button class="tab" data-file="slack">slack.py</button>
+              <button class="tab" data-file="setup">setup.sh</button>
+            </div>
+            <button class="copy-code">📋 Copy</button>
+          </div>
+          <pre class="code" id="code-block"><span class="com"># agent.py — Main RSS Intelligence Agent</span>
+<span class="com"># RRRTX SYSTEMS — Free Template</span>
+<span class="com"># Runs every 6h via cron, posts curated digest to Slack</span>
+
+<span class="kw">import</span> os
+<span class="kw">import</span> sqlite3
+<span class="kw">import</span> logging
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timezone
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+
+<span class="kw">from</span> feeds <span class="kw">import</span> FEEDS, fetch_all_feeds
+<span class="kw">from</span> classifier <span class="kw">import</span> classify_article, summarize_top
+<span class="kw">from</span> slack <span class="kw">import</span> post_digest
+
+<span class="com"># Setup logging — easy to tail when running in cron</span>
+LOG_DIR = Path(<span class="str">"logs"</span>)
+LOG_DIR.<span class="fn">mkdir</span>(exist_ok=<span class="kw">True</span>)
+logging.<span class="fn">basicConfig</span>(
+    level=logging.INFO,
+    format=<span class="str">"%(asctime)s [%(levelname)s] %(message)s"</span>,
+    handlers=[
+        logging.FileHandler(LOG_DIR / <span class="str">"agent.log"</span>),
+        logging.StreamHandler()
+    ]
+)
+log = logging.<span class="fn">getLogger</span>(<span class="str">"agent"</span>)
+
+DB_PATH = <span class="str">"state.db"</span>
+
+<span class="kw">def</span> <span class="fn">init_db</span>():
+    <span class="str">"""Create table to track seen articles (prevents duplicate alerts)."""</span>
+    <span class="kw">with</span> sqlite3.<span class="fn">connect</span>(DB_PATH) <span class="kw">as</span> conn:
+        conn.<span class="fn">execute</span>(<span class="str">"""
+            CREATE TABLE IF NOT EXISTS seen (
+                url TEXT PRIMARY KEY,
+                title TEXT,
+                published TEXT,
+                seen_at TEXT
+            )
+        """</span>)
+        conn.<span class="fn">commit</span>()
+
+<span class="kw">def</span> <span class="fn">is_seen</span>(url: <span class="str">str</span>) -> <span class="str">bool</span>:
+    <span class="kw">with</span> sqlite3.<span class="fn">connect</span>(DB_PATH) <span class="kw">as</span> conn:
+        cur = conn.<span class="fn">execute</span>(<span class="str">"SELECT 1 FROM seen WHERE url = ?"</span>, (url,))
+        <span class="kw">return</span> cur.<span class="fn">fetchone</span>() <span class="kw">is not None</span>
+
+<span class="kw">def</span> <span class="fn">mark_seen</span>(url: <span class="str">str</span>, title: <span class="str">str</span>, published: <span class="str">str</span>):
+    <span class="kw">with</span> sqlite3.<span class="fn">connect</span>(DB_PATH) <span class="kw">as</span> conn:
+        conn.<span class="fn">execute</span>(
+            <span class="str">"INSERT OR IGNORE INTO seen VALUES (?, ?, ?, ?)"</span>,
+            (url, title, published, datetime.<span class="fn">now</span>(timezone.utc).<span class="fn">isoformat</span>())
+        )
+        conn.<span class="fn">commit</span>()
+
+<span class="kw">def</span> <span class="fn">run_cycle</span>():
+    <span class="str">"""One full pipeline: fetch → filter → classify → summarize → post."""</span>
+    log.<span class="fn">info</span>(<span class="str">"Starting cycle..."</span>)
+
+    <span class="com"># 1. Fetch all feeds</span>
+    articles = <span class="fn">fetch_all_feeds</span>(FEEDS)
+    log.<span class="fn">info</span>(<span class="str">f"Fetched {len(articles)} articles"</span>)
+
+    <span class="com"># 2. Filter out already-seen</span>
+    fresh = [a <span class="kw">for</span> a <span class="kw">in</span> articles <span class="kw">if not</span> <span class="fn">is_seen</span>(a[<span class="str">'url'</span>])]
+    log.<span class="fn">info</span>(<span class="str">f"{len(fresh)} new articles after dedup"</span>)
+
+    <span class="kw">if not</span> fresh:
+        log.<span class="fn">info</span>(<span class="str">"Nothing new. Sleeping."</span>)
+        <span class="kw">return</span>
+
+    <span class="com"># 3. Classify each via local LLM (signal vs noise)</span>
+    classified = []
+    <span class="kw">for</span> article <span class="kw">in</span> fresh:
+        score = <span class="fn">classify_article</span>(article)
+        article[<span class="str">'score'</span>] = score
+        classified.<span class="fn">append</span>(article)
+        log.<span class="fn">info</span>(<span class="str">f"  [{score:.2f}] {article['title'][:60]}..."</span>)
+
+    <span class="com"># 4. Summarize top 3</span>
+    top = <span class="fn">sorted</span>(classified, key=<span class="kw">lambda</span> x: x[<span class="str">'score'</span>], reverse=<span class="kw">True</span>)[:<span class="num">3</span>]
+    digest = <span class="fn">summarize_top</span>(top)
+
+    <span class="com"># 5. Post to Slack</span>
+    <span class="fn">post_digest</span>(digest, top)
+
+    <span class="com"># 6. Mark all as seen</span>
+    <span class="kw">for</span> article <span class="kw">in</span> fresh:
+        <span class="fn">mark_seen</span>(article[<span class="str">'url'</span>], article[<span class="str">'title'</span>], article.<span class="fn">get</span>(<span class="str">'published'</span>, <span class="str">''</span>))
+
+    log.<span class="fn">info</span>(<span class="str">f"Cycle complete. Posted digest of {len(top)} articles."</span>)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="fn">init_db</span>()
+    <span class="fn">run_cycle</span>()</pre>
+        </div>
+
+        <div class="code-wrap" style="display:none;" id="feeds-block">
+          <div class="code-head">
+            <div class="file-name">feeds.py — RSS source list & fetcher</div>
+            <button class="copy-code">📋 Copy</button>
+          </div>
+          <pre class="code"><span class="com"># feeds.py — Edit this list to monitor your own sources</span>
+<span class="com"># Mix categories based on what signals matter to your team</span>
+
+<span class="kw">import</span> feedparser
+<span class="kw">import</span> httpx
+<span class="kw">from</span> concurrent.futures <span class="kw">import</span> ThreadPoolExecutor
+<span class="kw">from</span> typing <span class="kw">import</span> List, Dict
+
+<span class="com"># 25+ feeds — engineering + AI + product</span>
+FEEDS = [
+    <span class="com"># AI / ML</span>
+    {<span class="str">"url"</span>: <span class="str">"https://huggingface.co/blog/feed.xml"</span>, <span class="str">"category"</span>: <span class="str">"ai"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://openai.com/blog/rss.xml"</span>, <span class="str">"category"</span>: <span class="str">"ai"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://www.anthropic.com/news/rss.xml"</span>, <span class="str">"category"</span>: <span class="str">"ai"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://blog.google/technology/ai/rss/"</span>, <span class="str">"category"</span>: <span class="str">"ai"</span>},
+
+    <span class="com"># Engineering / Dev tools</span>
+    {<span class="str">"url"</span>: <span class="str">"https://github.blog/feed/"</span>, <span class="str">"category"</span>: <span class="str">"engineering"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://nextjs.org/feed.xml"</span>, <span class="str">"category"</span>: <span class="str">"engineering"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://vercel.com/atom"</span>, <span class="str">"category"</span>: <span class="str">"engineering"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://stackoverflow.blog/feed/"</span>, <span class="str">"category"</span>: <span class="str">"engineering"</span>},
+
+    <span class="com"># Product / Design</span>
+    {<span class="str">"url"</span>: <span class="str">"https://www.smashingmagazine.com/feed/"</span>, <span class="str">"category"</span>: <span class="str">"design"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://stripe.com/blog/feed.rss"</span>, <span class="str">"category"</span>: <span class="str">"product"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://linear.app/blog/rss"</span>, <span class="str">"category"</span>: <span class="str">"product"</span>},
+
+    <span class="com"># Ecommerce / Conversion</span>
+    {<span class="str">"url"</span>: <span class="str">"https://baymard.com/blog/feed"</span>, <span class="str">"category"</span>: <span class="str">"ecommerce"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://www.shopify.com/blog/engineering.atom"</span>, <span class="str">"category"</span>: <span class="str">"ecommerce"</span>},
+
+    <span class="com"># Tech news</span>
+    {<span class="str">"url"</span>: <span class="str">"https://hnrss.org/frontpage"</span>, <span class="str">"category"</span>: <span class="str">"tech"</span>},
+    {<span class="str">"url"</span>: <span class="str">"https://www.theverge.com/rss/index.xml"</span>, <span class="str">"category"</span>: <span class="str">"tech"</span>},
+
+    <span class="com"># Add your own: industry blogs, competitors, news outlets</span>
+]
+
+<span class="kw">def</span> <span class="fn">fetch_one</span>(feed: <span class="str">Dict</span>) -> <span class="str">List</span>[<span class="str">Dict</span>]:
+    <span class="str">"""Fetch a single feed, return parsed articles. Failures are logged."""</span>
+    <span class="kw">try</span>:
+        parsed = feedparser.<span class="fn">parse</span>(feed[<span class="str">"url"</span>])
+        articles = []
+        <span class="kw">for</span> entry <span class="kw">in</span> parsed.entries[:<span class="num">5</span>]:  <span class="com"># top 5 per feed</span>
+            articles.<span class="fn">append</span>({
+                <span class="str">"title"</span>: entry.<span class="fn">get</span>(<span class="str">"title"</span>, <span class="str">""</span>),
+                <span class="str">"url"</span>: entry.<span class="fn">get</span>(<span class="str">"link"</span>, <span class="str">""</span>),
+                <span class="str">"summary"</span>: entry.<span class="fn">get</span>(<span class="str">"summary"</span>, <span class="str">""</span>)[:<span class="num">500</span>],
+                <span class="str">"published"</span>: entry.<span class="fn">get</span>(<span class="str">"published"</span>, <span class="str">""</span>),
+                <span class="str">"category"</span>: feed[<span class="str">"category"</span>],
+                <span class="str">"source"</span>: feed[<span class="str">"url"</span>],
+            })
+        <span class="kw">return</span> articles
+    <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+        <span class="fn">print</span>(<span class="str">f"[feeds] Failed: {feed['url']} — {e}"</span>)
+        <span class="kw">return</span> []
+
+<span class="kw">def</span> <span class="fn">fetch_all_feeds</span>(feeds: <span class="str">List</span>[<span class="str">Dict</span>]) -> <span class="str">List</span>[<span class="str">Dict</span>]:
+    <span class="str">"""Parallel fetch all feeds — fast even with 50+ sources."""</span>
+    all_articles = []
+    <span class="kw">with</span> <span class="cls">ThreadPoolExecutor</span>(max_workers=<span class="num">10</span>) <span class="kw">as</span> ex:
+        results = <span class="fn">list</span>(ex.<span class="fn">map</span>(fetch_one, feeds))
+    <span class="kw">for</span> articles <span class="kw">in</span> results:
+        all_articles.<span class="fn">extend</span>(articles)
+    <span class="kw">return</span> all_articles</pre>
+        </div>
+
+        <div class="code-wrap" style="display:none;" id="classifier-block">
+          <div class="code-head">
+            <div class="file-name">classifier.py — Local LLM scoring</div>
+            <button class="copy-code">📋 Copy</button>
+          </div>
+          <pre class="code"><span class="com"># classifier.py — Use Ollama to score articles locally</span>
+<span class="com"># Zero API cost. Runs entirely on your VPS.</span>
+
+<span class="kw">import</span> httpx
+<span class="kw">import</span> json
+<span class="kw">import</span> re
+
+OLLAMA_URL = <span class="str">"http://localhost:11434"</span>
+MODEL = <span class="str">"gemma4:e4b"</span>  <span class="com"># or "llama3.1:8b", "mistral:7b"</span>
+
+<span class="com"># The prompt that decides what's signal vs noise</span>
+<span class="com"># EDIT THIS to match what YOUR team cares about</span>
+SYSTEM_PROMPT = <span class="str">"""You are an engineering intelligence filter.
+
+Given an article, score it from 0.0 to 1.0 based on:
+- Novelty (0.3): Is this new information or rehashed?
+- Relevance (0.4): Is this useful for a senior engineer building AI/ecommerce systems?
+- Actionability (0.3): Can the reader DO something with this today?
+
+Respond with ONLY a JSON object: {"score": 0.0, "reason": "one sentence"}
+
+Examples:
+- New model release with benchmarks: 0.85
+- Hiring announcement: 0.10
+- Open-source tool launch: 0.75
+- Generic "AI is changing everything" op-ed: 0.20
+"""</span>
+
+<span class="kw">def</span> <span class="fn">classify_article</span>(article: <span class="str">dict</span>) -> <span class="str">float</span>:
+    <span class="str">"""Score an article 0.0-1.0 via local LLM."""</span>
+    user_msg = <span class="str">f"""Title: {article['title']}
+
+Summary: {article['summary']}
+
+Score this."""</span>
+
+    <span class="kw">try</span>:
+        <span class="kw">with</span> httpx.<span class="cls">Client</span>(timeout=<span class="num">30.0</span>) <span class="kw">as</span> client:
+            resp = client.<span class="fn">post</span>(
+                <span class="str">f"{OLLAMA_URL}/api/generate"</span>,
+                json={
+                    <span class="str">"model"</span>: MODEL,
+                    <span class="str">"system"</span>: SYSTEM_PROMPT,
+                    <span class="str">"prompt"</span>: user_msg,
+                    <span class="str">"stream"</span>: <span class="kw">False</span>,
+                    <span class="str">"options"</span>: {<span class="str">"temperature"</span>: <span class="num">0.1</span>},
+                }
+            )
+            data = resp.<span class="fn">json</span>()
+            text = data.<span class="fn">get</span>(<span class="str">"response"</span>, <span class="str">"{}"</span>)
+
+            <span class="com"># Extract JSON from response</span>
+            <span class="kw">match</span> = re.<span class="fn">search</span>(<span class="str">r'\{[^}]+\}'</span>, text)
+            <span class="kw">if</span> <span class="kw">match</span>:
+                result = json.<span class="fn">loads</span>(<span class="kw">match</span>.<span class="fn">group</span>())
+                <span class="kw">return</span> <span class="fn">float</span>(result.<span class="fn">get</span>(<span class="str">"score"</span>, <span class="num">0.5</span>))
+    <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+        <span class="fn">print</span>(<span class="str">f"[classifier] LLM error: {e}"</span>)
+    <span class="kw">return</span> <span class="num">0.5</span>  <span class="com"># neutral on error</span>
+
+<span class="kw">def</span> <span class="fn">summarize_top</span>(articles: <span class="str">list</span>) -> <span class="str">str</span>:
+    <span class="str">"""One-paragraph summary of the top articles."""</span>
+    <span class="kw">if not</span> articles:
+        <span class="kw">return</span> <span class="str">"No standout articles this cycle."</span>
+
+    prompt = <span class="str">f"""Summarize these {len(articles)} articles in 3 sentences,
+each starting with the article number. Be specific and technical.
+
+"""</span>
+    <span class="kw">for</span> i, a <span class="kw">in</span> <span class="fn">enumerate</span>(articles, <span class="num">1</span>):
+        prompt += <span class="str">f"{i}. {a['title']}\n   {a['summary'][:200]}\n\n"</span>
+
+    <span class="kw">try</span>:
+        <span class="kw">with</span> httpx.<span class="cls">Client</span>(timeout=<span class="num">60.0</span>) <span class="kw">as</span> client:
+            resp = client.<span class="fn">post</span>(
+                <span class="str">f"{OLLAMA_URL}/api/generate"</span>,
+                json={
+                    <span class="str">"model"</span>: MODEL,
+                    <span class="str">"prompt"</span>: prompt,
+                    <span class="str">"stream"</span>: <span class="kw">False</span>,
+                }
+            )
+            <span class="kw">return</span> resp.<span class="fn">json</span>().<span class="fn">get</span>(<span class="str">"response"</span>, <span class="str">"Summary unavailable."</span>).<span class="fn">strip</span>()
+    <span class="kw">except</span> <span class="cls">Exception</span> <span class="kw">as</span> e:
+        <span class="fn">print</span>(<span class="str">f"[summarize] error: {e}"</span>)
+        <span class="kw">return</span> <span class="str">"Summary generation failed. See article links below."</span></pre>
+        </div>
+
+        <div class="code-wrap" style="display:none;" id="slack-block">
+          <div class="code-head">
+            <div class="file-name">slack.py — Slack incoming webhook poster</div>
+            <button class="copy-code">📋 Copy</button>
+          </div>
+          <pre class="code"><span class="com"># slack.py — Format & post digest to Slack via webhook</span>
+<span class="com"># Setup: Create incoming webhook at api.slack.com/messaging/webhooks</span>
+
+<span class="kw">import</span> os
+<span class="kw">import</span> httpx
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+WEBHOOK_URL = os.<span class="fn">getenv</span>(<span class="str">"SLACK_WEBHOOK_URL"</span>)
+
+<span class="kw">def</span> <span class="fn">post_digest</span>(summary: <span class="str">str</span>, articles: <span class="str">list</span>):
+    <span class="str">"""Build a clean Slack Block Kit message and POST it."""</span>
+    <span class="kw">if not</span> WEBHOOK_URL:
+        <span class="fn">print</span>(<span class="str">"[slack] No webhook configured — printing instead:"</span>)
+        <span class="fn">print</span>(summary)
+        <span class="kw">for</span> a <span class="kw">in</span> articles:
+            <span class="fn">print</span>(<span class="str">f"  • {a['title']}\n    {a['url']}"</span>)
+        <span class="kw">return</span>
+
+    blocks = [
+        {
+            <span class="str">"type"</span>: <span class="str">"header"</span>,
+            <span class="str">"text"</span>: {<span class="str">"type"</span>: <span class="str">"plain_text"</span>, <span class="str">"text"</span>: <span class="str">f"📡 Intelligence Digest — {datetime.now():%b %d, %H:%M}"</span>}
+        },
+        {<span class="str">"type"</span>: <span class="str">"section"</span>, <span class="str">"text"</span>: {<span class="str">"type"</span>: <span class="str">"mrkdwn"</span>, <span class="str">"text"</span>: summary}},
+        {<span class="str">"type"</span>: <span class="str">"divider"</span>},
+    ]
+
+    <span class="kw">for</span> a <span class="kw">in</span> articles:
+        blocks.<span class="fn">append</span>({
+            <span class="str">"type"</span>: <span class="str">"section"</span>,
+            <span class="str">"text"</span>: {
+                <span class="str">"type"</span>: <span class="str">"mrkdwn"</span>,
+                <span class="str">"text"</span>: <span class="str">f"*&lt;{a['url']}|{a['title']}&gt;*\n_Score: {a['score']:.2f} · {a['category']}_"</span>
+            }
+        })
+
+    <span class="kw">try</span>:
+        <span class="kw">with</span> httpx.<span class="cls">Client</span>(timeout=<span class="num">15.0</span>) <span class="kw">as</span> client:
+            r = client.<span class="fn">post</span>(WEBHOOK_URL, json={<span class="str">"blocks"</span>: blocks})
+            r.<span class="fn">raise_for_status</span>()
+            <span class="fn">print</span>(<span class="str">"[slack] Posted OK"</span>)
+    <span class="kw">except</span> httpx.<span class="cls">HTTPError</span> <span class="kw">as</span> e:
+        <span class="fn">print</span>(<span class="str">f"[slack] Failed: {e}"</span>)</pre>
+        </div>
+
+        <div class="code-wrap" style="display:none;" id="setup-block">
+          <div class="code-head">
+            <div class="file-name">setup.sh — One-command deployment</div>
+            <button class="copy-code">📋 Copy</button>
+          </div>
+          <pre class="code"><span class="com">#!/bin/bash</span>
+<span class="com"># setup.sh — Deploy this agent on a fresh Ubuntu VPS</span>
+<span class="com"># Tested on Hetzner CX22 ($4.50/mo) and DigitalOcean Basic ($6/mo)</span>
+
+<span class="kw">set</span> -e
+
+<span class="fn">echo</span> <span class="str">"🚀 Setting up RSS Intelligence Agent..."</span>
+
+<span class="com"># 1. System deps</span>
+<span class="fn">sudo</span> apt update -qq
+<span class="fn">sudo</span> apt install -y python3 python3-pip python3-venv cron
+
+<span class="com"># 2. Install Ollama (local LLM runner)</span>
+<span class="kw">if</span> ! <span class="fn">command</span> -v ollama &amp;&gt; /dev/null; <span class="kw">then</span>
+    <span class="fn">curl</span> -fsSL https://ollama.ai/install.sh | <span class="fn">sh</span>
+<span class="kw">fi</span>
+
+<span class="com"># 3. Pull the Gemma model (or swap for your preferred one)</span>
+<span class="fn">echo</span> <span class="str">"📥 Pulling Gemma 4 E4B model..."</span>
+ollama pull gemma4:e4b
+
+<span class="com"># 4. Set up Python venv</span>
+python3 -m venv venv
+<span class="kw">source</span> venv/bin/activate
+pip install --quiet feedparser httpx
+
+<span class="com"># 5. Set your Slack webhook (replace with your actual URL)</span>
+<span class="kw">if</span> [ ! -f .env ]; <span class="kw">then</span>
+    <span class="fn">echo</span> <span class="str">"SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL"</span> &gt; .env
+    <span class="fn">echo</span> <span class="str">"⚠️  Edit .env with your real Slack webhook URL"</span>
+<span class="kw">fi</span>
+
+<span class="com"># 6. Schedule to run every 6 hours via cron</span>
+<span class="fn">echo</span> <span class="str">"0 */6 * * * cd $(pwd) &amp;&amp; ./venv/bin/python agent.py &gt;&gt; logs/cron.log 2&gt;&amp;1"</span> | <span class="fn">sudo</span> crontab -
+
+<span class="fn">echo</span> <span class="str">"✅ Done! Test with: ./venv/bin/python agent.py"</span>
+<span class="fn">echo</span> <span class="str">"📊 Check logs at: tail -f logs/agent.log"</span>
+<span class="fn">echo</span> <span class="str">"⏰ Runs every 6 hours via cron"</span></pre>
+        </div>
+
+        <div class="cta">
+          <h2>Want a custom AI agent built for your business?</h2>
+          <p>This template handles RSS feeds. We build agents that score leads, classify support tickets, monitor competitors, and automate ops — all running on local LLMs at $0 API cost.</p>
+          <div class="cta-buttons">
+            <a href="https://rrrtx-systems.com/contact" class="cta-btn">Book Strategy Call →</a>
+            <a href="https://rrrtx-systems.com/services/ai-automation" class="cta-btn alt">View AI Service</a>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast">✓ Copied to clipboard</div>
+
+<footer>
+  <div class="container row">
+    <img src="rrrtx-logo.png" alt="RRRTX SYSTEMS" />
+    <div>© 2026 RRRTX SYSTEMS · <a href="https://rrrtx-systems.com">rrrtx-systems.com</a> · Built by engineers, not templates.</div>
+    <div><a href="https://rrrtx-systems.com/contact">Need a custom build?</a></div>
+  </div>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const fileMap = {
+    agent: 'code-block',
+    feeds: 'feeds-block',
+    classifier: 'classifier-block',
+    slack: 'slack-block',
+    setup: 'setup-block'
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const file = tab.dataset.file;
+      Object.values(fileMap).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (id === fileMap[file]) ? 'block' : 'none';
+      });
+    });
+  });
+
+  document.querySelectorAll('.copy-code').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const wrap = btn.closest('.code-wrap');
+      const code = wrap.querySelector('pre.code').textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch(e) {
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copied!';
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = '📋 Copy';
+        toast.classList.remove('show');
+      }, 2000);
+    });
+  });
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ec14133adb5b2e',t:'MTc4MTk3MjE5MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

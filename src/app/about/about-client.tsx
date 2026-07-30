@@ -1,9 +1,8 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Globe, Zap, Code2, Server } from "lucide-react";
+import { Globe, Zap, Code2, Server, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const values = [
   {
@@ -31,7 +30,6 @@ const values = [
 export function AboutPageClient() {
   return (
     <main className="relative min-h-screen bg-[#020617]">
-      <Navbar />
 
       <section className="pt-32 pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,7 +87,22 @@ export function AboutPageClient() {
         </div>
       </section>
 
-      <Footer />
+      <section className="pb-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-blue-950/30 to-purple-950/30 p-7 sm:p-9">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400 mb-3">How we reduce delivery risk</p>
+            <h2 className="text-2xl font-bold text-white mb-4">Understand the problem before prescribing the build.</h2>
+            <p className="text-slate-300 leading-relaxed mb-6">
+              Every engagement starts with the existing system, business constraints, integrations, and measurable outcome. We preserve working routes, data, content, and operations wherever an incremental change is safer than replacement.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/process" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-sm font-semibold text-slate-300 hover:text-white">Explore our process <ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link href="/work" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-sm font-semibold text-white">View production work <ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main>
   );
 }

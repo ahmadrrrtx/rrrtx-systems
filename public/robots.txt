@@ -1,7 +1,17 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /api
 
-Sitemap: https://rrrtx.com/sitemap.xml
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /dashboard
+Disallow: /api
 
-Disallow: /dashboard/
-Disallow: /api/
+User-agent: PerplexityBot
+Allow: /
+Disallow: /dashboard
+Disallow: /api
+
+Sitemap: https://rrrtx-systems.com/sitemap.xml
+Host: https://rrrtx-systems.com

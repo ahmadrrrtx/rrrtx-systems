@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ExternalLink, CheckCircle, XCircle, Edit, Trash, Plus, Pencil, Eye, EyeOff } from "lucide-react";
+import { SmartImage } from "@/components/SmartImage";
+import { CheckCircle, Trash, Plus, Pencil, Eye, EyeOff } from "lucide-react";
 
 interface Project {
   id: number;
@@ -37,10 +38,6 @@ export default function ProjectsPage() {
     status: "draft",
   });
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
   const fetchProjects = async () => {
     try {
       const res = await fetch("/api/projects");
@@ -54,6 +51,11 @@ export default function ProjectsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchProjects(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openEdit = (p: Project) => {
     setEditing(p);
@@ -123,7 +125,7 @@ export default function ProjectsPage() {
   };
 
   const deleteProject = async (id: number) => {
-    if (!confirm("Delete this project?")) return;
+    if (!confirm("Move this project back to draft?")) return;
     try {
       const res = await fetch(`/api/projects?id=${id}`, { method: "DELETE" });
       if (res.ok) fetchProjects();
@@ -141,7 +143,7 @@ export default function ProjectsPage() {
             <p className="text-sm text-slate-400">Add, edit, or remove case studies.</p>
           </div>
           <button
-            onClick={() => { editing ? resetForm() : setShowForm(!showForm); }}
+            onClick={() => { if (editing) resetForm(); else setShowForm(!showForm); }}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -158,6 +160,7 @@ export default function ProjectsPage() {
               <input
                 placeholder="Slug (URL identifier)"
                 value={formData.slug}
+                  disabled={Boolean(editing)}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                 required
@@ -286,18 +289,16 @@ export default function ProjectsPage() {
                     <button
                       onClick={() => deleteProject(project.id)}
                       className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 transition-colors"
-                      title="Delete"
+                      aria-label={`Move ${project.title} to draft`}
                     >
                       <Trash className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
                 {project.imageUrl && (
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="w-full aspect-video object-cover rounded-lg border border-slate-800/50"
-                  />
+                  <div className="relative w-full aspect-video overflow-hidden rounded-lg border border-slate-800/50">
+                    <SmartImage src={project.imageUrl} alt={project.title} sizes="(min-width: 1024px) 33vw, 100vw" className="w-full h-full object-cover" />
+                  </div>
                 )}
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                   <span className={`px-2 py-0.5 rounded-md border ${

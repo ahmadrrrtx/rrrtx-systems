@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
 import { ArrowRight, Code2, Zap, Globe, Server } from "lucide-react";
@@ -22,7 +19,7 @@ const pillars = [
     icon: Globe,
     title: "Global by Default",
     description:
-      "Edge-deployed, sub-2s everywhere, async-friendly across time zones. Built for real traffic, not demos.",
+      "Edge-deployed, monitored, and designed for reliable delivery across time zones. Built for real traffic, not demos.",
   },
   {
     icon: Server,
@@ -53,20 +50,13 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left: Story */}
           <div>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+            <p
               className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4"
             >
               About RRRTX Systems
-            </motion.p>
+            </p>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.08 }}
+            <h2
               className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight mb-6"
             >
               {activeHeading.includes(".") ? (
@@ -79,24 +69,16 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
               ) : (
                 activeHeading
               )}
-            </motion.h2>
+            </h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.16 }}
+            <p
               className="text-base text-slate-400 leading-relaxed mb-6"
             >
               {activeDescription}
-            </motion.p>
+            </p>
 
             {/* Availability + credibility signal */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.22 }}
+            <div
               className="flex flex-col sm:flex-row gap-3 mb-8"
             >
               <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-950/50 border border-slate-800/30">
@@ -110,13 +92,9 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
                   🌍 Working globally &middot; async-first
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.28 }}
+            <div
             >
               <Link
                 href="/about"
@@ -124,26 +102,22 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
               >
                 Learn more about us <ArrowRight className="w-4 h-4" />
               </Link>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right: Value pillars */}
           <div className="grid grid-cols-2 gap-4">
-            {pillars.map((pillar, i) => (
-              <motion.div
+            {pillars.map((pillar) => (
+              <div
                 key={pillar.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.12 + i * 0.08, duration: 0.45 }}
                 className="group p-5 rounded-xl bg-slate-950/40 border border-slate-800/30 hover:border-slate-700/50 transition-all duration-300 hover:-translate-y-0.5"
               >
                 <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800/50 mb-3 group-hover:border-slate-700/60 transition-colors">
                   <pillar.icon className="w-4 h-4 text-cyan-400" />
                 </div>
-                <h4 className="text-sm font-bold text-white mb-1.5">{pillar.title}</h4>
+                <h3 className="text-sm font-bold text-white mb-1.5">{pillar.title}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">{pillar.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

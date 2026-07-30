@@ -3,6 +3,7 @@ import { promptBundles } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-check";
+import { isSafePublicUrl, pickAllowedFields } from "@/lib/request-security";
 
 export async function GET() {
   const auth = await requireAuth();
@@ -18,15 +19,15 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
 
   try {
     const body = await request.json();
     const { title, description, category, githubUrl, price } = body;
 
-    if (!title) {
-      return NextResponse.json({ error: "Title is required" }, { status: 400 });
+    if (!title || (githubUrl && !isSafePublicUrl(githubUrl))) {
+      return NextResponse.json({ error: "Title and a safe repository URL are required" }, { status: 400 });
     }
 
     await db.insert(promptBundles).values({
@@ -45,15 +46,19 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
 
   try {
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id } = body;
+    const updates = pickAllowedFields(body, ["title", "description", "category", "githubUrl", "price", "isActive"]);
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+    if (updates.githubUrl && !isSafePublicUrl(updates.githubUrl)) {
+      return NextResponse.json({ error: "Repository URL must be a safe public URL" }, { status: 400 });
     }
 
     await db.update(promptBundles).set(updates).where(eq(promptBundles.id, id));
@@ -65,7 +70,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
 
   try {
@@ -76,7 +81,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    await db.delete(promptBundles).where(eq(promptBundles.id, parseInt(id)));
+    await db.update(promptBundles).set({ isActive: false }).where(eq(promptBundles.id, parseInt(id)));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete bundle error:", error);

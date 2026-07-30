@@ -44,6 +44,13 @@ html {
   color: white;
 }
 
+/* Preserve the slate palette while keeping normal-size supporting copy at AA contrast. */
+.text-slate-500,
+.text-slate-600,
+.text-slate-700 {
+  color: rgb(148 163 184);
+}
+
 @utility text-gradient {
   background-image: linear-gradient(to right, white, hsl(190 90% 50%), hsl(270 60% 55%));
   -webkit-background-clip: text;
@@ -133,4 +140,56 @@ html {
 
 @utility animate-shimmer {
   animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@utility animate-float {
+  animation: float-subtle 5s ease-in-out infinite;
+}
+
+.skeleton {
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.75) 25%, rgba(30, 41, 59, 0.8) 50%, rgba(15, 23, 42, 0.75) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background: white;
+  color: #020617;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid #22d3ee;
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

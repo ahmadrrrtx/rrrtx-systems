@@ -38,10 +38,6 @@ export default function BlogDashboardPage() {
     publishedAt: "",
   });
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
   const fetchItems = async () => {
     try {
       const res = await fetch("/api/posts");
@@ -55,6 +51,11 @@ export default function BlogDashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchItems(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const generateSlug = (title: string) => {
     return title
@@ -172,8 +173,10 @@ export default function BlogDashboardPage() {
           <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Title</label>
+                <label htmlFor="dashboard-posts-title-1" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Title</label>
                 <input
+                  id="dashboard-posts-title-1"
+                  name="dashboard-posts-title-1"
                   required
                   placeholder="Post Title"
                   value={form.title}
@@ -182,11 +185,14 @@ export default function BlogDashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Slug</label>
+                <label htmlFor="dashboard-posts-slug-2" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Slug</label>
                 <input
+                  id="dashboard-posts-slug-2"
+                  name="dashboard-posts-slug-2"
                   required
                   placeholder="post-slug"
                   value={form.slug}
+                  disabled={Boolean(editing)}
                   onChange={(e) => setForm({ ...form, slug: generateSlug(e.target.value) })}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                 />
@@ -195,8 +201,10 @@ export default function BlogDashboardPage() {
 
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Status</label>
+                <label htmlFor="dashboard-posts-status-3" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Status</label>
                 <select
+                  id="dashboard-posts-status-3"
+                  name="dashboard-posts-status-3"
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan-500/50"
@@ -206,8 +214,10 @@ export default function BlogDashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Publish Date</label>
+                <label htmlFor="dashboard-posts-publish-date-4" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Publish Date</label>
                 <input
+                  id="dashboard-posts-publish-date-4"
+                  name="dashboard-posts-publish-date-4"
                   type="date"
                   value={form.publishedAt}
                   onChange={(e) => setForm({ ...form, publishedAt: e.target.value })}
@@ -215,8 +225,10 @@ export default function BlogDashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Tags (comma-separated)</label>
+                <label htmlFor="dashboard-posts-tags-comma-separated-5" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Tags (comma-separated)</label>
                 <input
+                  id="dashboard-posts-tags-comma-separated-5"
+                  name="dashboard-posts-tags-comma-separated-5"
                   placeholder="ecommerce, ai, marketing"
                   value={form.tags}
                   onChange={(e) => setForm({ ...form, tags: e.target.value })}
@@ -226,8 +238,10 @@ export default function BlogDashboardPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Excerpt</label>
+              <label htmlFor="dashboard-posts-excerpt-6" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Excerpt</label>
               <textarea
+                  id="dashboard-posts-excerpt-6"
+                  name="dashboard-posts-excerpt-6"
                 placeholder="Brief summary of the article..."
                 value={form.excerpt}
                 onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
@@ -237,8 +251,10 @@ export default function BlogDashboardPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Content (Markdown supported)</label>
+              <label htmlFor="dashboard-posts-content-markdown-supported-7" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Content (Markdown supported)</label>
               <textarea
+                  id="dashboard-posts-content-markdown-supported-7"
+                  name="dashboard-posts-content-markdown-supported-7"
                 required
                 placeholder="Write your article content here..."
                 value={form.content}
@@ -249,8 +265,10 @@ export default function BlogDashboardPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cover Image URL</label>
+              <label htmlFor="dashboard-posts-cover-image-url-8" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Cover Image URL</label>
               <input
+                  id="dashboard-posts-cover-image-url-8"
+                  name="dashboard-posts-cover-image-url-8"
                 placeholder="https://example.com/image.png"
                 value={form.coverImageUrl}
                 onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })}
@@ -260,8 +278,10 @@ export default function BlogDashboardPage() {
 
             <div className="grid sm:grid-cols-2 gap-4 border-t border-slate-800/50 pt-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Meta Title (SEO)</label>
+                <label htmlFor="dashboard-posts-meta-title-seo-9" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Meta Title (SEO)</label>
                 <input
+                  id="dashboard-posts-meta-title-seo-9"
+                  name="dashboard-posts-meta-title-seo-9"
                   placeholder="Meta Title"
                   value={form.metaTitle}
                   onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
@@ -269,8 +289,10 @@ export default function BlogDashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Meta Description (SEO)</label>
+                <label htmlFor="dashboard-posts-meta-description-seo-10" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Meta Description (SEO)</label>
                 <input
+                  id="dashboard-posts-meta-description-seo-10"
+                  name="dashboard-posts-meta-description-seo-10"
                   placeholder="Meta Description"
                   value={form.metaDescription}
                   onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
@@ -342,7 +364,9 @@ export default function BlogDashboardPage() {
                     Edit
                   </button>
                   <button
+                    type="button"
                     onClick={() => deleteItem(p.id)}
+                    aria-label={`Move ${p.title} to draft`}
                     className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                   >
                     <Trash className="w-4 h-4" />

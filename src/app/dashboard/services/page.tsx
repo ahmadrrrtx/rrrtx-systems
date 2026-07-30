@@ -30,10 +30,6 @@ export default function ServicesPage() {
     sortOrder: 0,
   });
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
   const fetchServices = async () => {
     try {
       const res = await fetch("/api/services");
@@ -47,6 +43,11 @@ export default function ServicesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchServices(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openEdit = (s: Service) => {
     setEditing(s);
@@ -99,7 +100,7 @@ export default function ServicesPage() {
   };
 
   const deleteService = async (id: number) => {
-    if (!confirm("Delete this service?")) return;
+    if (!confirm("Deactivate this service?")) return;
     try {
       const res = await fetch(`/api/services?id=${id}`, { method: "DELETE" });
       if (res.ok) fetchServices();
@@ -117,7 +118,7 @@ export default function ServicesPage() {
             <p className="text-sm text-slate-400">Manage public-facing service offerings.</p>
           </div>
           <button
-            onClick={() => { editing ? resetForm() : setShowForm(!showForm); }}
+            onClick={() => { if (editing) resetForm(); else setShowForm(!showForm); }}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -134,6 +135,7 @@ export default function ServicesPage() {
               <input
                 placeholder="Slug (URL path)"
                 value={formData.slug}
+                  disabled={Boolean(editing)}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                 required
@@ -252,7 +254,7 @@ export default function ServicesPage() {
                   <button
                     onClick={() => deleteService(service.id)}
                     className="p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                    title="Delete"
+                    aria-label={`Deactivate ${service.title}`}
                   >
                     <Trash className="w-4 h-4" />
                   </button>

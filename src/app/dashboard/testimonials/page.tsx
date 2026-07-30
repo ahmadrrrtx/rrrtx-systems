@@ -26,14 +26,17 @@ export default function TestimonialsPage() {
     name: "", role: "", company: "", quote: "", rating: 5, imageUrl: "", featured: false, sortOrder: 0,
   });
 
-  useEffect(() => { fetchItems(); }, []);
-
   const fetchItems = async () => {
     try {
       const res = await fetch("/api/testimonials");
       if (res.ok) { const data = await res.json(); setItems(data); }
     } catch (err) { console.error(err); } finally { setLoading(false); }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchItems(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openEdit = (t: Testimonial) => {
     setEditing(t);
@@ -64,7 +67,7 @@ export default function TestimonialsPage() {
   };
 
   const deleteItem = async (id: number) => {
-    if (!confirm("Delete this testimonial?")) return;
+    if (!confirm("Deactivate this testimonial?")) return;
     try {
       const res = await fetch(`/api/testimonials?id=${id}`, { method: "DELETE" });
       if (res.ok) fetchItems();
@@ -89,7 +92,7 @@ export default function TestimonialsPage() {
             <h1 className="text-2xl font-bold text-white mb-1">Testimonials</h1>
             <p className="text-sm text-slate-400">Manage reviews and quotes shown on the site.</p>
           </div>
-          <button onClick={() => { editing ? resetForm() : setShowForm(!showForm); }} className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all">
+          <button onClick={() => { if (editing) resetForm(); else setShowForm(!showForm); }} className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all">
             <Plus className="w-4 h-4" /> {showForm ? "Cancel" : "Add Testimonial"}
           </button>
         </div>
@@ -133,9 +136,9 @@ export default function TestimonialsPage() {
                   <p className="text-xs text-slate-500 mt-1 italic">&quot;{t.quote}&quot;</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => toggleField(t.id, "isActive", t.isActive)} className={`p-1.5 rounded-lg transition-colors ${t.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
-                  <button onClick={() => openEdit(t)} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><Star className="w-4 h-4" /></button>
-                  <button onClick={() => deleteItem(t.id)} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
+                  <button onClick={() => toggleField(t.id, "isActive", t.isActive)} aria-label={`${t.isActive ? "Deactivate" : "Activate"} testimonial from ${t.name}`} className={`p-1.5 rounded-lg transition-colors ${t.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
+                  <button onClick={() => openEdit(t)} aria-label={`Edit testimonial from ${t.name}`} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><Star className="w-4 h-4" /></button>
+                  <button onClick={() => deleteItem(t.id)} aria-label={`Deactivate testimonial from ${t.name}`} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}

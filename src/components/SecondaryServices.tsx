@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
 import { ArrowRight, RefreshCw, MessageSquare, Search } from "lucide-react";
@@ -46,13 +43,9 @@ export function SecondaryServices() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {secondaryServices.map((service, i) => (
-            <motion.div
+          {secondaryServices.map((service) => (
+            <div
               key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
             >
               <Link
                 href={service.href}
@@ -87,7 +80,7 @@ export function SecondaryServices() {
                   </div>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

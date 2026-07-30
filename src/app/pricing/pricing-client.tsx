@@ -1,7 +1,5 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Check, ArrowRight, Sparkles, HelpCircle } from "lucide-react";
@@ -18,7 +16,7 @@ type Tier = {
 const defaultTiers: Tier[] = [
   {
     name: "Discovery & Strategy",
-    range: "$500 – $2,500",
+    range: "$100 – $300",
     description: "Best when you need clarity before building.",
     features: [
       "Full stack & conversion audit",
@@ -32,7 +30,7 @@ const defaultTiers: Tier[] = [
   },
   {
     name: "Project-Based Build",
-    range: "$10,000 – $25,000",
+    range: "$500 – $10,000",
     description: "Best for one-time ecommerce or AI system builds.",
     features: [
       "Custom codebase from scratch",
@@ -47,7 +45,7 @@ const defaultTiers: Tier[] = [
   },
   {
     name: "Retainer & Growth",
-    range: "$800+ / month",
+    range: "$500+ / month",
     description: "Best for ongoing optimization and expansion.",
     features: [
       "Monthly CRO & A/B testing",
@@ -65,7 +63,7 @@ const defaultTiers: Tier[] = [
 const faqs = [
   {
     q: "Why no fixed price list?",
-    a: "Every project has different scope, integrations, and complexity. These ranges reflect what we've shipped for similar clients. We provide exact quotes after the discovery phase.",
+    a: "Every project has different scope, integrations, and complexity. These ranges reflect what we&apos;ve shipped for similar clients. We provide exact quotes after the discovery phase.",
   },
   {
     q: "How long does a typical build take?",
@@ -85,7 +83,6 @@ export function PricingPageClient({ items }: { items?: Tier[] }) {
   const tiers = items && items.length > 0 ? items : defaultTiers;
   return (
     <main className="min-h-screen bg-[#020617]">
-      <Navbar />
 
       <section className="pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +99,7 @@ export function PricingPageClient({ items }: { items?: Tier[] }) {
               <span className="text-gradient">No Surprises.</span>
             </h1>
             <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-              Real starting ranges based on what we've shipped. Exact quotes come after discovery.
+              Real starting ranges based on what we&apos;ve shipped. Exact quotes come after discovery.
             </p>
           </motion.div>
 
@@ -189,7 +186,6 @@ export function PricingPageClient({ items }: { items?: Tier[] }) {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

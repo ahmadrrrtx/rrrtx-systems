@@ -4,6 +4,7 @@ import { LinkedinIcon, XIcon } from "./SocialIcons";
 import Link from "next/link";
 
 export async function TeamSection() {
+  if (!process.env.TURSO_DATABASE_URL && process.env.NODE_ENV === "production") return null;
   // Safe fetch: returns [] on any error so build/site never crash.
   const team = await getPublicTeam();
 

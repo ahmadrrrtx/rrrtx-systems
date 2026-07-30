@@ -2,11 +2,17 @@ import { db } from "@/lib/db";
 import { testimonials } from "@/lib/schema";
 import { eq, asc } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/auth-check";
+import { getAuthenticatedSession, requireAuth } from "@/lib/auth-check";
+import { isSafePublicUrl, pickAllowedFields } from "@/lib/request-security";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
-    const all = await db.select().from(testimonials).orderBy(asc(testimonials.sortOrder));
+    const session = await getAuthenticatedSession();
+    const query = db.select().from(testimonials);
+    const all = session?.role === "admin"
+      ? await query.orderBy(asc(testimonials.sortOrder))
+      : await query.where(eq(testimonials.isActive, true)).orderBy(asc(testimonials.sortOrder));
     return NextResponse.json(all);
   } catch (error) {
     console.error("Fetch testimonials error:", error);
@@ -15,7 +21,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
@@ -34,6 +40,7 @@ export async function POST(request: Request) {
       sortOrder: sortOrder ?? 0,
       isActive: true,
     });
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Create testimonial error:", error);
@@ -42,16 +49,21 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id } = body;
+    const updates = pickAllowedFields(body, ["name", "role", "company", "quote", "rating", "imageUrl", "featured", "sortOrder", "isActive"]);
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    if (updates.rating) updates.rating = parseInt(updates.rating);
+    if (updates.imageUrl && !isSafePublicUrl(updates.imageUrl)) {
+      return NextResponse.json({ error: "Image URL must be a safe public URL" }, { status: 400 });
+    }
+    if (typeof updates.rating === "string") updates.rating = parseInt(updates.rating, 10);
     await db.update(testimonials).set(updates).where(eq(testimonials.id, id));
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update testimonial error:", error);
@@ -60,7 +72,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const { searchParams } = new URL(request.url);
@@ -68,7 +80,8 @@ export async function DELETE(request: Request) {
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    await db.delete(testimonials).where(eq(testimonials.id, parseInt(id)));
+    await db.update(testimonials).set({ isActive: false }).where(eq(testimonials.id, parseInt(id)));
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete testimonial error:", error);

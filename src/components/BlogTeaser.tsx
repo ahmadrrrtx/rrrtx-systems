@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import { SectionWrapper } from "./SectionWrapper";
 import type { DbPost } from "@/lib/queries";
+import { SmartImage } from "./SmartImage";
 
 function estimateReadTime(content: string): number {
   const words = content.split(/\s+/).length;
@@ -56,9 +57,10 @@ export function BlogTeaser({ posts }: { posts: DbPost[] }) {
               >
                 {post.coverImageUrl && (
                   <div className="relative aspect-[2/1] overflow-hidden">
-                    <img
+                    <SmartImage
                       src={post.coverImageUrl}
                       alt={post.title}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className="w-full h-full object-cover opacity-60 group-hover:opacity-85 group-hover:scale-[1.03] transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent" />

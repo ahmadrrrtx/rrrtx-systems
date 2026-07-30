@@ -1,36 +1,42 @@
-import Script from "next/script";
+"use client";
 
-/**
- * GA4 (gtag.js) loader.
- *
- * Measurement ID is read from the public env var NEXT_PUBLIC_GA_ID so it is
- * never hardcoded as a secret and can be changed without a code edit.
- * Falls back to the known RRRTX SYSTEMS property if the env var is absent so
- * analytics keeps working even before the var is set in Vercel.
- *
- * Renders nothing in development to avoid polluting analytics with local hits.
- */
+import { Suspense, useEffect, useState } from "react";
+import Script from "next/script";
+import { AnalyticsClient } from "./AnalyticsClient";
+
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-0C94FXCGHH";
 
 export function GoogleAnalytics() {
-  if (process.env.NODE_ENV !== "production") return null;
-  if (!GA_ID) return null;
+  const [enabled, setEnabled] = useState(false);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" || !GA_ID) return;
+    const activate = () => setEnabled(true);
+    const options: AddEventListenerOptions = { once: true, passive: true };
+    window.addEventListener("pointerdown", activate, options);
+    window.addEventListener("keydown", activate, options);
+    window.addEventListener("scroll", activate, options);
+    const timer = window.setTimeout(activate, 20_000);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("keydown", activate);
+      window.removeEventListener("scroll", activate);
+    };
+  }, []);
+
+  if (!enabled || process.env.NODE_ENV !== "production" || !GA_ID) return null;
   return (
     <>
-      <Script
-        id="ga4-src"
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-      />
-      <Script id="ga4-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GA_ID}');
-        `}
-      </Script>
+      <Script id="ga4-src" strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+      <Script id="ga4-init" strategy="afterInteractive">{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', '${GA_ID}', { send_page_view: false });
+      `}</Script>
+      <Suspense fallback={null}><AnalyticsClient /></Suspense>
     </>
   );
 }

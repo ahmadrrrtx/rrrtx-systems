@@ -2,7 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Lock, CheckCircle, HelpCircle, Plus, Trash, Eye, Settings, Heart, Laptop, Award, Flame, Star, Bot, Activity, DollarSign, RefreshCw, ShoppingCart, MessageSquare, Shield, Sparkles, AlertTriangle } from "lucide-react";
+import { Lock, CheckCircle, Plus, Trash } from "lucide-react";
+
+
+type SettingsTab = "security" | "general" | "homepage" | "integrations" | "stats" | "chatbot" | "techstack" | "about";
+const settingsTabs: Array<{ id: SettingsTab; label: string }> = [
+  { id: "general", label: "General & Socials" },
+  { id: "homepage", label: "Homepage Copy" },
+  { id: "integrations", label: "Trusted Integrations" },
+  { id: "stats", label: "Stats & Counters" },
+  { id: "techstack", label: "Tech Stack" },
+  { id: "about", label: "About Section" },
+  { id: "chatbot", label: "Chatbot Assistant" },
+  { id: "security", label: "Password & Security" },
+];
 
 const availableIcons = {
   Rocket: "Rocket",
@@ -22,7 +35,7 @@ const availableIcons = {
 };
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<"security" | "general" | "homepage" | "integrations" | "stats" | "chatbot" | "techstack" | "about">("general");
+  const [activeTab, setActiveTab] = useState<SettingsTab>("general");
   
   // Tab 1: Security (Password Change)
   const [currentPassword, setCurrentPassword] = useState("");
@@ -54,6 +67,7 @@ export default function SettingsPage() {
 
   // Tab 5: Stats & Counters
   const [statsList, setStatsList] = useState<{ icon: string; value: number; suffix: string; label: string }[]>([]);
+  const [statsVerified, setStatsVerified] = useState(false);
   const [newStat, setNewStat] = useState({ icon: "Rocket", value: 10, suffix: "+", label: "" });
 
   // Tab 6: Tech Stack
@@ -74,10 +88,6 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
-
-  useEffect(() => {
-    fetchSettings();
-  }, []);
 
   const fetchSettings = async () => {
     try {
@@ -193,10 +203,15 @@ export default function SettingsPage() {
     }
   };
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchSettings(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordMsg(""); setPasswordErr("");
-    if (newPassword.length < 6) { setPasswordErr("New password must be at least 6 characters."); return; }
+    if (newPassword.length < 12) { setPasswordErr("New password must be at least 12 characters."); return; }
     if (newPassword !== confirmPassword) { setPasswordErr("Passwords do not match."); return; }
     setPasswordLoading(true);
     try {
@@ -340,19 +355,10 @@ export default function SettingsPage() {
 
         {/* Tab switcher */}
         <div className="flex border-b border-slate-800/60 overflow-x-auto gap-2">
-          {[
-            { id: "general", label: "General & Socials" },
-            { id: "homepage", label: "Homepage Copy" },
-            { id: "integrations", label: "Trusted Integrations" },
-            { id: "stats", label: "Stats & Counters" },
-            { id: "techstack", label: "Tech Stack" },
-            { id: "about", label: "About Section" },
-            { id: "chatbot", label: "Chatbot Assistant" },
-            { id: "security", label: "Password & Security" },
-          ].map((tab) => (
+          {settingsTabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2.5 text-sm font-semibold border-b-2 whitespace-nowrap transition-all ${
                 activeTab === tab.id
                   ? "border-cyan-500 text-cyan-400 bg-cyan-500/5"
@@ -370,8 +376,10 @@ export default function SettingsPage() {
             <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">General & Contact Channels</h2>
             
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Inquiry Contact Email</label>
+              <label htmlFor="dashboard-settings-inquiry-contact-email-1" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Inquiry Contact Email</label>
               <input
+                  id="dashboard-settings-inquiry-contact-email-1"
+                  name="dashboard-settings-inquiry-contact-email-1"
                 type="email"
                 required
                 value={contactEmail}
@@ -382,7 +390,7 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-4">
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Social Profiles</label>
+              <h3 className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Social Profiles</h3>
               
               <div className="rounded-lg border border-slate-800/50 divide-y divide-slate-800/50 bg-slate-950/30">
                 {socials.map((s, idx) => (
@@ -392,7 +400,9 @@ export default function SettingsPage() {
                       <span className="text-sm text-slate-300">{s.url}</span>
                     </div>
                     <button
+                      type="button"
                       onClick={() => removeSocial(idx)}
+                      aria-label={`Remove ${s.platform} social profile`}
                       className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                     >
                       <Trash className="w-4 h-4" />
@@ -403,8 +413,10 @@ export default function SettingsPage() {
 
               <div className="flex gap-3 items-end">
                 <div className="w-1/3">
-                  <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Platform</label>
+                  <label htmlFor="dashboard-settings-platform-2" className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Platform</label>
                   <select
+                  id="dashboard-settings-platform-2"
+                  name="dashboard-settings-platform-2"
                     value={newPlatform}
                     onChange={(e) => setNewPlatform(e.target.value)}
                     className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan-500/50"
@@ -419,8 +431,10 @@ export default function SettingsPage() {
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">URL</label>
+                  <label htmlFor="dashboard-settings-url-3" className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">URL</label>
                   <input
+                  id="dashboard-settings-url-3"
+                  name="dashboard-settings-url-3"
                     type="url"
                     placeholder="https://..."
                     value={newSocialUrl}
@@ -446,10 +460,12 @@ export default function SettingsPage() {
             <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">Hero Section Content</h2>
             
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <label htmlFor="dashboard-settings-hero-title-lines-comma-separated-for-4" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                 Hero Title Lines (Comma-separated for line-breaks)
               </label>
               <textarea
+                  id="dashboard-settings-hero-title-lines-comma-separated-for-4"
+                  name="dashboard-settings-hero-title-lines-comma-separated-for-4"
                 required
                 rows={3}
                 value={heroTitleLines}
@@ -461,8 +477,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Hero Subtitle</label>
+              <label htmlFor="dashboard-settings-hero-subtitle-5" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Hero Subtitle</label>
               <textarea
+                  id="dashboard-settings-hero-subtitle-5"
+                  name="dashboard-settings-hero-subtitle-5"
                 required
                 rows={3}
                 value={heroSubtitle}
@@ -473,8 +491,10 @@ export default function SettingsPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">CTA Button Text</label>
+                <label htmlFor="dashboard-settings-cta-button-text-6" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">CTA Button Text</label>
                 <input
+                  id="dashboard-settings-cta-button-text-6"
+                  name="dashboard-settings-cta-button-text-6"
                   required
                   value={heroCtaText}
                   onChange={(e) => setHeroCtaText(e.target.value)}
@@ -482,8 +502,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">CTA Link Destination</label>
+                <label htmlFor="dashboard-settings-cta-link-destination-7" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">CTA Link Destination</label>
                 <input
+                  id="dashboard-settings-cta-link-destination-7"
+                  name="dashboard-settings-cta-link-destination-7"
                   required
                   value={heroCtaLink}
                   onChange={(e) => setHeroCtaLink(e.target.value)}
@@ -496,8 +518,10 @@ export default function SettingsPage() {
             
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Problem Section Title</label>
+                <label htmlFor="dashboard-settings-problem-section-title-8" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Problem Section Title</label>
                 <input
+                  id="dashboard-settings-problem-section-title-8"
+                  name="dashboard-settings-problem-section-title-8"
                   required
                   value={problemSectionTitle}
                   onChange={(e) => setProblemSectionTitle(e.target.value)}
@@ -505,8 +529,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Problem Section Description</label>
+                <label htmlFor="dashboard-settings-problem-section-description-9" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Problem Section Description</label>
                 <textarea
+                  id="dashboard-settings-problem-section-description-9"
+                  name="dashboard-settings-problem-section-description-9"
                   required
                   rows={2}
                   value={problemSectionDesc}
@@ -592,6 +618,10 @@ export default function SettingsPage() {
             <div>
               <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-1">Homepage Stats & Counters</h2>
               <p className="text-xs text-slate-400 mb-4">Manage statistics displayed on the homepage stats ticker bar.</p>
+              <label className="flex items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-slate-300">
+                <input type="checkbox" checked={statsVerified} onChange={(event) => setStatsVerified(event.target.checked)} className="mt-0.5" />
+                <span><strong className="text-amber-300 block mb-1">Publish verified statistics</strong>Only enable this after every number has a documented source and permission to publish. Unverified statistics remain saved in the CMS but hidden from the public homepage.</span>
+              </label>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -618,8 +648,10 @@ export default function SettingsPage() {
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">Add New Stat Counter</h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                 <div>
-                  <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Label / Title</label>
+                  <label htmlFor="dashboard-settings-label-title-10" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Label / Title</label>
                   <input
+                  id="dashboard-settings-label-title-10"
+                  name="dashboard-settings-label-title-10"
                     placeholder="Happy Clients"
                     value={newStat.label}
                     onChange={(e) => setNewStat({ ...newStat, label: e.target.value })}
@@ -627,8 +659,10 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Numeric Target</label>
+                  <label htmlFor="dashboard-settings-numeric-target-11" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Numeric Target</label>
                   <input
+                  id="dashboard-settings-numeric-target-11"
+                  name="dashboard-settings-numeric-target-11"
                     type="number"
                     value={newStat.value}
                     onChange={(e) => setNewStat({ ...newStat, value: parseInt(e.target.value) || 0 })}
@@ -636,8 +670,10 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Suffix (e.g. +, %)</label>
+                  <label htmlFor="dashboard-settings-suffix-e-g-12" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Suffix (e.g. +, %)</label>
                   <input
+                  id="dashboard-settings-suffix-e-g-12"
+                  name="dashboard-settings-suffix-e-g-12"
                     placeholder="+"
                     value={newStat.suffix}
                     onChange={(e) => setNewStat({ ...newStat, suffix: e.target.value })}
@@ -645,8 +681,10 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Lucide Icon</label>
+                  <label htmlFor="dashboard-settings-lucide-icon-13" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Lucide Icon</label>
                   <select
+                  id="dashboard-settings-lucide-icon-13"
+                  name="dashboard-settings-lucide-icon-13"
                     value={newStat.icon}
                     onChange={(e) => setNewStat({ ...newStat, icon: e.target.value })}
                     className="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-white text-xs focus:outline-none"
@@ -723,8 +761,10 @@ export default function SettingsPage() {
             {/* Add new */}
             <div className="grid sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Technology Name</label>
+                <label htmlFor="dashboard-settings-technology-name-14" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Technology Name</label>
                 <input
+                  id="dashboard-settings-technology-name-14"
+                  name="dashboard-settings-technology-name-14"
                   placeholder="e.g. Next.js"
                   value={newTech.name}
                   onChange={(e) => setNewTech({ ...newTech, name: e.target.value })}
@@ -732,8 +772,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Category</label>
+                <label htmlFor="dashboard-settings-category-15" className="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Category</label>
                 <input
+                  id="dashboard-settings-category-15"
+                  name="dashboard-settings-category-15"
                   placeholder="e.g. Framework"
                   value={newTech.category}
                   onChange={(e) => setNewTech({ ...newTech, category: e.target.value })}
@@ -767,8 +809,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Heading</label>
+              <label htmlFor="dashboard-settings-heading-16" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Heading</label>
               <input
+                  id="dashboard-settings-heading-16"
+                  name="dashboard-settings-heading-16"
                 placeholder="We Build Systems. Not Websites."
                 value={aboutHeading}
                 onChange={(e) => setAboutHeading(e.target.value)}
@@ -778,8 +822,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
+              <label htmlFor="dashboard-settings-description-17" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
               <textarea
+                  id="dashboard-settings-description-17"
+                  name="dashboard-settings-description-17"
                 rows={4}
                 placeholder="RRRTX SYSTEMS is an engineering-first..."
                 value={aboutDescription}
@@ -820,8 +866,10 @@ export default function SettingsPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Bot Name / Avatar Name</label>
+                <label htmlFor="dashboard-settings-bot-name-avatar-name-18" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Bot Name / Avatar Name</label>
                 <input
+                  id="dashboard-settings-bot-name-avatar-name-18"
+                  name="dashboard-settings-bot-name-avatar-name-18"
                   required
                   placeholder="e.g. RRRTX Guide"
                   value={chatbotName}
@@ -830,8 +878,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Inquiry/Contact CTA Button Text</label>
+                <label htmlFor="dashboard-settings-inquiry-contact-cta-button-text-19" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Inquiry/Contact CTA Button Text</label>
                 <input
+                  id="dashboard-settings-inquiry-contact-cta-button-text-19"
+                  name="dashboard-settings-inquiry-contact-cta-button-text-19"
                   required
                   placeholder="e.g. Book a Free Call"
                   value={chatbotContactCta}
@@ -842,8 +892,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Welcome Greeting Message</label>
+              <label htmlFor="dashboard-settings-welcome-greeting-message-20" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Welcome Greeting Message</label>
               <textarea
+                  id="dashboard-settings-welcome-greeting-message-20"
+                  name="dashboard-settings-welcome-greeting-message-20"
                 required
                 rows={3}
                 placeholder="Write the initial greeting message..."
@@ -854,8 +906,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Predefined Agency Description (Fallback Knowledge Base)</label>
+              <label htmlFor="dashboard-settings-predefined-agency-description-fallba-21" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Predefined Agency Description (Fallback Knowledge Base)</label>
               <textarea
+                  id="dashboard-settings-predefined-agency-description-fallba-21"
+                  name="dashboard-settings-predefined-agency-description-fallba-21"
                 required
                 rows={3}
                 placeholder="Give a short summary of your company for users asking 'about'..."
@@ -895,8 +949,10 @@ export default function SettingsPage() {
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Current Password</label>
+                <label htmlFor="dashboard-settings-current-password-22" className="block text-sm font-medium text-slate-300 mb-2">Current Password</label>
                 <input
+                  id="dashboard-settings-current-password-22"
+                  name="dashboard-settings-current-password-22"
                   type="password"
                   required
                   value={currentPassword}
@@ -906,8 +962,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">New Password</label>
+                <label htmlFor="dashboard-settings-new-password-23" className="block text-sm font-medium text-slate-300 mb-2">New Password</label>
                 <input
+                  id="dashboard-settings-new-password-23"
+                  name="dashboard-settings-new-password-23"
                   type="password"
                   required
                   value={newPassword}
@@ -917,8 +975,10 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Confirm New Password</label>
+                <label htmlFor="dashboard-settings-confirm-new-password-24" className="block text-sm font-medium text-slate-300 mb-2">Confirm New Password</label>
                 <input
+                  id="dashboard-settings-confirm-new-password-24"
+                  name="dashboard-settings-confirm-new-password-24"
                   type="password"
                   required
                   value={confirmPassword}

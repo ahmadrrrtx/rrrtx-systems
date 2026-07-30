@@ -30,7 +30,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
 
   try {

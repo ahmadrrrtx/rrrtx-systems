@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, Bot, Target } from "lucide-react";
@@ -50,7 +47,7 @@ const gradients = [
 
 const microDetails = [
   ["Custom Checkout", "Real-time Inventory", "Multi-currency"],
-  ["Local LLMs", "Workflow Pipelines", "Zero API Cost"],
+  ["Local LLMs", "Workflow Pipelines", "Controlled Inference Cost"],
   ["Auto Scoring", "CRM Sync", "Follow-up Flows"],
 ];
 
@@ -81,12 +78,8 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
             const details = microDetails[i % microDetails.length];
 
             return (
-              <motion.div
+              <div
                 key={service.title}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.5 }}
               >
                 <Link
                   href={service.href}
@@ -147,7 +140,7 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
         </div>

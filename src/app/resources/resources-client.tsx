@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, Lock, CheckCircle, FileText, X, Filter, RefreshCw } from "lucide-react";
+import { Download, Lock, CheckCircle, FileText, X, Filter, RefreshCw, AlertCircle } from "lucide-react";
+import { SmartImage } from "@/components/SmartImage";
+import { trackEvent } from "@/components/AnalyticsClient";
 
 interface Resource {
   id: number;
@@ -25,6 +27,19 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [unlockedUrl, setUnlockedUrl] = useState("");
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!activeGatedResource) return;
+    closeButtonRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveGatedResource(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [activeGatedResource]);
 
   // Filter lists
   const categories = ["All", "PDF", "Checklist", "Guide", "Template", "XLSX"];
@@ -40,7 +55,8 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
   const handleDownloadClick = async (resource: Resource) => {
     // If not gated, trigger download link directly
     if (!resource.isGated) {
-      window.open(resource.downloadUrl, "_blank");
+      trackEvent("resource_download", { resource: resource.title, gated: false });
+      window.open(resource.downloadUrl, "_blank", "noopener,noreferrer");
       return;
     }
 
@@ -49,6 +65,8 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
     setName("");
     setEmail("");
     setSuccess(false);
+    setError("");
+    setUnlockedUrl("");
   };
 
   const handleGatedSubmit = async (e: React.FormEvent) => {
@@ -56,28 +74,24 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
     if (!activeGatedResource) return;
 
     setSubmitting(true);
+    setError("");
     try {
       const res = await fetch("/api/resources/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          resourceId: activeGatedResource.id,
-        }),
+        body: JSON.stringify({ name, email, resourceId: activeGatedResource.id }),
       });
-
-      if (res.ok) {
-        const data = await res.json();
-        setSuccess(true);
-        // Instant download/redirect
-        setTimeout(() => {
-          window.open(data.downloadUrl, "_blank");
-          setActiveGatedResource(null);
-        }, 1000);
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "The resource could not be unlocked. Please try again.");
+        return;
       }
-    } catch (err) {
-      console.error("Gated lead submission failed", err);
+      setUnlockedUrl(data.downloadUrl);
+      setSuccess(true);
+      trackEvent("resource_unlock", { resource: activeGatedResource.title });
+    } catch (requestError) {
+      console.error("Gated lead submission failed", requestError);
+      setError("A network error interrupted the request. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -92,9 +106,9 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">
             Knowledge Hub
           </p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+          <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             Free Systems & <span className="text-gradient">Engineering Library.</span>
-          </h2>
+          </h1>
           <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
             Download our custom checklist guides, technical audit sheets, and website planning templates created by our full-stack engineering team.
           </p>
@@ -107,6 +121,7 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
+              aria-pressed={selectedCategory === cat}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                 selectedCategory === cat
                   ? "bg-cyan-500/10 border-cyan-400 text-cyan-400"
@@ -137,10 +152,10 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                 {/* Visual Thumbnail */}
                 <div className="aspect-[16/10] bg-slate-900 border-b border-slate-800/50 relative overflow-hidden flex items-center justify-center p-6">
                   {res.coverImageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <SmartImage
                       src={res.coverImageUrl}
                       alt={res.title}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                     />
                   ) : (
@@ -198,6 +213,10 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
               />
 
               <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="resource-dialog-title"
+                aria-describedby="resource-dialog-description"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -209,16 +228,19 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                     <span className="text-xs font-bold text-purple-400 uppercase tracking-wider">Premium Resource Gated</span>
                   </div>
                   <button
+                    ref={closeButtonRef}
+                    type="button"
                     onClick={() => setActiveGatedResource(null)}
-                    className="p-1 rounded text-slate-500 hover:text-white hover:bg-white/5 transition-all"
+                    aria-label="Close resource download dialog"
+                    className="p-2 rounded text-slate-400 hover:text-white hover:bg-white/5 transition-all"
                   >
                     <X className="w-4.5 h-4.5" />
                   </button>
                 </div>
 
                 <div className="space-y-1.5">
-                  <h3 className="text-base font-bold text-white leading-tight">Unlock: {activeGatedResource.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <h2 id="resource-dialog-title" className="text-base font-bold text-white leading-tight">Unlock: {activeGatedResource.title}</h2>
+                  <p id="resource-dialog-description" className="text-xs text-slate-400 leading-relaxed">
                     Provide your work details below to gain instant access to download this customized full-stack planning asset.
                   </p>
                 </div>
@@ -232,8 +254,11 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                       className="py-6 flex flex-col items-center justify-center text-center space-y-2"
                     >
                       <CheckCircle className="w-10 h-10 text-green-400 animate-bounce" />
-                      <h4 className="text-sm font-bold text-white">Access Granted!</h4>
-                      <p className="text-xs text-slate-500">Your file download should begin in a moment...</p>
+                      <h3 className="text-sm font-bold text-white">Access granted</h3>
+                      <p className="text-xs text-slate-400">Your resource is ready. Open it using the link below.</p>
+                      <a href={unlockedUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-xs font-bold text-white">
+                        Open resource <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                      </a>
                     </motion.div>
                   ) : (
                     <motion.form
@@ -242,8 +267,12 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                       className="space-y-3.5"
                     >
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Full Name</label>
+                        <label htmlFor="resource-name" className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Full Name</label>
                         <input
+                          id="resource-name"
+                          name="name"
+                          autoComplete="name"
+                          maxLength={120}
                           required
                           type="text"
                           placeholder="John Doe"
@@ -253,8 +282,12 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Work Email</label>
+                        <label htmlFor="resource-email" className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Work Email</label>
                         <input
+                          id="resource-email"
+                          name="email"
+                          autoComplete="email"
+                          maxLength={254}
                           required
                           type="email"
                           placeholder="john@brand.com"
@@ -263,6 +296,12 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                           className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-800 text-white text-xs placeholder-slate-600 focus:outline-none focus:border-cyan-500/50"
                         />
                       </div>
+
+                      {error && (
+                        <div role="alert" className="flex items-start gap-2 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-300">
+                          <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> {error}
+                        </div>
+                      )}
 
                       <button
                         type="submit"

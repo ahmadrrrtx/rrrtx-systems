@@ -1,7 +1,5 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, Bot, Target, RefreshCw, MessageSquare, Search, type LucideIcon } from "lucide-react";
@@ -65,7 +63,6 @@ export function ServicesPageClient({ items }: { items?: ServiceItem[] }) {
   const services = items && items.length > 0 ? items : allServices;
   return (
     <main className="relative min-h-screen bg-[#020617]">
-      <Navbar />
 
       <section className="pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -128,7 +125,6 @@ export function ServicesPageClient({ items }: { items?: ServiceItem[] }) {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

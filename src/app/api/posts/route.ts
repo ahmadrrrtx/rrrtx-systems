@@ -3,8 +3,13 @@ import { posts } from "@/lib/schema";
 import { eq, desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-check";
+import { isSafePublicUrl, pickAllowedFields } from "@/lib/request-security";
+import { notifyIndexNow } from "@/lib/indexnow";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
+  const auth = await requireAuth();
+  if (auth) return auth;
   try {
     const all = await db.select().from(posts).orderBy(desc(posts.createdAt));
     return NextResponse.json(all);
@@ -15,7 +20,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
@@ -37,6 +42,13 @@ export async function POST(request: Request) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+    revalidatePath("/");
+    revalidatePath("/blog");
+    revalidatePath(`/blog/${slug}`);
+    revalidatePath("/sitemap.xml");
+    if ((status || "draft") === "published") {
+      void notifyIndexNow([`/blog/${slug}`, "/blog", "/sitemap.xml"]);
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Create post error:", error);
@@ -45,21 +57,30 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id } = body;
+    const updates = pickAllowedFields(body, ["title", "excerpt", "content", "coverImageUrl", "tags", "metaTitle", "metaDescription", "status", "publishedAt"]);
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    
-    if (updates.publishedAt) {
+    if ((updates.status && !["draft", "published"].includes(String(updates.status))) || (updates.coverImageUrl && !isSafePublicUrl(updates.coverImageUrl))) {
+      return NextResponse.json({ error: "Status or cover image URL is invalid" }, { status: 400 });
+    }
+
+    if (typeof updates.publishedAt === "string" || typeof updates.publishedAt === "number") {
       updates.publishedAt = new Date(updates.publishedAt);
     }
     updates.updatedAt = new Date();
 
     await db.update(posts).set(updates).where(eq(posts.id, id));
+    revalidatePath("/");
+    revalidatePath("/blog");
+    revalidatePath("/blog/[slug]", "page");
+    revalidatePath("/sitemap.xml");
+    void notifyIndexNow([typeof body.slug === "string" ? `/blog/${body.slug}` : "/blog", "/blog", "/sitemap.xml"]);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update post error:", error);
@@ -68,7 +89,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const { searchParams } = new URL(request.url);
@@ -76,7 +97,11 @@ export async function DELETE(request: Request) {
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    await db.delete(posts).where(eq(posts.id, parseInt(id)));
+    await db.update(posts).set({ status: "draft", updatedAt: new Date() }).where(eq(posts.id, parseInt(id)));
+    revalidatePath("/");
+    revalidatePath("/blog");
+    revalidatePath("/blog/[slug]", "page");
+    revalidatePath("/sitemap.xml");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete post error:", error);

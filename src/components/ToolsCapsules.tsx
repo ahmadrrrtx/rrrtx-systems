@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ClipboardCheck, Calculator, Download, ArrowRight } from "lucide-react";
 
@@ -21,7 +18,7 @@ const tools = [
     label: "Free Resources",
     href: "/resources",
     icon: Download,
-    description: "Checklists, guides, and templates — no sign-up required.",
+    description: "Browse instant and email-gated checklists, guides, and templates.",
   },
 ];
 
@@ -38,13 +35,9 @@ export function ToolsCapsules() {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4">
-          {tools.map((tool, i) => (
-            <motion.div
+          {tools.map((tool) => (
+            <div
               key={tool.label}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.4 }}
             >
               <Link
                 href={tool.href}
@@ -63,7 +56,7 @@ export function ToolsCapsules() {
                   </p>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

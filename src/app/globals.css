@@ -199,7 +199,6 @@ html {
 }
 
 .premium-surface {
-  position: relative;
   background:
     linear-gradient(145deg, rgba(15,23,42,.76), rgba(2,6,23,.68)),
     radial-gradient(circle at 15% 0%, rgba(34,211,238,.05), transparent 34%);
@@ -207,6 +206,12 @@ html {
   box-shadow: var(--shadow-surface);
   backdrop-filter: blur(18px) saturate(125%);
   -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+
+/* Keep decorative surfaces positioned without overriding explicit Tailwind
+   positioning on dropdowns, mobile overlays, or hero callouts. */
+.premium-surface:not(.absolute):not(.fixed):not(.sticky) {
+  position: relative;
 }
 
 .premium-surface::before {

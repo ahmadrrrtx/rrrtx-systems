@@ -26,10 +26,6 @@ export default function PromptBundlesPage() {
     price: "",
   });
 
-  useEffect(() => {
-    fetchBundles();
-  }, []);
-
   const fetchBundles = async () => {
     try {
       const res = await fetch("/api/prompt-bundles");
@@ -43,6 +39,11 @@ export default function PromptBundlesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchBundles(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +67,7 @@ export default function PromptBundlesPage() {
   };
 
   const deleteBundle = async (id: number) => {
-    if (!confirm("Delete this bundle?")) return;
+    if (!confirm("Deactivate this bundle?")) return;
     try {
       const res = await fetch(`/api/prompt-bundles?id=${id}`, { method: "DELETE" });
       if (res.ok) fetchBundles();

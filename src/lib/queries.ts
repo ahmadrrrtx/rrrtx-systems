@@ -1,6 +1,7 @@
+import { cache } from "react";
 import { db } from "./db";
 import { services, projects, pricingTiers, testimonials, teamMembers, contentPages, posts, siteSettings, resources } from "./schema";
-import { eq, and, asc, desc } from "drizzle-orm";
+import { eq, and, asc, desc, lte } from "drizzle-orm";
 
 /**
  * Safe, server-side data fetchers for the PUBLIC site.
@@ -33,6 +34,41 @@ export async function getPublicServices(opts?: { primaryOnly?: boolean }): Promi
   }
 }
 
+export async function getServiceBySlug(slug: string): Promise<DbService | null> {
+  try {
+    const rows = await db
+      .select()
+      .from(services)
+      .where(eq(services.slug, slug))
+      .limit(1);
+    return rows[0] || null;
+  } catch (error) {
+    console.error("getServiceBySlug error:", error);
+    return null;
+  }
+}
+
+export async function getSettings<T extends Record<string, unknown>>(
+  defaults: T
+): Promise<T> {
+  try {
+    const rows = await db.select().from(siteSettings);
+    const result: Record<string, unknown> = { ...defaults };
+    for (const row of rows) {
+      if (row.value === null) continue;
+      try {
+        result[row.key] = JSON.parse(row.value);
+      } catch {
+        result[row.key] = row.value;
+      }
+    }
+    return result as T;
+  } catch (error) {
+    console.error("getSettings error:", error);
+    return defaults;
+  }
+}
+
 export async function getPublicProjects(opts?: { featuredOnly?: boolean }): Promise<DbProject[]> {
   try {
     const rows = await db
@@ -44,6 +80,20 @@ export async function getPublicProjects(opts?: { featuredOnly?: boolean }): Prom
   } catch (error) {
     console.error("getPublicProjects error:", error);
     return [];
+  }
+}
+
+export async function getPublicProjectBySlug(slug: string): Promise<DbProject | null> {
+  try {
+    const rows = await db
+      .select()
+      .from(projects)
+      .where(and(eq(projects.slug, slug), eq(projects.status, "published")))
+      .limit(1);
+    return rows[0] || null;
+  } catch (error) {
+    console.error("getPublicProjectBySlug error:", error);
+    return null;
   }
 }
 
@@ -122,7 +172,7 @@ export async function getPublicPosts(): Promise<DbPost[]> {
     return await db
       .select()
       .from(posts)
-      .where(eq(posts.status, "published"))
+      .where(and(eq(posts.status, "published"), lte(posts.publishedAt, new Date())))
       .orderBy(desc(posts.publishedAt));
   } catch (error) {
     console.error("getPublicPosts error:", error);
@@ -130,19 +180,19 @@ export async function getPublicPosts(): Promise<DbPost[]> {
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<DbPost | null> {
+export const getPostBySlug = cache(async function getPostBySlug(slug: string): Promise<DbPost | null> {
   try {
     const rows = await db
       .select()
       .from(posts)
-      .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
+      .where(and(eq(posts.slug, slug), eq(posts.status, "published"), lte(posts.publishedAt, new Date())))
       .limit(1);
     return rows[0] || null;
   } catch (error) {
     console.error("getPostBySlug error:", error);
     return null;
   }
-}
+});
 
 export async function getSetting<T>(key: string, defaultValue: T): Promise<T> {
   try {

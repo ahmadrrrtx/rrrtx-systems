@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
+import { createMetadata } from "@/lib/seo";
 import { ProcessPageClient } from "./process-client";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Our Process — From Discovery to Production",
   description:
-    "4-step process: Discover, Build, Deploy, Optimize. Custom ecommerce and AI systems built with measurable outcomes. Realistic timelines, milestone delivery.",
-  openGraph: {
-    title: "Our Process — From Discovery to Production | RRRTX SYSTEMS",
-    description: "4-step process: Discover, Build, Deploy, Optimize. Custom ecommerce and AI systems with measurable outcomes.",
-    url: "/process",
-  },
-};
+    "Discover, build, deploy, and optimize with a transparent engineering process designed around measurable outcomes and controlled delivery risk.",
+  path: "/process",
+});
 
 export default function ProcessPage() {
-  return <ProcessPageClient />;
+  return <><Navbar /><ProcessPageClient /><Footer /></>;
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { ArrowLeft, Calendar, Save, CheckCircle, Mail, Tag, DollarSign, MessageSquare } from "lucide-react";
+import { ArrowLeft, Calendar, Save, Mail, Tag, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 interface Lead {
@@ -35,14 +35,17 @@ export default function LeadDetailPage() {
   const [followUpDate, setFollowUpDate] = useState("");
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => { fetchLead(); }, [id]);
-
-  const fetchLead = async () => {
+  const fetchLead = useCallback(async () => {
     try {
       const res = await fetch(`/api/leads/${id}`);
       if (res.ok) { const data = await res.json(); setLead(data.lead); setNotes(data.notes || []); }
     } catch (err) { console.error(err); } finally { setLoading(false); }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchLead(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchLead]);
 
   const updateStatus = async (status: string) => {
     try {

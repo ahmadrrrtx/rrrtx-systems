@@ -3,6 +3,9 @@ import { resources } from "@/lib/schema";
 import { eq, asc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-check";
+import { isSafePublicUrl, pickAllowedFields } from "@/lib/request-security";
+import { notifyIndexNow } from "@/lib/indexnow";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   try {
@@ -31,14 +34,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
     const { title, description, coverImageUrl, category, fileType, downloadUrl, isGated, sortOrder } = body;
 
-    if (!title || !downloadUrl) {
-      return NextResponse.json({ error: "Title and download URL are required" }, { status: 400 });
+    if (!title || !isSafePublicUrl(downloadUrl) || (coverImageUrl && !isSafePublicUrl(coverImageUrl))) {
+      return NextResponse.json({ error: "Title and safe download/image URLs are required" }, { status: 400 });
     }
 
     await db.insert(resources).values({
@@ -54,6 +57,9 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     });
 
+    revalidatePath("/resources");
+    revalidatePath("/sitemap.xml");
+    void notifyIndexNow(["/resources", "/sitemap.xml"]);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Create resource error:", error);
@@ -62,16 +68,23 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id } = body;
+    const updates = pickAllowedFields(body, ["title", "description", "coverImageUrl", "category", "fileType", "downloadUrl", "isGated", "isActive", "sortOrder"]);
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
+    if ((updates.downloadUrl && !isSafePublicUrl(updates.downloadUrl)) || (updates.coverImageUrl && !isSafePublicUrl(updates.coverImageUrl))) {
+      return NextResponse.json({ error: "Download and image URLs must use a safe public path or HTTP(S)." }, { status: 400 });
+    }
 
     await db.update(resources).set(updates).where(eq(resources.id, id));
+    revalidatePath("/resources");
+    revalidatePath("/sitemap.xml");
+    void notifyIndexNow(["/resources", "/sitemap.xml"]);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update resource error:", error);
@@ -80,7 +93,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const { searchParams } = new URL(request.url);
@@ -88,7 +101,9 @@ export async function DELETE(request: Request) {
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    await db.delete(resources).where(eq(resources.id, parseInt(id)));
+    await db.update(resources).set({ isActive: false }).where(eq(resources.id, parseInt(id)));
+    revalidatePath("/resources");
+    revalidatePath("/sitemap.xml");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete resource error:", error);

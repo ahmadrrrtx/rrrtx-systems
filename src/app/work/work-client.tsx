@@ -1,10 +1,9 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ExternalLink, Code } from "lucide-react";
+import { SmartImage } from "@/components/SmartImage";
 
 type WorkItem = {
   client: string;
@@ -24,10 +23,10 @@ const defaultProjects: WorkItem[] = [
     title: "Full-Stack Ecommerce Platform",
     description:
       "Custom Next.js storefront with category architecture, product grid, cart logic, WhatsApp order integration, and COD checkout — built from scratch for a sports brand in Sialkot.",
-    image: "/assets/abstract-commerce-grid.png",
+    image: "/assets/abstract-commerce-grid.webp",
     link: "https://janjua-sports.vercel.app/",
     tags: ["Next.js", "Custom Cart", "WhatsApp API", "COD"],
-    metrics: "15K+ orders processed, sub-2s load times",
+    metrics: "Production storefront and mobile order flow",
   },
   {
     client: "RRRTX Internal",
@@ -35,10 +34,10 @@ const defaultProjects: WorkItem[] = [
     title: "Gemma 4 RSS Intelligence Agent",
     description:
       "Autonomous developer-news agent powered by Gemma 4 E4B. Monitors 25+ RSS feeds, classifies signal vs. noise, and posts clean digests to Slack — running on a $7/month VPS with zero API costs.",
-    image: "/assets/ai-agent-network.png",
+    image: "/assets/ai-agent-network.webp",
     link: "https://github.com/ahmadrrrtx/Gemma-4-RSS-Intelligence-Monitor",
     tags: ["Python", "Gemma 4", "Slack API", "Local LLM"],
-    metrics: "$0 AI spend, 6-hour monitoring cycles",
+    metrics: "Self-hosted local-model monitoring workflow",
   },
   {
     client: "Client Project",
@@ -46,10 +45,10 @@ const defaultProjects: WorkItem[] = [
     title: "Make.com → Custom Automation Migration",
     description:
       "Replaced fragile Make.com spaghetti workflows with a robust custom Python automation pipeline. Lead scoring, CRM sync, and follow-up sequences now run without third-party failure points.",
-    image: "/assets/hero-core-visual.png",
+    image: "/assets/hero-core-visual.webp",
     link: "#",
     tags: ["Make.com", "Python", "CRM Integration", "Lead Scoring"],
-    metrics: "90% reduction in workflow failures",
+    metrics: "Monitored custom workflow with controlled retries",
   },
 ];
 
@@ -57,7 +56,6 @@ export function WorkPageClient({ items }: { items?: WorkItem[] }) {
   const projects = items && items.length > 0 ? items : defaultProjects;
   return (
     <main className="relative min-h-screen bg-[#020617]">
-      <Navbar />
 
       <section className="pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,9 +87,10 @@ export function WorkPageClient({ items }: { items?: WorkItem[] }) {
                 className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/50 hover:border-slate-700/80 transition-all"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
+                  <SmartImage
                     src={project.image}
                     alt={project.title}
+                    sizes="(min-width: 1024px) 33vw, 100vw"
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent" />
@@ -144,7 +143,6 @@ export function WorkPageClient({ items }: { items?: WorkItem[] }) {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

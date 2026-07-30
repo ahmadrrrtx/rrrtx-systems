@@ -1,22 +1,25 @@
 import { db } from "./db";
-import { leads, services, pricingTiers, projects, users } from "./schema";
+import { services, pricingTiers, users } from "./schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 async function seed() {
   console.log("Seeding database...");
 
-  // Seed admin user
-  const adminEmail = "admin@rrrtx.com";
-  const existing = await db.select().from(users).where(eq(users.email, adminEmail));
-  if (existing.length === 0) {
-    const hash = await bcrypt.hash("rrrtx2024", 10);
-    await db.insert(users).values({
-      email: adminEmail,
-      passwordHash: hash,
-      role: "admin",
-    });
-    console.log("Admin user created:", adminEmail);
+  // Admin seeding is explicit: production and local environments must provide
+  // their own credentials. There are no source-code defaults.
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (adminEmail && adminPassword) {
+    if (adminPassword.length < 12) throw new Error("ADMIN_PASSWORD must be at least 12 characters");
+    const existing = await db.select().from(users).where(eq(users.email, adminEmail));
+    if (existing.length === 0) {
+      const hash = await bcrypt.hash(adminPassword, 12);
+      await db.insert(users).values({ email: adminEmail, passwordHash: hash, role: "admin" });
+      console.log("Admin user created:", adminEmail);
+    }
+  } else {
+    console.warn("Skipping admin seed: ADMIN_EMAIL and ADMIN_PASSWORD are not set.");
   }
 
   // Seed services
@@ -89,7 +92,7 @@ async function seed() {
         slug: "discovery",
         title: "Discovery & Strategy",
         subtitle: "Best when you need clarity before building.",
-        startingPrice: "$500 – $2,500",
+        startingPrice: "$100 – $300",
         description: "Full audit, architecture plan, and roadmap.",
         features: JSON.stringify(["Full stack & conversion audit", "Competitive & UX analysis", "Technical architecture plan", "AI automation opportunity map", "Roadmap & budget estimate"]),
         sortOrder: 1,
@@ -98,7 +101,7 @@ async function seed() {
         slug: "project",
         title: "Project-Based Build",
         subtitle: "Best for one-time ecommerce or AI system builds.",
-        startingPrice: "$10,000 – $25,000",
+        startingPrice: "$500 – $10,000",
         description: "Custom codebase from scratch with QA and launch support.",
         features: JSON.stringify(["Custom codebase from scratch", "Database & API architecture", "Payment & integration setup", "AI agent or automation logic", "QA, testing & launch support", "30-day post-launch optimization"]),
         sortOrder: 2,
@@ -107,7 +110,7 @@ async function seed() {
         slug: "retainer",
         title: "Retainer & Growth",
         subtitle: "Best for ongoing optimization and expansion.",
-        startingPrice: "$800+ / month",
+        startingPrice: "$500+ / month",
         description: "Monthly CRO, feature additions, and priority support.",
         features: JSON.stringify(["Monthly CRO & A/B testing", "Feature additions & updates", "AI model tuning & retraining", "Performance monitoring & alerts", "Priority support & fast turnaround", "Quarterly growth strategy reviews"]),
         sortOrder: 3,
@@ -116,21 +119,6 @@ async function seed() {
     console.log("Pricing tiers seeded.");
   }
 
-  // Seed sample lead
-  const existingLeads = await db.select().from(leads);
-  if (existingLeads.length === 0) {
-    await db.insert(leads).values({
-      name: "Test Lead",
-      email: "test@example.com",
-      company: "Test Company",
-      service: "Custom Ecommerce",
-      budget: "$10,000 – $25,000",
-      message: "I need a custom ecommerce store built from scratch. Looking to launch in 8 weeks.",
-      status: "new",
-      source: "website",
-    });
-    console.log("Sample lead created.");
-  }
 
   console.log("Seed complete.");
 }

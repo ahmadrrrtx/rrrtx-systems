@@ -1,25 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import Link from "next/link";
 import {
-  Search,
   Filter,
   Mail,
   Calendar,
   Tag,
   DollarSign,
-  ArrowRight,
   ChevronDown,
   ChevronUp,
   Inbox,
   Sparkles,
-  BarChart,
   RefreshCw,
   FileText,
-  ShieldCheck,
-  CheckCircle,
   TrendingUp,
 } from "lucide-react";
 
@@ -45,6 +39,22 @@ interface AuditLead {
   scores: string; // JSON string
   recommendations: string; // JSON string
   createdAt: string;
+}
+
+interface AuditScores {
+  status?: string;
+  websiteClarity: number | null;
+  performanceUX: number | null;
+  conversionCapture: number | null;
+}
+
+interface AuditRecommendation {
+  area: string;
+  score?: number;
+  critique?: string;
+  fix?: string;
+  status?: string;
+  note?: string;
 }
 
 interface ROILead {
@@ -76,9 +86,17 @@ const statusColors: Record<string, string> = {
 };
 
 const statusOptions = ["new", "contacted", "qualified", "proposal", "closed", "lost"];
+type LeadTab = "inbound" | "audit" | "roi" | "gated";
+const leadTabs: Array<{ id: LeadTab; label: string }> = [
+  { id: "inbound", label: "Inbound Inquiries" },
+  { id: "audit", label: "Audit Requests" },
+  { id: "roi", label: "ROI Calculations" },
+  { id: "gated", label: "Gated Downloads" },
+];
+
 
 export default function LeadsPage() {
-  const [activeTab, setActiveTab] = useState<"inbound" | "audit" | "roi" | "gated">("inbound");
+  const [activeTab, setActiveTab] = useState<LeadTab>("inbound");
   
   // 4 lists for different leads
   const [inboundLeads, setInboundLeads] = useState<Lead[]>([]);
@@ -87,15 +105,9 @@ export default function LeadsPage() {
   const [gatedLeads, setGatedLeads] = useState<GatedLead[]>([]);
 
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetchLeads();
-  }, [activeTab]);
-
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     setLoading(true);
     try {
       if (activeTab === "inbound") {
@@ -116,7 +128,12 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchLeads(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchLeads]);
 
   const updateStatus = async (id: number, status: string) => {
     try {
@@ -147,18 +164,11 @@ export default function LeadsPage() {
 
         {/* Dynamic subpages tabs */}
         <div className="flex border-b border-slate-800/60 overflow-x-auto gap-2">
-          {[
-            { id: "inbound", label: "Inbound Inquiries" },
-            { id: "audit", label: "Audit Requests" },
-            { id: "roi", label: "ROI Calculations" },
-            { id: "gated", label: "Gated Downloads" },
-          ].map((tab) => (
+          {leadTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => {
-                setActiveTab(tab.id as any);
-                setFilter("all");
-                setSearch("");
+                setActiveTab(tab.id);
                 setExpanded(null);
               }}
               className={`px-4 py-2.5 text-sm font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
@@ -241,8 +251,11 @@ export default function LeadsPage() {
             ) : (
               <div className="divide-y divide-slate-800/50">
                 {auditLeads.map((lead) => {
-                  let parsedScores = { websiteClarity: 0, performanceUX: 0, conversionCapture: 0 };
-                  try { parsedScores = JSON.parse(lead.scores); } catch {}
+                  let parsedScores: AuditScores = { websiteClarity: null, performanceUX: null, conversionCapture: null };
+                  let recommendations: AuditRecommendation[] = [];
+                  try { parsedScores = JSON.parse(lead.scores) as AuditScores; } catch {}
+                  try { recommendations = JSON.parse(lead.recommendations || "[]") as AuditRecommendation[]; } catch {}
+                  const hasScores = [parsedScores.websiteClarity, parsedScores.performanceUX, parsedScores.conversionCapture].every((value) => typeof value === "number");
                   return (
                     <div key={lead.id} className="p-4 sm:p-5">
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -252,8 +265,11 @@ export default function LeadsPage() {
                             <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {lead.email}</span>
                             <span className="flex items-center gap-1"><Tag className="w-3 h-3" /> {lead.businessType || "N/A"}</span>
                             <span className="flex items-center gap-1 text-purple-400"><FileText className="w-3 h-3" /> {lead.helpWith || "N/A"}</span>
-                            <span className="flex items-center gap-1 text-green-400">
-                              <Sparkles className="w-3 h-3" /> Clarity: {parsedScores.websiteClarity}/10 · Perf: {parsedScores.performanceUX}/10 · Conv: {parsedScores.conversionCapture}/10
+                            <span className={`flex items-center gap-1 ${hasScores ? "text-green-400" : "text-amber-300"}`}>
+                              <Sparkles className="w-3 h-3" />
+                              {hasScores
+                                ? `Clarity: ${parsedScores.websiteClarity}/10 · Perf: ${parsedScores.performanceUX}/10 · Conv: ${parsedScores.conversionCapture}/10`
+                                : "Pending engineer review"}
                             </span>
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(lead.createdAt).toLocaleDateString()}</span>
                           </div>
@@ -267,13 +283,15 @@ export default function LeadsPage() {
                       </div>
                       {expanded === lead.id && (
                         <div className="mt-3 pt-3 border-t border-slate-800/50 space-y-3">
-                          <h4 className="text-xs font-bold text-white uppercase tracking-wider">Recommendations Prepared:</h4>
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider">Review areas:</h4>
                           <div className="grid sm:grid-cols-2 gap-3">
-                            {JSON.parse(lead.recommendations || "[]").map((rec: any, idx: number) => (
-                              <div key={idx} className="p-3 bg-slate-900/60 rounded border border-slate-800 text-xs">
-                                <span className="font-bold text-cyan-400 block">{rec.area} (Score: {rec.score}/10)</span>
-                                <span className="text-slate-400 block mt-1">{rec.critique}</span>
-                                <span className="text-cyan-300 block mt-1.5 italic"><strong>Fix:</strong> {rec.fix}</span>
+                            {recommendations.map((recommendation, index) => (
+                              <div key={`${recommendation.area}-${index}`} className="p-3 bg-slate-900/60 rounded border border-slate-800 text-xs">
+                                <span className="font-bold text-cyan-400 block">
+                                  {recommendation.area}{typeof recommendation.score === "number" ? ` (Score: ${recommendation.score}/10)` : ""}
+                                </span>
+                                <span className="text-slate-300 block mt-1">{recommendation.note || recommendation.critique || "Pending review"}</span>
+                                {recommendation.fix && <span className="text-cyan-300 block mt-1.5 italic"><strong>Fix:</strong> {recommendation.fix}</span>}
                               </div>
                             ))}
                           </div>

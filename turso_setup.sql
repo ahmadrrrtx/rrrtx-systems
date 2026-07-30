@@ -91,7 +91,7 @@ INSERT INTO `posts` (`slug`, `title`, `excerpt`, `content`, `cover_image_url`, `
       
       Themes are naturally slow because they are compiled of render-blocking resources that must load completely before a visitor can see anything.
       
-      Custom website systems engineered from scratch using modern stacks like **Next.js** solve this completely. By generating static pages on the server and using edge-caching delivery nodes, custom web systems deliver sub-0.5s render times globally.
+      Custom website systems engineered from scratch using modern stacks like **Next.js** solve this completely. By generating static pages on the server and using edge-caching delivery nodes, well-optimized systems can reduce render delays and improve Core Web Vitals when measured under real user conditions.
 
       ## Bottleneck 2: Rigid Conversion Paths and Gimmicky Addons
       
@@ -206,7 +206,7 @@ INSERT INTO `posts` (`slug`, `title`, `excerpt`, `content`, `cover_image_url`, `
       - Deploy a **Free Systems Audit tool**: Let visitors analyze their own bottlenecks.
       - Embed an **ROI Calculator**: Let them see the exact value your services provide.
       
-      By introducing these interactive conversion channels, you increase lead generation rates by up to 300%.
+      By introducing these interactive conversion channels, you can create additional conversion paths whose effect should be measured through controlled experiments.
 
       ## Milestone 4: Custom Automation Pipelines
       

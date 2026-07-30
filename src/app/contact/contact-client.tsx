@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { ArrowRight, Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { trackEvent } from "@/components/AnalyticsClient";
 
 const services = [
   "Custom Ecommerce",
@@ -27,6 +27,7 @@ const budgets = [
 export function ContactPageClient() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,20 +35,29 @@ export function ContactPageClient() {
     service: "",
     budget: "",
     message: "",
+    website: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (res.ok) setSubmitted(true);
-    } catch (err) {
-      console.error(err);
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Your message could not be sent. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+      trackEvent("generate_lead", { form: "contact", service: formData.service, budget: formData.budget });
+    } catch (requestError) {
+      console.error(requestError);
+      setError("A network error interrupted the request. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +65,6 @@ export function ContactPageClient() {
 
   return (
     <main className="relative min-h-screen bg-[#020617]">
-      <Navbar />
 
       <section className="pt-32 pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,8 +81,7 @@ export function ContactPageClient() {
               <span className="text-gradient">Converts.</span>
             </h1>
             <p className="text-slate-400 max-w-xl mx-auto">
-              Tell us what you&apos;re building. We&apos;ll reply within 24 hours with a clear
-              next step.
+              Tell us what you&apos;re building. We&apos;ll review the details and respond with a clear next step.
             </p>
           </motion.div>
 
@@ -86,7 +94,7 @@ export function ContactPageClient() {
               <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
               <h2 className="text-xl font-bold text-white mb-2">Message Received</h2>
               <p className="text-slate-400">
-                We&apos;ll review your project and get back to you within 24 hours.
+                We&apos;ll review your project and respond with the most useful next step.
               </p>
             </motion.div>
           ) : (
@@ -97,10 +105,18 @@ export function ContactPageClient() {
               onSubmit={handleSubmit}
               className="space-y-6 rounded-2xl border border-slate-800/60 bg-slate-950/40 p-8"
             >
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="contact-website">Leave this field empty</label>
+                <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={formData.website} onChange={(event) => setFormData({ ...formData, website: event.target.value })} />
+              </div>
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
                   <input
+                    id="contact-name"
+                    name="name"
+                    autoComplete="name"
+                    maxLength={120}
                     required
                     type="text"
                     value={formData.name}
@@ -110,8 +126,12 @@ export function ContactPageClient() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                  <label htmlFor="contact-email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
                   <input
+                    id="contact-email"
+                    name="email"
+                    autoComplete="email"
+                    maxLength={254}
                     required
                     type="email"
                     value={formData.email}
@@ -123,8 +143,12 @@ export function ContactPageClient() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Company</label>
+                <label htmlFor="contact-company" className="block text-sm font-medium text-slate-300 mb-2">Company</label>
                 <input
+                    id="contact-company"
+                    name="company"
+                  autoComplete="organization"
+                  maxLength={160}
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -135,8 +159,10 @@ export function ContactPageClient() {
 
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Service Interest</label>
+                  <label htmlFor="contact-service" className="block text-sm font-medium text-slate-300 mb-2">Service Interest</label>
                   <select
+                    id="contact-service"
+                    name="service"
                     required
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
@@ -149,8 +175,10 @@ export function ContactPageClient() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
+                  <label htmlFor="contact-budget" className="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
                   <select
+                    id="contact-budget"
+                    name="budget"
                     required
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
@@ -165,8 +193,11 @@ export function ContactPageClient() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Project Details</label>
+                <label htmlFor="contact-message" className="block text-sm font-medium text-slate-300 mb-2">Project Details</label>
                 <textarea
+                    id="contact-message"
+                    name="message"
+                  maxLength={5000}
                   required
                   rows={4}
                   value={formData.message}
@@ -175,6 +206,16 @@ export function ContactPageClient() {
                   placeholder="Tell us about your project, goals, and timeline..."
                 />
               </div>
+
+              {error && (
+                <div role="alert" className="flex items-start gap-2 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300">
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" /> {error}
+                </div>
+              )}
+
+              <p className="text-xs text-slate-400">
+                By submitting, you agree that RRRTX Systems may use these details to respond to your enquiry. Read our <Link href="/privacy" className="text-cyan-300 underline underline-offset-2">privacy policy</Link>.
+              </p>
 
               <button
                 type="submit"
@@ -189,7 +230,6 @@ export function ContactPageClient() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { SectionWrapper } from "./SectionWrapper";
 import { TestimonialSlider } from "./TestimonialSlider";
 
 export async function TestimonialsSection() {
+  if (!process.env.TURSO_DATABASE_URL && process.env.NODE_ENV === "production") return null;
   // Safe fetch: returns [] on any error (missing table, DB down) so the build
   // and the public site never crash.
   const rows = await getPublicTestimonials();

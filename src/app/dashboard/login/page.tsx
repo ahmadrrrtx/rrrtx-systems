@@ -61,8 +61,11 @@ export default function DashboardLogin() {
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+            <label htmlFor="admin-email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
             <input
+              id="admin-email"
+              name="email"
+              autoComplete="username"
               type="email"
               required
               value={email}
@@ -72,8 +75,10 @@ export default function DashboardLogin() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+            <label htmlFor="dashboard-login-password-1" className="block text-sm font-medium text-slate-300 mb-2">Password</label>
             <input
+                  id="dashboard-login-password-1"
+                  name="dashboard-login-password-1"
               type="password"
               required
               value={password}

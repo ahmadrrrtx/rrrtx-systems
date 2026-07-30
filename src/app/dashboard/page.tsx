@@ -48,10 +48,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
-
   const fetchLeads = async () => {
     try {
       const res = await fetch("/api/leads");
@@ -65,6 +61,11 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchLeads(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const stats = {
     total: leads.length,

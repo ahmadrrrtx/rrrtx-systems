@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 
@@ -12,11 +9,7 @@ export function CTASection() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
         >
           <h2 className="text-3xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">
             Ready to Build a System That{" "}
@@ -42,7 +35,7 @@ export function CTASection() {
               View Our Work
             </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

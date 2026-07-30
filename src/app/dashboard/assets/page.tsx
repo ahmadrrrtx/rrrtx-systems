@@ -41,7 +41,7 @@ export default function AssetsPage() {
         setError(err.error || "Failed to fetch GitHub assets");
         setAssets([]);
       }
-    } catch (err) {
+    } catch {
       setError("Network error fetching assets");
       setAssets([]);
     } finally {
@@ -72,16 +72,20 @@ export default function AssetsPage() {
         <div className="p-5 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-4">
           <div className="grid sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs text-slate-500 mb-1.5 uppercase tracking-wider">Owner</label>
+              <label htmlFor="dashboard-assets-owner-1" className="block text-xs text-slate-500 mb-1.5 uppercase tracking-wider">Owner</label>
               <input
+                  id="dashboard-assets-owner-1"
+                  name="dashboard-assets-owner-1"
                 value={owner}
                 onChange={(e) => setOwner(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-500 mb-1.5 uppercase tracking-wider">Repository</label>
+              <label htmlFor="dashboard-assets-repository-2" className="block text-xs text-slate-500 mb-1.5 uppercase tracking-wider">Repository</label>
               <input
+                  id="dashboard-assets-repository-2"
+                  name="dashboard-assets-repository-2"
                 value={repo}
                 onChange={(e) => setRepo(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
@@ -97,8 +101,10 @@ export default function AssetsPage() {
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                 />
                 <button
+                  type="button"
                   onClick={fetchAssets}
                   disabled={loading}
+                  aria-label="Browse repository path"
                   className="px-3 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium hover:from-blue-500 hover:to-purple-500 transition-all disabled:opacity-50"
                 >
                   <ArrowRight className="w-4 h-4" />

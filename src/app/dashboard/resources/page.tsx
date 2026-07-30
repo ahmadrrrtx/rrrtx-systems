@@ -34,10 +34,6 @@ export default function ResourcesDashboardPage() {
     sortOrder: 0,
   });
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
   const fetchItems = async () => {
     try {
       const res = await fetch("/api/resources?all=true");
@@ -51,6 +47,11 @@ export default function ResourcesDashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchItems(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openEdit = (res: ResourceItem) => {
     setEditing(res);
@@ -143,8 +144,10 @@ export default function ResourcesDashboardPage() {
           <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-slate-800/50 bg-slate-950/40 space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resource Title</label>
+                <label htmlFor="dashboard-resources-resource-title-1" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resource Title</label>
                 <input
+                  id="dashboard-resources-resource-title-1"
+                  name="dashboard-resources-resource-title-1"
                   required
                   placeholder="e.g. Website Launch Checklist"
                   value={form.title}
@@ -153,8 +156,10 @@ export default function ResourcesDashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Download Link / URL</label>
+                <label htmlFor="dashboard-resources-download-link-url-2" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Download Link / URL</label>
                 <input
+                  id="dashboard-resources-download-link-url-2"
+                  name="dashboard-resources-download-link-url-2"
                   required
                   placeholder="e.g. https://yourbrand.com/assets/file.pdf"
                   value={form.downloadUrl}
@@ -166,8 +171,10 @@ export default function ResourcesDashboardPage() {
 
             <div className="grid sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Category</label>
+                <label htmlFor="dashboard-resources-category-3" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Category</label>
                 <select
+                  id="dashboard-resources-category-3"
+                  name="dashboard-resources-category-3"
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan-500/50"
@@ -179,8 +186,10 @@ export default function ResourcesDashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">File Format Type</label>
+                <label htmlFor="dashboard-resources-file-format-type-4" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">File Format Type</label>
                 <select
+                  id="dashboard-resources-file-format-type-4"
+                  name="dashboard-resources-file-format-type-4"
                   value={form.fileType}
                   onChange={(e) => setForm({ ...form, fileType: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan-500/50"
@@ -192,8 +201,10 @@ export default function ResourcesDashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sort Order</label>
+                <label htmlFor="dashboard-resources-sort-order-5" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sort Order</label>
                 <input
+                  id="dashboard-resources-sort-order-5"
+                  name="dashboard-resources-sort-order-5"
                   type="number"
                   value={form.sortOrder}
                   onChange={(e) => setForm({ ...form, sortOrder: parseInt(e.target.value) || 0 })}
@@ -201,8 +212,10 @@ export default function ResourcesDashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Gated Lead Access</label>
+                <label htmlFor="dashboard-resources-gated-lead-access-6" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Gated Lead Access</label>
                 <select
+                  id="dashboard-resources-gated-lead-access-6"
+                  name="dashboard-resources-gated-lead-access-6"
                   value={form.isGated ? "true" : "false"}
                   onChange={(e) => setForm({ ...form, isGated: e.target.value === "true" })}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none"
@@ -214,8 +227,10 @@ export default function ResourcesDashboardPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
+              <label htmlFor="dashboard-resources-description-7" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
               <textarea
+                  id="dashboard-resources-description-7"
+                  name="dashboard-resources-description-7"
                 placeholder="Give a brief summary of what this asset helps users achieve..."
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -225,8 +240,10 @@ export default function ResourcesDashboardPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Thumbnail/Cover Image URL (optional)</label>
+              <label htmlFor="dashboard-resources-thumbnail-cover-image-url-optional-8" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Thumbnail/Cover Image URL (optional)</label>
               <input
+                  id="dashboard-resources-thumbnail-cover-image-url-optional-8"
+                  name="dashboard-resources-thumbnail-cover-image-url-optional-8"
                 placeholder="e.g. https://yourbrand.com/assets/cover.png"
                 value={form.coverImageUrl}
                 onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })}
@@ -262,10 +279,10 @@ export default function ResourcesDashboardPage() {
                   {item.description && <p className="text-xs text-slate-500 mt-2 truncate max-w-xl">{item.description}</p>}
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => toggleStatus(item.id, "isActive", item.isActive)} className={`p-1.5 rounded-lg transition-colors ${item.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
-                  <button onClick={() => toggleStatus(item.id, "isGated", item.isGated)} className={`p-1.5 rounded-lg transition-colors ${item.isGated ? "text-purple-400 hover:bg-purple-500/10" : "text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10"}`}>{item.isGated ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}</button>
+                  <button onClick={() => toggleStatus(item.id, "isActive", item.isActive)} aria-label={`${item.isActive ? "Deactivate" : "Activate"} ${item.title}`} className={`p-1.5 rounded-lg transition-colors ${item.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
+                  <button onClick={() => toggleStatus(item.id, "isGated", item.isGated)} aria-label={`${item.isGated ? "Make ungated" : "Require lead details for"} ${item.title}`} className={`p-1.5 rounded-lg transition-colors ${item.isGated ? "text-purple-400 hover:bg-purple-500/10" : "text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10"}`}>{item.isGated ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}</button>
                   <button onClick={() => openEdit(item)} className="px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 hover:text-white transition-all">Edit</button>
-                  <button onClick={() => deleteItem(item.id)} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
+                  <button onClick={() => deleteItem(item.id)} aria-label={`Deactivate ${item.title}`} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}

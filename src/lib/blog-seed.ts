@@ -28,7 +28,7 @@ async function seedBlog() {
       
       Themes are naturally slow because they are compiled of render-blocking resources that must load completely before a visitor can see anything.
       
-      Custom website systems engineered from scratch using modern stacks like **Next.js** solve this completely. By generating static pages on the server and using edge-caching delivery nodes, custom web systems deliver sub-0.5s render times globally.
+      Custom website systems engineered from scratch using modern stacks like **Next.js** solve this completely. By generating static pages on the server and using edge-caching delivery nodes, well-optimized systems can reduce render delays and improve Core Web Vitals when measured under real user conditions.
 
       ## Bottleneck 2: Rigid Conversion Paths and Gimmicky Addons
       
@@ -57,7 +57,7 @@ async function seedBlog() {
       A template is a cost; an engineered website is a capital asset. If you are serious about scaling your operations, establishing brand authority, and increasing conversions, it's time to build a custom system.
       
       [Book a Free Strategy Consultation Session](/contact) with RRRTX SYSTEMS today to explore how we can engineer a custom, high-speed website designed strictly to convert your traffic into leads.`,
-      coverImageUrl: "/assets/blog-templates-fail.png",
+      coverImageUrl: "/assets/blog-templates-fail.webp",
       tags: "ecommerce, custom development, web systems",
       metaTitle: "Custom Ecommerce vs Templates: Why Themes Fail | RRRTX",
       metaDescription: "Templates seem cheap, but slow load times and rigid paths will kill your sales. Learn why custom-engineered web systems out-scale off-the-shelf themes.",
@@ -116,7 +116,7 @@ async function seedBlog() {
       At RRRTX SYSTEMS, we build persistent, custom background automations and AI pipelines from scratch. Bypassing rigid templates, we write clean, secure code tailored strictly to your operations.
       
       [Book a Free Automation Consultation Session](/contact) with us today to discuss how we can streamline your back-office and reclaim hours of free operational time.`,
-      coverImageUrl: "/assets/blog-workflow-automation.png",
+      coverImageUrl: "/assets/blog-workflow-automation.webp",
       tags: "automation, python agents, workflow productivity",
       metaTitle: "Operational Workflow Automation for Scaling B2B Agencies | RRRTX",
       metaDescription: "Are manual operational tasks dragging down agency margins? Replace Zapier spaghetti with persistent Python automation pipelines.",
@@ -165,7 +165,7 @@ async function seedBlog() {
       - Deploy a **Free Systems Audit tool**: Let visitors analyze their own bottlenecks.
       - Embed an **ROI Calculator**: Let them see the exact value your services provide.
       
-      By introducing these interactive conversion channels, you increase lead generation rates by up to 300%.
+      By introducing these interactive conversion channels, you can create additional conversion paths whose effect should be measured through controlled experiments.
 
       ## Milestone 4: Custom Automation Pipelines
       
@@ -184,7 +184,7 @@ async function seedBlog() {
       At RRRTX SYSTEMS, we build high-speed, conversion-first website systems and AI automations designed specifically to convert. 
       
       [Book a Free Strategy Consultation Session](/contact) with us today to discuss how we can transform your website into an automated lead machine.`,
-      coverImageUrl: "/assets/blog-website-conversions.png",
+      coverImageUrl: "/assets/blog-website-conversions.webp",
       tags: "conversion optimization, b2b lead generation, cro checklist",
       metaTitle: "Improve Website Conversion Rate: B2B CRO Guide | RRRTX",
       metaDescription: "Stop wasting money on dead traffic. Learn the 4 conversion architecture milestones that turn passive visitors into qualified inbound leads.",

@@ -23,11 +23,15 @@ export default function PricingPage() {
   const [editing, setEditing] = useState<Tier | null>(null);
   const [form, setForm] = useState({ slug: "", title: "", subtitle: "", startingPrice: "", description: "", features: "", sortOrder: 0 });
 
-  useEffect(() => { fetchItems(); }, []);
   const fetchItems = async () => {
     try { const res = await fetch("/api/pricing"); if (res.ok) { const data = await res.json(); setItems(data); } }
     catch (err) { console.error(err); } finally { setLoading(false); }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void fetchItems(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openEdit = (t: Tier) => {
     setEditing(t);
@@ -45,7 +49,7 @@ export default function PricingPage() {
     } catch (err) { console.error(err); }
   };
 
-  const deleteItem = async (id: number) => { if (!confirm("Delete this tier?")) return; try { const res = await fetch(`/api/pricing?id=${id}`, { method: "DELETE" }); if (res.ok) fetchItems(); } catch (err) { console.error(err); } };
+  const deleteItem = async (id: number) => { if (!confirm("Archive this tier?")) return; try { const res = await fetch(`/api/pricing?id=${id}`, { method: "DELETE" }); if (res.ok) fetchItems(); } catch (err) { console.error(err); } };
   const toggleActive = async (id: number, active: boolean) => { try { const res = await fetch("/api/pricing", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, isActive: !active }) }); if (res.ok) fetchItems(); } catch (err) { console.error(err); } };
 
   return (
@@ -53,7 +57,7 @@ export default function PricingPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div><h1 className="text-2xl font-bold text-white mb-1">Pricing Editor</h1><p className="text-sm text-slate-400">Manage pricing tiers displayed on the site.</p></div>
-          <button onClick={() => { editing ? resetForm() : setShowForm(!showForm); }} className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"><Plus className="w-4 h-4" /> {showForm ? "Cancel" : "Add Tier"}</button>
+          <button onClick={() => { if (editing) resetForm(); else setShowForm(!showForm); }} className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all"><Plus className="w-4 h-4" /> {showForm ? "Cancel" : "Add Tier"}</button>
         </div>
 
         {showForm && (
@@ -84,9 +88,9 @@ export default function PricingPage() {
                   {t.description && <p className="text-xs text-slate-500 mt-1">{t.description}</p>}
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => toggleActive(t.id, t.isActive)} className={`p-1.5 rounded-lg transition-colors ${t.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
+                  <button onClick={() => toggleActive(t.id, t.isActive)} aria-label={`${t.isActive ? "Deactivate" : "Activate"} ${t.title}`} className={`p-1.5 rounded-lg transition-colors ${t.isActive ? "text-green-400 hover:bg-green-500/10" : "text-slate-500 hover:text-red-400 hover:bg-red-500/10"}`}><CheckCircle className="w-4 h-4" /></button>
                   <button onClick={() => openEdit(t)} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors text-xs font-medium">Edit</button>
-                  <button onClick={() => deleteItem(t.id)} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
+                  <button onClick={() => deleteItem(t.id)} aria-label={`Archive ${t.title}`} className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"><Trash className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}

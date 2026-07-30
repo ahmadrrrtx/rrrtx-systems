@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { createMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import { getPublicResources } from "@/lib/queries";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -6,16 +8,12 @@ import { ResourcesClient } from "./resources-client";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Gated Engineering Resources & Guides | RRRTX SYSTEMS",
+export const metadata: Metadata = createMetadata({
+  title: "Free Systems & Engineering Resources",
   description:
-    "Explore our free downloads, website planning documents, checklist templates, launch sheets, and guides for custom ecommerce & AI automation systems.",
-  openGraph: {
-    title: "Gated Engineering Resources & Guides | RRRTX SYSTEMS",
-    description: "Explore our free downloads, website planning documents, checklist templates, and guides.",
-    url: "/resources",
-  },
-};
+    "Download practical ecommerce, conversion, website-launch, lead-generation, and AI automation guides from RRRTX Systems.",
+  path: "/resources",
+});
 
 export default async function ResourcesPage() {
   const items = await getPublicResources();
@@ -27,13 +25,31 @@ export default async function ResourcesPage() {
     description: r.description || "",
     coverImageUrl: r.coverImageUrl || "",
     category: r.category || "Guide",
-    fileType: r.fileType || "PDF",
+    fileType: r.downloadUrl.toLowerCase().split("?")[0].endsWith(".html")
+      ? "Interactive HTML"
+      : (r.fileType || "Download"),
     isGated: r.isGated || false,
     downloadUrl: r.downloadUrl,
   }));
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "RRRTX Systems engineering resources",
+    numberOfItems: serializedItems.length,
+    itemListElement: serializedItems.map((resource, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: resource.title,
+      url: resource.downloadUrl.startsWith("http")
+        ? resource.downloadUrl
+        : `https://rrrtx-systems.com${resource.downloadUrl}`,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#020617]">
+      <JsonLd id="schema-resource-library" data={schema} />
       <Navbar />
       <ResourcesClient initialItems={serializedItems} />
       <Footer />

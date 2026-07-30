@@ -2,8 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Send, ArrowRight, Bot, Info, ShieldCheck } from "lucide-react";
+import { MessageSquare, X, Send, ArrowRight, Bot, ShieldCheck } from "lucide-react";
+
+
+interface ServiceSummary { title: string; shortDescription?: string | null }
+interface PricingSummary { title: string; startingPrice?: string | null; description?: string | null }
+interface ProjectSummary { title: string; industry?: string | null }
+interface TestimonialSummary { name: string; role?: string | null; quote: string }
+interface BlogSummary { title: string; slug: string }
 
 interface ChatMessage {
   sender: "user" | "bot";
@@ -11,24 +17,23 @@ interface ChatMessage {
   links?: { label: string; href: string }[];
 }
 
-export function ChatbotWidget() {
+export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
   const [enabled, setEnabled] = useState(true);
   const [botName, setBotName] = useState("RRRTX Guide");
-  const [welcomeMsg, setWelcomeMessage] = useState("Hi there! I am your RRRTX Systems guide. Ask me anything about our custom ecommerce, AI automations, pricing, or how we build systems that scale!");
   const [aboutText, setAboutText] = useState("RRRTX SYSTEMS builds custom ecommerce websites and AI automation systems from scratch for brands that outgrew templates.");
   const [contactText, setContactText] = useState("Book a Free Call");
 
   // Dynamic CMS Data
-  const [servicesData, setServicesData] = useState<any[]>([]);
-  const [pricingData, setPricingData] = useState<any[]>([]);
-  const [projectsData, setProjectsData] = useState<any[]>([]);
-  const [testimonialsData, setTestimonialsData] = useState<any[]>([]);
-  const [blogData, setBlogData] = useState<any[]>([]);
+  const [servicesData, setServicesData] = useState<ServiceSummary[]>([]);
+  const [pricingData, setPricingData] = useState<PricingSummary[]>([]);
+  const [projectsData, setProjectsData] = useState<ProjectSummary[]>([]);
+  const [testimonialsData, setTestimonialsData] = useState<TestimonialSummary[]>([]);
+  const [blogData, setBlogData] = useState<BlogSummary[]>([]);
   const [contactEmail, setContactEmail] = useState("admin@rrrtx.com");
 
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([{ sender: "bot", text: "Hi there! I am your automated RRRTX Systems guide. Ask about our services, pricing, work, or process." }]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +53,7 @@ export function ChatbotWidget() {
       .then((res) => res.json())
       .then((data) => {
         if (!data) return;
-        
+
         // Settings
         const settings = data.settings || {};
         if (settings.chatbot_enabled === "false") {
@@ -58,7 +63,9 @@ export function ChatbotWidget() {
           setBotName(settings.chatbot_name);
         }
         if (settings.chatbot_welcome) {
-          setWelcomeMessage(settings.chatbot_welcome);
+          setMessages((current) => current.length === 1 && current[0]?.sender === "bot"
+            ? [{ sender: "bot", text: settings.chatbot_welcome }]
+            : current);
         }
         if (settings.chatbot_about) {
           setAboutText(settings.chatbot_about);
@@ -79,13 +86,6 @@ export function ChatbotWidget() {
       })
       .catch((err) => console.error("Failed to load chatbot data", err));
   }, []);
-
-  // Initialize welcome message once open
-  useEffect(() => {
-    if (messages.length === 0 && welcomeMsg) {
-      setMessages([{ sender: "bot", text: welcomeMsg }]);
-    }
-  }, [welcomeMsg, messages.length]);
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -157,7 +157,7 @@ export function ChatbotWidget() {
           replyText += `• ${p.title} (${p.startingPrice || "Contact Us"}): ${p.description || ""}\n`;
         });
       } else {
-        replyText += "• Discovery & Strategy: $500 – $2,500\n• Project-Based Build: $10,000 – $25,000\n• Retainer & Growth: $800+ / month";
+        replyText += "• Discovery & Strategy: $100 – $300\n• Project-Based Build: $500 – $10,000\n• Retainer & Growth: $500+ / month";
       }
       return {
         sender: "bot",
@@ -194,7 +194,8 @@ export function ChatbotWidget() {
       }
       return {
         sender: "bot",
-        text: 'Our clients love our conversion-centric systems: "RRRTX built a custom automated store that loaded in under 0.5s and auto-qualified 150+ leads within the first week!"'
+        text: "We do not have a published testimonial in the site library right now. You can review current project examples on the Work page instead.",
+        links: [{ label: "View Our Work", href: "/work" }]
       };
     }
 
@@ -242,14 +243,14 @@ export function ChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <AnimatePresence>
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="absolute bottom-16 right-0 w-[350px] sm:w-[380px] h-[500px] bg-slate-950/95 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          <div
+            id="rrrtx-guide-panel"
+            role="dialog"
+            aria-modal="false"
+            aria-label={`${botName}, automated site guide`}
+            className="absolute bottom-16 right-0 w-[calc(100vw-2rem)] max-w-[380px] h-[min(500px,calc(100dvh-7rem))] bg-slate-950/95 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-gradient-to-r from-blue-900/30 to-purple-900/30">
@@ -259,12 +260,14 @@ export function ChatbotWidget() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white leading-none">{botName}</h3>
-                  <span className="text-[10px] text-cyan-400 font-medium">Assistant · Online</span>
+                  <span className="text-[10px] text-cyan-400 font-medium">Automated site guide</span>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                aria-label="Close automated site guide"
+                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -330,7 +333,10 @@ export function ChatbotWidget() {
               }}
               className="p-3 border-t border-slate-900 bg-slate-950 flex gap-2"
             >
+              <label htmlFor="rrrtx-guide-input" className="sr-only">Ask the automated RRRTX site guide</label>
               <input
+                id="rrrtx-guide-input"
+                name="question"
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
@@ -339,6 +345,7 @@ export function ChatbotWidget() {
               />
               <button
                 type="submit"
+                aria-label="Send question"
                 className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 flex items-center justify-center shrink-0 text-white transition-all shadow"
               >
                 <Send className="w-3.5 h-3.5" />
@@ -348,43 +355,32 @@ export function ChatbotWidget() {
             {/* Footer Tag */}
             <div className="px-4 py-1.5 bg-slate-950 border-t border-slate-900 text-center flex items-center justify-center gap-1">
               <ShieldCheck className="w-3 h-3 text-cyan-500" />
-              <span className="text-[9px] text-slate-600 font-medium uppercase tracking-wider">SECURE KNOWLEDGE SYSTEM</span>
+              <span className="text-[9px] text-slate-400 font-medium uppercase tracking-wider">Automated · no personal data required</span>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* Floating Toggle Button */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-900/40 cursor-pointer z-50 transition-all duration-300 focus:outline-none"
-        aria-label="Toggle chatbot"
+        aria-label={isOpen ? "Close automated site guide" : "Open automated site guide"}
+        aria-expanded={isOpen}
+        aria-controls="rrrtx-guide-panel"
       >
-        <AnimatePresence mode="wait">
           {isOpen ? (
-            <motion.div
+            <div
               key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
             >
               <X className="w-6 h-6" />
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
+            <div
               key="chat"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
             >
               <MessageSquare className="w-6 h-6" />
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
 
         {/* Small notification beacon for high-end feel */}
         {!isOpen && (
@@ -393,7 +389,7 @@ export function ChatbotWidget() {
             <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-400"></span>
           </span>
         )}
-      </motion.button>
+      </button>
     </div>
   );
 }

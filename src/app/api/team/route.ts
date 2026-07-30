@@ -2,11 +2,17 @@ import { db } from "@/lib/db";
 import { teamMembers } from "@/lib/schema";
 import { eq, asc } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/auth-check";
+import { getAuthenticatedSession, requireAuth } from "@/lib/auth-check";
+import { isSafePublicUrl, pickAllowedFields } from "@/lib/request-security";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
-    const all = await db.select().from(teamMembers).orderBy(asc(teamMembers.sortOrder));
+    const session = await getAuthenticatedSession();
+    const query = db.select().from(teamMembers);
+    const all = session?.role === "admin"
+      ? await query.orderBy(asc(teamMembers.sortOrder))
+      : await query.where(eq(teamMembers.isActive, true)).orderBy(asc(teamMembers.sortOrder));
     return NextResponse.json(all);
   } catch (error) {
     console.error("Fetch team error:", error);
@@ -15,13 +21,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
     const { name, role, bio, imageUrl, linkedinUrl, twitterUrl, sortOrder } = body;
-    if (!name || !role) {
-      return NextResponse.json({ error: "Name and role are required" }, { status: 400 });
+    if (!name || !role || (imageUrl && !isSafePublicUrl(imageUrl)) || (linkedinUrl && !isSafePublicUrl(linkedinUrl)) || (twitterUrl && !isSafePublicUrl(twitterUrl))) {
+      return NextResponse.json({ error: "Name, role, and safe profile/image URLs are required" }, { status: 400 });
     }
     await db.insert(teamMembers).values({
       name,
@@ -33,6 +39,7 @@ export async function POST(request: Request) {
       sortOrder: sortOrder ?? 0,
       isActive: true,
     });
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Create team member error:", error);
@@ -41,15 +48,20 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id } = body;
+    const updates = pickAllowedFields(body, ["name", "role", "bio", "imageUrl", "linkedinUrl", "twitterUrl", "sortOrder", "isActive"]);
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
+    if ([updates.imageUrl, updates.linkedinUrl, updates.twitterUrl].some((url) => url && !isSafePublicUrl(url))) {
+      return NextResponse.json({ error: "Profile and image URLs must be safe public URLs" }, { status: 400 });
+    }
     await db.update(teamMembers).set(updates).where(eq(teamMembers.id, id));
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update team member error:", error);
@@ -58,7 +70,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireAuth();
+  const auth = await requireAuth(request);
   if (auth) return auth;
   try {
     const { searchParams } = new URL(request.url);
@@ -66,7 +78,8 @@ export async function DELETE(request: Request) {
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
-    await db.delete(teamMembers).where(eq(teamMembers.id, parseInt(id)));
+    await db.update(teamMembers).set({ isActive: false }).where(eq(teamMembers.id, parseInt(id)));
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete team member error:", error);

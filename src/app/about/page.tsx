@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { AboutPageClient } from "./about-client";
+import { createMetadata } from "@/lib/seo";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
-export const metadata: Metadata = {
-  title: "About RRRTX SYSTEMS — Custom Ecommerce & AI Engineering Studio",
+export const metadata: Metadata = createMetadata({
+  title: "About Our Engineering-First Product Studio",
   description:
-    "Engineering-first product studio building custom ecommerce websites and AI automation systems from scratch. No templates. No vendor lock-in. Full ownership.",
-  openGraph: {
-    title: "About RRRTX SYSTEMS — Custom Ecommerce & AI Engineering Studio",
-    description: "Engineering-first product studio building custom ecommerce and AI automation systems from scratch.",
-    url: "/about",
-  },
-};
+    "Learn how RRRTX Systems designs and engineers custom ecommerce platforms and AI automations with clear ownership and measurable outcomes.",
+  path: "/about",
+});
 
 export default function AboutPage() {
-  return <AboutPageClient />;
+  return <><Navbar /><AboutPageClient /><Footer /></>;
 }

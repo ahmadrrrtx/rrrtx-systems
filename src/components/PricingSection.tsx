@@ -1,173 +1,76 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
-import { Check, ArrowRight, Sparkles, Shield } from "lucide-react";
+import { ArrowRight, CheckCircle2, Compass, Layers3, ShieldCheck } from "lucide-react";
+import { SectionWrapper } from "./SectionWrapper";
 
-type Tier = {
-  name: string;
-  range: string;
-  description: string;
-  features: string[];
-  cta: string;
-  popular: boolean;
-};
-
-const defaultTiers: Tier[] = [
-  {
-    name: "Discovery & Strategy",
-    range: "$500 – $2,500",
-    description: "Best when you need clarity before building.",
-    features: [
-      "Full stack & conversion audit",
-      "Competitive & UX analysis",
-      "Technical architecture plan",
-      "AI automation opportunity map",
-      "Roadmap & budget estimate",
-    ],
-    cta: "Book a Strategy Call",
-    popular: false,
-  },
-  {
-    name: "Project-Based Build",
-    range: "$10,000 – $25,000",
-    description: "Best for one-time ecommerce or AI system builds.",
-    features: [
-      "Custom codebase from scratch",
-      "Database & API architecture",
-      "Payment & integration setup",
-      "AI agent or automation logic",
-      "QA, testing & launch support",
-      "30-day post-launch optimization",
-    ],
-    cta: "Start Your Project",
-    popular: true,
-  },
-  {
-    name: "Retainer & Growth",
-    range: "$800+ / month",
-    description: "Best for ongoing optimization and expansion.",
-    features: [
-      "Monthly CRO & A/B testing",
-      "Feature additions & updates",
-      "AI model tuning & retraining",
-      "Performance monitoring & alerts",
-      "Priority support & fast turnaround",
-      "Quarterly growth strategy reviews",
-    ],
-    cta: "Discuss a Retainer",
-    popular: false,
-  },
+const outcomes = [
+  { icon: Compass, text: "Clarify the highest-value problem before committing to a build" },
+  { icon: Layers3, text: "Map scope, architecture, integrations, timeline, and delivery risk" },
+  { icon: ShieldCheck, text: "Leave with a practical next step and no pressure to proceed" },
 ];
 
-export function PricingSection({ items }: { items?: Tier[] }) {
-  const tiers = items && items.length > 0 ? items : defaultTiers;
-
+export function PricingSection() {
   return (
-    <SectionWrapper id="pricing" className="py-24 lg:py-32 relative overflow-hidden">
-      {/* Background image — human + robot handshake */}
+    <SectionWrapper id="engagement" className="py-24 lg:py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.04]"
-          style={{ backgroundImage: "url('/assets/pricing-handshake.png')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-600/[0.03] rounded-full blur-[120px]" />
+        <div className="absolute left-1/2 top-1/2 h-[420px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-600/[0.06] blur-[120px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">
-            Engagement Models
-          </p>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4">
-            Transparent Pricing. No Surprises.
-          </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">
-            We don&apos;t hide behind custom quotes. These are real starting ranges based
-            on what we&apos;ve shipped for clients like you.
-          </p>
-        </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div
+          className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-[#020617] shadow-2xl shadow-purple-950/20"
+        >
+          <div className="absolute inset-0 pointer-events-none opacity-50" aria-hidden="true">
+            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
+            <div className="absolute -bottom-28 left-1/4 h-80 w-80 rounded-full bg-purple-600/10 blur-3xl" />
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {tiers.map((tier, i) => (
-            <motion.div
-              key={tier.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.5 }}
-              className={`relative flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1 ${
-                tier.popular ? "shadow-xl shadow-purple-900/10" : ""
-              }`}
-            >
-              <div
-                className={`absolute inset-0 rounded-2xl ${
-                  tier.popular
-                    ? "bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-purple-500/25"
-                    : "bg-slate-950/40 border border-slate-800/40"
-                }`}
-              />
+          <div className="relative grid lg:grid-cols-[1.15fr_0.85fr] gap-10 p-7 sm:p-10 lg:p-14 items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">Start with clarity</p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-5">
+                Book a <span className="text-gradient">Strategy Call</span>
+              </h2>
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mb-8">
+                Bring the system, conversion, or automation problem that is slowing your business down. We will identify the constraint, pressure-test the opportunity, and outline the safest path forward.
+              </p>
 
-              {tier.popular && (
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-              )}
+              <div className="grid gap-4 mb-9">
+                {outcomes.map((outcome) => (
+                  <div key={outcome.text} className="flex items-start gap-3 text-sm text-slate-300">
+                    <div className="w-8 h-8 rounded-lg border border-cyan-500/20 bg-cyan-500/10 flex items-center justify-center shrink-0">
+                      <outcome.icon className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                    </div>
+                    <span className="pt-1.5 leading-relaxed">{outcome.text}</span>
+                  </div>
+                ))}
+              </div>
 
-              {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                  <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-purple-900/30">
-                    <Sparkles className="w-3 h-3" /> Most Popular
-                  </span>
-                </div>
-              )}
-
-              <div className="relative p-8 flex flex-col flex-1">
-                <div className="mb-6">
-                  <h3 className="text-lg font-bold text-white mb-1">{tier.name}</h3>
-                  <p className="text-sm text-slate-400">{tier.description}</p>
-                </div>
-
-                <div className="mb-6 pb-6 border-b border-slate-800/40">
-                  <span className="text-3xl font-bold text-white">{tier.range}</span>
-                </div>
-
-                <ul className="space-y-3 mb-8 flex-1">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-slate-300">
-                      <div className="mt-0.5 shrink-0 w-5 h-5 rounded-md bg-cyan-500/10 flex items-center justify-center">
-                        <Check className="w-3 h-3 text-cyan-400" />
-                      </div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/contact"
-                  className={`inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold rounded-xl transition-all duration-300 ${
-                    tier.popular
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40"
-                      : "border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white bg-slate-900/30 hover:bg-slate-900/50"
-                  }`}
-                >
-                  {tier.cta} <ArrowRight className="w-3.5 h-3.5" />
+              <div className="flex flex-wrap items-center gap-4">
+                <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-900/30">
+                  Book a Strategy Call <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link href="/pricing" className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-slate-300 hover:text-white transition-colors">
+                  View engagement options
                 </Link>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="flex items-center justify-center gap-2 mt-10 text-xs text-slate-500"
-        >
-          <Shield className="w-3.5 h-3.5 text-cyan-500/60" />
-          All engagements include transparent scope, milestone deliverables, and full code ownership.
-        </motion.div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 backdrop-blur-sm p-6 sm:p-7">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400 mb-5">What to bring</p>
+              <ul className="space-y-4">
+                {["The business outcome you are targeting", "Where the current workflow or website breaks", "Known constraints, systems, and integrations", "Any timeline or launch dependency"].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-slate-300">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-7 pt-6 border-t border-white/10 text-xs leading-relaxed text-slate-400">
+                No generic pitch deck. No forced commitment. If a smaller fix is the right answer, we will say so.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </SectionWrapper>
   );

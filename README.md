@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RRRTX Systems
 
-## Getting Started
+Production website, content management system, lead dashboard, resource library, and free tools for RRRTX Systems.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js 16 App Router and React 19
+- TypeScript and Tailwind CSS
+- Turso/libSQL with Drizzle ORM
+- Vercel deployment behind Cloudflare
+- Server-rendered public pages with CMS-backed content and safe fallbacks
+- Signed, expiring administrator sessions
+- GA4 page, conversion, and Core Web Vitals events
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Copy `.env.example` to `.env.local` and provide local-only values.
+2. Install exact dependencies with `npm ci`.
+3. Create the local schema with `npx drizzle-kit push` against the default local database.
+4. Seed optional baseline content only after setting a unique `ADMIN_EMAIL` and an `ADMIN_PASSWORD` of at least 12 characters.
+5. Run `npm run dev`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The local database is intentionally ignored and must never be committed.
 
-## Learn More
+## Quality commands
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run lint` — ESLint and Next.js rules
+- `npm run typecheck` — strict TypeScript validation
+- `npm run test` — unit and security regression tests
+- `npm run test:e2e` — mobile/desktop route, metadata, auth, and axe accessibility tests
+- `npm run build` — production build
+- `npm run check` — complete release gate
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production safety
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Preview deployments must use a separate Turso database and token.
+- Do not run `drizzle-kit push` against production without a reviewed, backed-up migration plan.
+- Never restore the legacy constant-value dashboard cookie.
+- Rotate `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, and Turso tokens after any suspected exposure.
+- Keep the previous Vercel deployment available until public-route and dashboard smoke tests pass.
 
-## Deploy on Vercel
+## Content model
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Services, projects, pricing, posts, resources, testimonials, team members, legal content, and homepage settings remain controlled by Turso and the dashboard. Existing hardcoded service and portfolio content is retained only as an availability fallback.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Search and structured data
+
+Every indexable route owns its canonical, social metadata, and applicable page-level structured data. The sitemap contains only canonical public URLs. Dashboard and API routes emit `noindex` headers.
+
+## License
+
+No license is granted for this production website repository. The separately published Gemma RSS Intelligence Monitor is available under Apache License 2.0 in its own repository.

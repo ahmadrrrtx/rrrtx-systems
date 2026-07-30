@@ -20,94 +20,85 @@ import { Footer } from "@/components/Footer";
 import {
   getPublicServices,
   getPublicProjects,
-  getPublicPricing,
   getPublicPosts,
-  getSetting,
+  getSettings,
 } from "@/lib/queries";
+import { parseMetrics } from "@/lib/content-parsers";
+import { createMetadata } from "@/lib/seo";
 
-// Read live data on every request so dashboard edits appear immediately.
-export const dynamic = "force-dynamic";
+// Cached at the edge; dashboard mutations explicitly revalidate this route.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Custom Ecommerce & AI Systems Built to Convert | RRRTX SYSTEMS",
-  description:
-    "Premium custom ecommerce websites and AI automation systems built from scratch. Next.js, Python agents, conversion-first engineering. No templates. No limits.",
-  openGraph: {
-    title: "Custom Ecommerce & AI Systems Built to Convert | RRRTX SYSTEMS",
+  ...createMetadata({
+    title: "Custom Ecommerce & AI Systems Built to Convert",
     description:
-      "Premium custom ecommerce websites and AI automation systems built from scratch. Engineering-first product studio.",
-    url: "/",
-  },
+      "Custom ecommerce platforms, AI automations, and lead generation systems engineered around your business. No generic templates. Full ownership.",
+    path: "/",
+  }),
+  title: { absolute: "Custom Ecommerce & AI Systems Built to Convert | RRRTX SYSTEMS" },
+};
+
+const defaultHomeSettings = {
+  hero_title: "",
+  hero_subtitle: "",
+  hero_cta_text: "",
+  hero_cta_link: "",
+  problem_title: "",
+  problem_desc: "",
+  problem_bullets: [] as string[],
+  trusted_integrations: [] as string[],
+  homepage_stats: [] as Array<{ icon: string; value: number; suffix: string; label: string }>,
+  homepage_stats_verified: false,
+  tech_stack: [] as Array<{ name: string; category: string }>,
+  about_heading: "",
+  about_description: "",
 };
 
 export default async function Home() {
-  const dbServices = await getPublicServices({ primaryOnly: true });
-  const serviceItems = dbServices.map((s) => ({
-    title: s.title,
-    description: s.shortDescription || s.fullDescription || "",
-    href: `/services/${s.slug}`,
-    iconName: s.iconName,
+  const shouldReadDatabase = Boolean(process.env.TURSO_DATABASE_URL) || process.env.NODE_ENV !== "production";
+  const [dbServices, dbProjects, dbPosts, settings] = shouldReadDatabase
+    ? await Promise.all([
+        getPublicServices({ primaryOnly: true }),
+        getPublicProjects({ featuredOnly: true }),
+        getPublicPosts(),
+        getSettings(defaultHomeSettings),
+      ])
+    : [[], [], [], defaultHomeSettings];
+
+  const serviceItems = dbServices.map((service) => ({
+    title: service.title,
+    description: service.shortDescription || service.fullDescription || "",
+    href: `/services/${service.slug}`,
+    iconName: service.iconName,
   }));
 
-  const dbProjects = await getPublicProjects({ featuredOnly: true });
-  const workItems = dbProjects.map((p) => {
-    let metricsStr = "";
-    try {
-      const parsed = p.metrics ? JSON.parse(p.metrics) : null;
-      if (parsed && typeof parsed === "object") {
-        metricsStr = Object.values(parsed).join(" · ");
-      } else if (typeof parsed === "string") {
-        metricsStr = parsed;
-      }
-    } catch {
-      metricsStr = p.metrics || "";
-    }
-    return {
-      client: p.clientName || "Client",
-      industry: p.industry || "",
-      title: p.title,
-      description: p.solution || p.challenge || p.results || "",
-      image: p.imageUrl || "/assets/hero-core-visual.png",
-      link: "/work",
-      tags: [],
-      metrics: metricsStr || p.results || "",
-    };
-  });
-
-  const dbPricing = await getPublicPricing();
-  const pricingItems = dbPricing.map((t) => ({
-    name: t.title,
-    range: t.startingPrice || "",
-    description: t.subtitle || t.description || "",
-    features: (t.features || "")
-      .split(/\r?\n|,/)
-      .map((f) => f.trim())
-      .filter(Boolean),
-    cta: "Get Started",
-    popular: false,
+  const workItems = dbProjects.map((project) => ({
+    client: project.clientName || "Client",
+    industry: project.industry || "",
+    title: project.title,
+    description: project.solution || project.challenge || project.results || "",
+    image: project.imageUrl || "/assets/hero-core-visual.webp",
+    link: `/work/${project.slug}`,
+    tags: [] as string[],
+    metrics: parseMetrics(project.metrics) || project.results || "",
   }));
 
-  const dbPosts = await getPublicPosts();
-
-  const heroTitle = await getSetting<string>("hero_title", "");
-  const heroSubtitle = await getSetting<string>("hero_subtitle", "");
-  const heroCtaText = await getSetting<string>("hero_cta_text", "");
-  const heroCtaLink = await getSetting<string>("hero_cta_link", "");
-
-  const problemTitle = await getSetting<string>("problem_title", "");
-  const problemDesc = await getSetting<string>("problem_desc", "");
-  const problemBullets = await getSetting<string[]>("problem_bullets", []);
-
-  const trustedIntegrations = await getSetting<string[]>("trusted_integrations", []);
-  const homepageStats = await getSetting<any[]>("homepage_stats", []);
-
-  const techStack = await getSetting<{ name: string; category: string }[]>(
-    "tech_stack",
-    []
-  );
-
-  const aboutHeading = await getSetting<string>("about_heading", "");
-  const aboutDescription = await getSetting<string>("about_description", "");
+  const {
+    hero_title: heroTitle,
+    hero_subtitle: heroSubtitle,
+    hero_cta_text: heroCtaText,
+    hero_cta_link: heroCtaLink,
+    problem_title: problemTitle,
+    problem_desc: problemDesc,
+    problem_bullets: problemBullets,
+    trusted_integrations: trustedIntegrations,
+    homepage_stats: homepageStats,
+    homepage_stats_verified: homepageStatsVerified,
+    tech_stack: techStack,
+    about_heading: aboutHeading,
+    about_description: aboutDescription,
+  } = settings;
 
   return (
     <main className="relative">
@@ -121,7 +112,7 @@ export default async function Home() {
       <TrustBar
         brands={trustedIntegrations.length ? trustedIntegrations : undefined}
       />
-      <StatsBar stats={homepageStats.length ? homepageStats : undefined} />
+      {homepageStatsVerified && homepageStats.length > 0 && <StatsBar stats={homepageStats} />}
       <ProblemSection
         title={problemTitle || undefined}
         description={problemDesc || undefined}
@@ -138,7 +129,7 @@ export default async function Home() {
         heading={aboutHeading || undefined}
         description={aboutDescription || undefined}
       />
-      <PricingSection items={pricingItems.length ? pricingItems : undefined} />
+      <PricingSection />
       <ToolsCapsules />
       <BlogTeaser posts={dbPosts.slice(0, 3)} />
       <CTASection />

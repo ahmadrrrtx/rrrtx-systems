@@ -1,7 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionWrapper } from "./SectionWrapper";
+import { SmartImage } from "./SmartImage";
 import Link from "next/link";
 import { ArrowRight, ExternalLink, Code, TrendingUp } from "lucide-react";
 
@@ -23,10 +21,10 @@ const defaultProjects: WorkItem[] = [
     title: "Full-Stack Ecommerce Platform",
     description:
       "Custom Next.js storefront with category architecture, product grid, cart logic, WhatsApp order integration, and COD checkout — built from scratch for a sports brand in Sialkot.",
-    image: "/assets/abstract-commerce-grid.png",
+    image: "/assets/abstract-commerce-grid.webp",
     link: "https://janjua-sports.vercel.app/",
     tags: ["Next.js", "Custom Cart", "WhatsApp API", "COD"],
-    metrics: "15K+ orders processed, sub-2s load times",
+    metrics: "Production storefront and mobile order flow",
   },
   {
     client: "RRRTX Internal",
@@ -34,10 +32,10 @@ const defaultProjects: WorkItem[] = [
     title: "Gemma 4 RSS Intelligence Agent",
     description:
       "Autonomous developer-news agent powered by Gemma 4 E4B. Monitors 25+ RSS feeds, classifies signal vs. noise, and posts clean digests to Slack — running on a $7/month VPS with zero API costs.",
-    image: "/assets/ai-agent-network.png",
+    image: "/assets/ai-agent-network.webp",
     link: "https://github.com/ahmadrrrtx/Gemma-4-RSS-Intelligence-Monitor",
     tags: ["Python", "Gemma 4", "Slack API", "Local LLM"],
-    metrics: "$0 AI spend, 6-hour monitoring cycles",
+    metrics: "Self-hosted local-model monitoring workflow",
   },
   {
     client: "Client Project",
@@ -45,10 +43,10 @@ const defaultProjects: WorkItem[] = [
     title: "Make.com → Custom Automation Migration",
     description:
       "Replaced fragile Make.com spaghetti workflows with a robust custom Python automation pipeline. Lead scoring, CRM sync, and follow-up sequences now run without third-party failure points.",
-    image: "/assets/hero-core-visual.png",
-    link: "#",
+    image: "/assets/hero-core-visual.webp",
+    link: "/contact",
     tags: ["Make.com", "Python", "CRM Integration", "Lead Scoring"],
-    metrics: "90% reduction in workflow failures",
+    metrics: "Monitored custom workflow with controlled retries",
   },
 ];
 
@@ -83,17 +81,14 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Hero card — first project gets full-width left column */}
           {projects.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.5 }}
+            <div
               className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 lg:row-span-2"
             >
               <div className="relative aspect-[16/10] lg:aspect-auto lg:h-[55%] overflow-hidden">
-                <img
+                <SmartImage
                   src={projects[0].image}
                   alt={projects[0].title}
+                  sizes="(min-width: 1024px) 66vw, 100vw"
                   className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent" />
@@ -129,7 +124,9 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                   </div>
                   <Link
                     href={projects[0].link}
-                    target="_blank"
+                    target={projects[0].link.startsWith("http") ? "_blank" : undefined}
+                    rel={projects[0].link.startsWith("http") ? "noopener noreferrer" : undefined}
+                    aria-label={`Open ${projects[0].title}`}
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors"
                   >
                     {projects[0].link.includes("github") ? (
@@ -141,25 +138,22 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Remaining cards stacked on the right */}
           <div className="flex flex-col gap-6">
-            {projects.slice(1).map((project, i) => (
-              <motion.div
+            {projects.slice(1).map((project) => (
+              <div
                 key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 + (i + 1) * 0.1, duration: 0.5 }}
                 className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 flex flex-col sm:flex-row"
               >
                 {/* Thumbnail */}
                 <div className="relative w-full sm:w-48 aspect-[16/10] sm:aspect-auto shrink-0 overflow-hidden">
-                  <img
+                  <SmartImage
                     src={project.image}
                     alt={project.title}
+                    sizes="(min-width: 640px) 192px, 100vw"
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#020617]/80 hidden sm:block" />
@@ -196,7 +190,9 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                     </div>
                     <Link
                       href={project.link}
-                      target="_blank"
+                      target={project.link.startsWith("http") ? "_blank" : undefined}
+                      rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={`Open ${project.title}`}
                       className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-cyan-400 transition-colors shrink-0"
                     >
                       {project.link.includes("github") ? (
@@ -207,7 +203,7 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

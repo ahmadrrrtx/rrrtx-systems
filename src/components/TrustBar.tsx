@@ -1,7 +1,3 @@
-"use client";
-
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
 
 interface LogoItem {
   name: string;
@@ -23,9 +19,6 @@ const allLogos: LogoItem[] = [
 ];
 
 export function TrustBar({ brands }: { brands?: string[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-
   const activeLogos =
     brands && brands.length > 0
       ? allLogos.filter((l) =>
@@ -35,16 +28,11 @@ export function TrustBar({ brands }: { brands?: string[] }) {
   const logosToRender = activeLogos.length > 0 ? activeLogos : allLogos;
 
   return (
-    <section ref={ref} className="relative py-7 border-y border-white/[0.04] bg-[#020617]/50">
+    <section className="relative py-7 border-y border-white/[0.04] bg-[#020617]/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center text-[10px] uppercase tracking-[0.3em] text-slate-600 font-medium"
-        >
+        <p className="text-center text-[10px] uppercase tracking-[0.3em] text-slate-300 font-medium">
           Trusted Integrations &amp; Platforms
-        </motion.p>
+        </p>
       </div>
 
       <div className="relative overflow-hidden">

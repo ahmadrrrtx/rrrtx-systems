@@ -170,7 +170,7 @@ export function PricingPageClient({ items }: { items?: Tier[] }) {
               {faqs.map((faq, i) => (
                 <div
                   key={i}
-                  className="p-5 rounded-xl bg-slate-950/40 border border-slate-800/50"
+                  className="premium-surface rounded-2xl p-5"
                 >
                   <div className="flex items-start gap-3">
                     <HelpCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />

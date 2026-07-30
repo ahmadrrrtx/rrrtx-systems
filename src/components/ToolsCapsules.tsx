@@ -2,61 +2,37 @@ import Link from "next/link";
 import { ClipboardCheck, Calculator, Download, ArrowRight } from "lucide-react";
 
 const tools = [
-  {
-    label: "Free Website Audit",
-    href: "/audit",
-    icon: ClipboardCheck,
-    description: "Get a free conversion & performance audit of your current site.",
-  },
-  {
-    label: "ROI Calculator",
-    href: "/roi",
-    icon: Calculator,
-    description: "See exactly how much revenue a custom system can unlock.",
-  },
-  {
-    label: "Free Resources",
-    href: "/resources",
-    icon: Download,
-    description: "Browse instant and email-gated checklists, guides, and templates.",
-  },
+  { label: "Free Website Audit", href: "/audit", icon: ClipboardCheck, description: "Get a focused conversion and performance review of your current site.", accent: "from-cyan-400/20 to-blue-500/5", iconColor: "text-cyan-300" },
+  { label: "ROI Calculator", href: "/roi", icon: Calculator, description: "Model a transparent improvement scenario using your own business inputs.", accent: "from-blue-400/20 to-purple-500/5", iconColor: "text-blue-300" },
+  { label: "Free Resources", href: "/resources", icon: Download, description: "Browse instant and email-gated checklists, guides, and templates.", accent: "from-purple-400/20 to-pink-500/5", iconColor: "text-purple-300" },
 ];
 
 export function ToolsCapsules() {
   return (
-    <section className="py-12 lg:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-800/40 to-transparent" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600 shrink-0">
-            Free Tools &amp; Resources
-          </span>
-          <div className="h-[1px] flex-1 bg-gradient-to-l from-slate-800/40 to-transparent" />
+    <section className="relative overflow-hidden py-16 lg:py-20">
+      <div className="absolute inset-x-0 top-1/2 h-52 -translate-y-1/2 bg-gradient-to-r from-transparent via-blue-500/[0.025] to-transparent blur-3xl" aria-hidden="true" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-center gap-4">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-700/60" />
+          <span className="shrink-0 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-300">Free Tools &amp; Resources</span>
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-700/60" />
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid gap-5 sm:grid-cols-3">
           {tools.map((tool) => (
-            <div
-              key={tool.label}
-            >
-              <Link
-                href={tool.href}
-                className="group flex items-start gap-4 p-4 rounded-xl bg-slate-950/30 border border-slate-800/30 hover:border-slate-700/50 transition-all duration-300 hover:-translate-y-0.5"
-              >
-                <div className="shrink-0 w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800/50 flex items-center justify-center group-hover:border-slate-700/60 transition-colors">
-                  <tool.icon className="w-4 h-4 text-cyan-400" />
+            <Link key={tool.label} href={tool.href} className="premium-card group/tool flex min-h-40 items-start gap-4 overflow-hidden rounded-2xl p-5 sm:p-6">
+              <div className={`absolute inset-0 bg-gradient-to-br ${tool.accent} opacity-35 transition-opacity duration-500 group-hover/tool:opacity-70`} aria-hidden="true" />
+              <div className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.07] bg-slate-950/65 shadow-[inset_0_1px_0_rgba(255,255,255,.07),0_14px_30px_-18px_rgba(34,211,238,.45)] ${tool.iconColor}`}>
+                <tool.icon className="premium-icon h-5 w-5" aria-hidden="true" />
+              </div>
+              <div className="relative min-w-0 flex-1 pt-0.5">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <h3 className="text-base font-semibold tracking-[-0.015em] text-white transition-colors duration-300 group-hover/tool:text-cyan-300">{tool.label}</h3>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition-[transform,color] duration-300 ease-[var(--ease-premium)] group-hover/tool:translate-x-1 group-hover/tool:text-cyan-300" aria-hidden="true" />
                 </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors duration-300 flex items-center gap-1.5">
-                    {tool.label}
-                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-300" />
-                  </div>
-                  <p className="text-[11px] text-slate-500 leading-relaxed mt-0.5">
-                    {tool.description}
-                  </p>
-                </div>
-              </Link>
-            </div>
+                <p className="text-sm leading-relaxed text-slate-300">{tool.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

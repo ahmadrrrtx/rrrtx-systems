@@ -82,14 +82,14 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
           {/* Hero card — first project gets full-width left column */}
           {projects.length > 0 && (
             <div
-              className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 lg:row-span-2"
+              className="premium-card group relative overflow-hidden rounded-3xl lg:row-span-2"
             >
               <div className="relative aspect-[16/10] lg:aspect-auto lg:h-[55%] overflow-hidden">
                 <SmartImage
                   src={projects[0].image}
                   alt={projects[0].title}
                   sizes="(min-width: 1024px) 66vw, 100vw"
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  className="h-full w-full object-cover opacity-75 transition-[transform,opacity] duration-700 ease-[var(--ease-premium)] group-hover:scale-[1.04] group-hover:opacity-95"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent" />
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
             {projects.slice(1).map((project) => (
               <div
                 key={project.title}
-                className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/40 hover:border-slate-700/60 transition-all duration-500 flex flex-col sm:flex-row"
+                className="premium-card group relative flex flex-col overflow-hidden rounded-2xl sm:flex-row"
               >
                 {/* Thumbnail */}
                 <div className="relative w-full sm:w-48 aspect-[16/10] sm:aspect-auto shrink-0 overflow-hidden">
@@ -154,7 +154,7 @@ export function FeaturedWork({ items }: { items?: WorkItem[] }) {
                     src={project.image}
                     alt={project.title}
                     sizes="(min-width: 640px) 192px, 100vw"
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    className="h-full w-full object-cover opacity-75 transition-[transform,opacity] duration-700 ease-[var(--ease-premium)] group-hover:scale-[1.04] group-hover:opacity-95"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#020617]/80 hidden sm:block" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/80 to-transparent sm:hidden" />

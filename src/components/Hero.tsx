@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
+import { HeroSceneLoader } from "./HeroSceneLoader";
 
 export function Hero({
   titleLines,
@@ -21,11 +22,14 @@ export function Hero({
   const activeCtaLink = ctaLink || "/contact";
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-28 lg:pt-32 pb-16 lg:pb-20">
-      <div className="absolute top-0 left-0 right-0 h-40 lg:h-48 pointer-events-none z-[2] bg-gradient-to-b from-[#020617] via-[#020617]/70 to-transparent" />
+    <section className="relative isolate min-h-[100dvh] flex items-center overflow-hidden pt-28 lg:pt-32 pb-16 lg:pb-20">
+      <HeroSceneLoader />
+      <div className="absolute inset-0 soft-grid pointer-events-none z-[1] opacity-70" aria-hidden="true" />
+      <div className="absolute top-0 left-0 right-0 h-40 lg:h-48 pointer-events-none z-[3] bg-gradient-to-b from-[#020617] via-[#020617]/75 to-transparent" />
       <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true">
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[12%] right-[12%] w-[620px] h-[620px] bg-purple-600/[0.11] rounded-full blur-[130px]" />
+        <div className="absolute bottom-[8%] left-[8%] w-[540px] h-[540px] bg-cyan-500/[0.09] rounded-full blur-[110px]" />
+        <div className="absolute left-1/2 top-1/3 w-[340px] h-[340px] -translate-x-1/2 rounded-full bg-blue-500/[0.045] blur-[90px]" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -42,18 +46,19 @@ export function Hero({
                 {activeCtaText}<ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <Link prefetch={false} href="/work" className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-300 rounded-lg border border-slate-700 hover:border-slate-500 hover:text-white transition-all bg-slate-900/30">
-                <Play className="w-4 h-4" aria-hidden="true" />View Our Work
+                <Play className="premium-icon w-4 h-4 group-hover:text-cyan-300" aria-hidden="true" />View Our Work
               </Link>
             </div>
           </div>
 
           <div className="relative hidden lg:block">
             <div className="relative aspect-square max-w-[600px] mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-3xl" aria-hidden="true" />
-              <Image src="/assets/hero-holographic-hand.webp" alt="RRRTX system architecture visualization" fill sizes="(min-width: 1280px) 600px, 50vw" className="object-contain drop-shadow-2xl animate-float" />
-              <div className="absolute top-10 right-0 glass-card px-4 py-3"><div className="text-[10px] uppercase tracking-wider text-slate-300 mb-1">AI Automations</div><div className="text-sm font-semibold text-cyan-400">Workflows that save time</div></div>
-              <div className="absolute top-1/3 -left-4 glass-card px-4 py-3"><div className="text-[10px] uppercase tracking-wider text-slate-300 mb-1">Lead Generation</div><div className="text-sm font-semibold text-purple-400">Get qualified leads on autopilot</div></div>
-              <div className="absolute bottom-20 right-4 glass-card px-4 py-3"><div className="text-[10px] uppercase tracking-wider text-slate-300 mb-1">Conversion Engineering</div><div className="text-sm font-semibold text-blue-400">Journeys designed to convert</div></div>
+              <div className="absolute inset-[7%] rounded-full border border-cyan-400/[0.08] bg-gradient-to-br from-cyan-500/[0.055] via-transparent to-purple-500/[0.07] shadow-[inset_0_0_90px_rgba(34,211,238,.035),0_0_90px_-40px_rgba(139,92,246,.3)]" aria-hidden="true" />
+              <div className="absolute inset-[16%] rounded-full border border-dashed border-slate-500/[0.14] animate-[spin_36s_linear_infinite] motion-reduce:animate-none" aria-hidden="true" />
+              <Image src="/assets/hero-holographic-hand.webp" alt="RRRTX system architecture visualization" fill sizes="(min-width: 1280px) 600px, 50vw" className="object-contain drop-shadow-[0_28px_48px_rgba(8,145,178,.16)] animate-float" />
+              <div className="premium-surface animate-float absolute top-10 right-0 rounded-xl px-4 py-3" style={{ animationDelay: "-1.2s", animationDuration: "6.4s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">AI Automations</div><div className="text-sm font-semibold text-cyan-300">Workflows that save time</div></div>
+              <div className="premium-surface animate-float absolute top-1/3 -left-4 rounded-xl px-4 py-3" style={{ animationDelay: "-3s", animationDuration: "7.2s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">Lead Generation</div><div className="text-sm font-semibold text-purple-300">Get qualified leads on autopilot</div></div>
+              <div className="premium-surface animate-float absolute bottom-20 right-4 rounded-xl px-4 py-3" style={{ animationDelay: "-4.4s", animationDuration: "6.8s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">Conversion Engineering</div><div className="text-sm font-semibold text-blue-300">Journeys designed to convert</div></div>
             </div>
           </div>
         </div>

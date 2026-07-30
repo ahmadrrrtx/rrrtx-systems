@@ -115,7 +115,7 @@ export function ServicesPageClient({ items }: { items?: ServiceItem[] }) {
                     ))}
                   </div>
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 group-hover:text-cyan-400 transition-colors">
-                    Learn more <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                   </span>
                 </Link>
               </motion.div>

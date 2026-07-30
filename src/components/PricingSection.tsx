@@ -19,9 +19,12 @@ export function PricingSection() {
         <div
           className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-[#020617] shadow-2xl shadow-purple-950/20"
         >
-          <div className="absolute inset-0 pointer-events-none opacity-50" aria-hidden="true">
-            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
-            <div className="absolute -bottom-28 left-1/4 h-80 w-80 rounded-full bg-purple-600/10 blur-3xl" />
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="soft-grid absolute inset-0 opacity-35" />
+            <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-cyan-500/[0.13] blur-3xl transition-transform duration-700 ease-[var(--ease-premium)] group-hover/strategy:scale-110" />
+            <div className="absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-purple-600/[0.14] blur-3xl transition-transform duration-700 ease-[var(--ease-premium)] group-hover/strategy:scale-110" />
+            <div className="absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/45 to-transparent" />
+            <div className="absolute -left-1/4 top-0 h-full w-1/2 rotate-12 bg-gradient-to-r from-transparent via-white/[0.025] to-transparent blur-xl transition-transform duration-1000 ease-[var(--ease-premium)] group-hover/strategy:translate-x-[230%]" />
           </div>
 
           <div className="relative grid lg:grid-cols-[1.15fr_0.85fr] gap-10 p-7 sm:p-10 lg:p-14 items-center">

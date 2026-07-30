@@ -63,7 +63,7 @@ export function SecondaryServices() {
                 <div className="relative p-7">
                   <div className="flex items-start gap-5">
                     <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br ${service.gradient} shadow-lg shrink-0 mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity duration-300`}>
-                      <service.icon className="w-5 h-5 text-white" />
+                      <service.icon className="premium-icon w-5 h-5 text-white" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-base font-semibold text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">

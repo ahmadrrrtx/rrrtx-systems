@@ -70,7 +70,7 @@ export function ProcessPageClient() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.15 }}
-                className="relative grid md:grid-cols-[1fr_2fr] gap-8 p-8 rounded-2xl bg-slate-950/40 border border-slate-800/50"
+                className="premium-card relative grid gap-8 rounded-3xl p-8 md:grid-cols-[1fr_2fr]"
               >
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-3">

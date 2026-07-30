@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { SmartImage } from "@/components/SmartImage";
 import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
-import { Calendar, Tag, ArrowRight, BookOpen, Clock3 } from "lucide-react";
+import { Calendar, Tag, ArrowRight, BookOpen, Clock3, PenTool } from "lucide-react";
 import { createMetadata, absoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -86,22 +86,23 @@ export default async function BlogListingPage({
               <Link href="/blog" className="text-sm font-semibold text-cyan-400 hover:text-cyan-300">View all insights</Link>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {visiblePosts.map((post) => {
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {visiblePosts.map((post, index) => {
                 const tagList = tagsFor(post.tags);
                 return (
-                  <article key={post.id} className="flex flex-col rounded-2xl bg-slate-950/40 border border-slate-800/50 overflow-hidden hover:border-slate-600/80 transition-all duration-300 group">
-                    <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] overflow-hidden" aria-label={`Read ${post.title}`}>
+                  <article key={post.id} className={`premium-card group/article flex flex-col overflow-hidden rounded-2xl ${index === 0 ? "md:col-span-2 lg:col-span-2 lg:row-span-2" : ""}`}>
+                    <Link href={`/blog/${post.slug}`} className={`relative block overflow-hidden ${index === 0 ? "aspect-[16/8] lg:aspect-[16/9]" : "aspect-[16/9]"}`} aria-label={`Read ${post.title}`}>
                       {post.coverImageUrl ? (
-                        <SmartImage src={post.coverImageUrl} alt={post.title} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <SmartImage src={post.coverImageUrl} alt={post.title} sizes={index === 0 ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"} className="h-full w-full object-cover opacity-75 transition-[transform,opacity] duration-700 ease-[var(--ease-premium)] group-hover/article:scale-[1.045] group-hover/article:opacity-95" />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-blue-900/40 via-purple-900/20 to-[#020617] flex items-center justify-center border-b border-slate-800/50">
                           <BookOpen className="w-8 h-8 text-cyan-500/60" aria-hidden="true" />
                         </div>
                       )}
                     </Link>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 mb-3">
+                    <div className={`flex flex-1 flex-col ${index === 0 ? "p-6 sm:p-8" : "p-6"}`}>
+                      <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                        <span className="flex items-center gap-1"><PenTool className="h-3.5 w-3.5 text-purple-300" aria-hidden="true" />RRRTX Engineering</span>
                         <time dateTime={(post.publishedAt || post.createdAt || new Date()).toISOString()} className="flex items-center gap-1">
                           <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
                           {(post.publishedAt || post.createdAt || new Date()).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
@@ -109,10 +110,10 @@ export default async function BlogListingPage({
                         <span className="flex items-center gap-1"><Clock3 className="w-3.5 h-3.5" aria-hidden="true" /> {readingTime(post.content)} min</span>
                       </div>
                       {tagList[0] && <span className="flex items-center gap-1 text-xs text-cyan-400 mb-3"><Tag className="w-3.5 h-3.5" aria-hidden="true" />{tagList[0]}</span>}
-                      <h2 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-cyan-400 transition-colors"><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
+                      <h2 className={`mb-3 line-clamp-2 font-bold leading-tight tracking-[-0.02em] text-white transition-colors duration-300 group-hover/article:text-cyan-300 ${index === 0 ? "text-2xl sm:text-3xl" : "text-xl"}`}><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
                       {post.excerpt && <p className="text-sm text-slate-300 mb-6 line-clamp-3 leading-relaxed flex-1">{post.excerpt}</p>}
-                      <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 hover:text-cyan-300 mt-auto">
-                        Read article <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      <Link href={`/blog/${post.slug}`} className="group/read mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200">
+                        Read article <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/read:translate-x-1" aria-hidden="true" />
                       </Link>
                     </div>
                   </article>

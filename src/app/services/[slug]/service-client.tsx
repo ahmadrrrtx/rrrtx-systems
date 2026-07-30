@@ -47,7 +47,7 @@ export function ServicePageClient({ service }: { service: ServiceDetail }) {
               { icon: Workflow, title: "Understand the process", text: "See how discovery, delivery, deployment, and optimization work.", href: "/process", label: "Explore our process" },
               { icon: BadgeDollarSign, title: "Plan the engagement", text: "Start with scope, priorities, and the right engagement model.", href: "/contact", label: "Book a strategy call" },
             ].map((item) => (
-              <div key={item.title} className="rounded-xl border border-slate-800/50 bg-slate-950/40 p-5">
+              <div key={item.title} className="premium-card group/next rounded-2xl p-5">
                 <item.icon className="w-5 h-5 text-cyan-400 mb-3" aria-hidden="true" />
                 <h2 id={item.title === "See production work" ? "next-step-heading" : undefined} className="text-base font-bold text-white mb-2">{item.title}</h2>
                 <p className="text-sm text-slate-400 mb-4">{item.text}</p>
@@ -61,7 +61,7 @@ export function ServicePageClient({ service }: { service: ServiceDetail }) {
           <div className="text-center rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-blue-950/30 to-purple-950/30 p-8">
             <h2 className="text-2xl font-bold text-white mb-3">Build the right system for your business.</h2>
             <p className="text-slate-400 mb-6 max-w-2xl mx-auto">Tell us what is slowing growth or creating operational friction. We will map the safest next step before recommending a build.</p>
-            <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all">
+            <Link href="/contact" className="premium-button inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white">
               Book a Strategy Call <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </div>

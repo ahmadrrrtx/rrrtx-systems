@@ -29,9 +29,10 @@ const values = [
 
 export function AboutPageClient() {
   return (
-    <main className="relative min-h-screen bg-[#020617]">
-
-      <section className="pt-32 pb-24">
+    <main className="relative min-h-screen overflow-hidden bg-[#020617]">
+      <div className="soft-grid absolute inset-0 opacity-25" aria-hidden="true" />
+      <div className="absolute left-1/2 top-24 h-80 w-[720px] -translate-x-1/2 rounded-full bg-blue-500/[0.04] blur-[110px]" aria-hidden="true" />
+      <section className="relative pt-32 pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -97,7 +98,7 @@ export function AboutPageClient() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/process" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-sm font-semibold text-slate-300 hover:text-white">Explore our process <ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
-              <Link href="/work" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-sm font-semibold text-white">View production work <ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link href="/work" className="premium-button inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white">View production work <ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ export function CTASection() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold text-white rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-900/25 hover:shadow-purple-900/40"
+              className="premium-button group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 text-base font-semibold text-white"
             >
               <Calendar className="w-4 h-4" />
               Get Your Free Strategy Call
@@ -30,7 +30,7 @@ export function CTASection() {
             </Link>
             <Link
               href="/work"
-              className="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold text-slate-300 rounded-xl border border-slate-700 hover:border-slate-500 hover:text-white transition-all bg-slate-900/30"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/45 px-8 py-4 text-base font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,.04)] backdrop-blur-md transition-[transform,border-color,color] duration-300 ease-[var(--ease-premium)] hover:-translate-y-0.5 hover:border-slate-500 hover:text-white"
             >
               View Our Work
             </Link>

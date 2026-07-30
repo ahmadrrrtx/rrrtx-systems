@@ -220,7 +220,7 @@ export function ContactPageClient() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50"
+                className="premium-button inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3.5 text-sm font-semibold text-white disabled:opacity-50"
               >
                 {loading ? "Sending..." : "Send Message"}
                 <Send className="w-4 h-4" />

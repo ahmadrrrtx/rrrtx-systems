@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Download, Lock, CheckCircle, FileText, X, Filter, RefreshCw, AlertCircle } from "lucide-react";
 import { SmartImage } from "@/components/SmartImage";
 import { trackEvent } from "@/components/AnalyticsClient";
@@ -98,15 +98,18 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
   };
 
   return (
-    <section className="pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <MotionConfig reducedMotion="user">
+    <section className="relative overflow-hidden pt-32 pb-24">
+      <div className="soft-grid absolute inset-0 opacity-30" aria-hidden="true" />
+      <div className="absolute left-1/2 top-24 h-80 w-[760px] -translate-x-1/2 rounded-full bg-cyan-500/[0.035] blur-[120px]" aria-hidden="true" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">
             Knowledge Hub
           </p>
-          <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+          <h1 className="mb-4 text-3xl font-bold tracking-[-0.03em] text-white lg:text-5xl">
             Free Systems & <span className="text-gradient">Engineering Library.</span>
           </h1>
           <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
@@ -115,17 +118,17 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
         </div>
 
         {/* Categories filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12 select-none">
+        <div className="premium-surface mx-auto mb-12 flex w-fit max-w-full flex-wrap items-center justify-center gap-2 rounded-2xl p-2.5 select-none">
           <Filter className="w-3.5 h-3.5 text-slate-500 mr-1" />
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               aria-pressed={selectedCategory === cat}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+              className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-[transform,color,border-color,background-color,box-shadow] duration-200 ease-[var(--ease-premium)] cursor-pointer ${
                 selectedCategory === cat
-                  ? "bg-cyan-500/10 border-cyan-400 text-cyan-400"
-                  : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-white"
+                  ? "border-cyan-400/45 bg-cyan-400/[0.1] text-cyan-200 shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_8px_22px_-14px_rgba(34,211,238,.55)]"
+                  : "border-transparent bg-slate-900/45 text-slate-300 hover:-translate-y-0.5 hover:border-slate-700 hover:text-white"
               }`}
             >
               {cat}
@@ -143,55 +146,55 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
             </p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((res) => (
               <div
                 key={res.id}
-                className="flex flex-col rounded-2xl bg-slate-950/40 border border-slate-800/50 hover:border-slate-700/80 transition-all duration-300 overflow-hidden group"
+                className="premium-card group/resource flex flex-col overflow-hidden rounded-2xl"
               >
                 {/* Visual Thumbnail */}
-                <div className="aspect-[16/10] bg-slate-900 border-b border-slate-800/50 relative overflow-hidden flex items-center justify-center p-6">
+                <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-slate-800/55 bg-gradient-to-br from-slate-900 via-slate-950 to-[#020617] p-6">
                   {res.coverImageUrl ? (
                     <SmartImage
                       src={res.coverImageUrl}
                       alt={res.title}
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                      className="absolute inset-0 h-full w-full object-cover opacity-75 transition-[transform,opacity] duration-700 ease-[var(--ease-premium)] group-hover/resource:scale-[1.045] group-hover/resource:opacity-95"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-xl">
-                      <FileText className="w-6 h-6" />
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/[0.075] text-cyan-300 shadow-[inset_0_1px_0_rgba(255,255,255,.08),0_18px_36px_-20px_rgba(34,211,238,.6)]">
+                      <FileText className="premium-icon h-6 w-6" aria-hidden="true" />
                     </div>
                   )}
-                  <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-slate-950/80 text-[10px] font-bold text-cyan-400 uppercase tracking-wider border border-slate-800">
+                  <span className="absolute left-3 top-3 rounded-lg border border-cyan-400/20 bg-slate-950/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-cyan-300 shadow-lg backdrop-blur-md">
                     {res.fileType}
                   </span>
                   {res.isGated && (
-                    <span className="absolute top-3 right-3 px-2 py-0.5 rounded bg-purple-900/60 text-[10px] font-bold text-purple-200 uppercase tracking-wider border border-purple-800/40 inline-flex items-center gap-1">
+                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-lg border border-purple-400/20 bg-purple-950/75 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-purple-200 shadow-lg backdrop-blur-md">
                       <Lock className="w-2.5 h-2.5" /> Gated
                     </span>
                   )}
                 </div>
 
                 {/* Info Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="flex flex-1 flex-col justify-between space-y-5 p-6">
                   <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">
+                    <h3 className="line-clamp-2 text-lg font-bold tracking-[-0.015em] text-white transition-colors duration-300 group-hover/resource:text-cyan-300">
                       {res.title}
                     </h3>
                     <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block mt-1">
                       Category: {res.category}
                     </span>
-                    <p className="text-xs text-slate-400 mt-3 leading-relaxed line-clamp-3">
+                    <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-300">
                       {res.description}
                     </p>
                   </div>
 
                   <button
                     onClick={() => handleDownloadClick(res)}
-                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded bg-slate-900 border border-slate-800 group-hover:border-slate-500 hover:bg-slate-800 transition-all cursor-pointer"
+                    className="premium-button group/download inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-700/70 bg-slate-900/80 px-4 py-2.5 text-xs font-bold text-white cursor-pointer group-hover/resource:border-slate-600 hover:bg-slate-800"
                   >
-                    <Download className="w-3.5 h-3.5 text-cyan-400" />
+                    <Download className="premium-icon h-3.5 w-3.5 text-cyan-300 group-hover/download:-translate-y-0.5" aria-hidden="true" />
                     {res.isGated ? "Enter Info to Download" : "Instant Download"}
                   </button>
                 </div>
@@ -220,7 +223,7 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-md p-6 rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col space-y-5"
+                className="premium-surface relative flex w-full max-w-md flex-col space-y-5 rounded-2xl border-slate-700/70 p-6 shadow-[0_35px_100px_-30px_rgba(0,0,0,.95),0_0_70px_-35px_rgba(139,92,246,.45)]"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -327,5 +330,6 @@ export function ResourcesClient({ initialItems }: { initialItems: Resource[] }) 
         </AnimatePresence>
       </div>
     </section>
+    </MotionConfig>
   );
 }

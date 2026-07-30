@@ -57,9 +57,9 @@ export default function ROICalculatorClient() {
   };
 
   return (
-    <main className="min-h-screen bg-[#020617]">
-
-      <section className="pt-32 pb-24">
+    <main className="relative min-h-screen overflow-hidden bg-[#020617]">
+      <div className="soft-grid absolute inset-0 opacity-25" aria-hidden="true" />
+      <section className="relative pt-32 pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header */}
@@ -176,7 +176,7 @@ export default function ROICalculatorClient() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 mt-2 text-xs font-semibold text-white rounded bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all disabled:opacity-50"
+                  className="premium-button mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2.5 text-xs font-semibold text-white disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -229,7 +229,7 @@ export default function ROICalculatorClient() {
 
                     {/* Metric breakdown cards */}
                     <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/40 space-y-1">
+                      <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
                           <span>Monthly Revenue Gain</span>
                           <TrendingUp className="w-4 h-4 text-cyan-400" />
@@ -238,7 +238,7 @@ export default function ROICalculatorClient() {
                         <p className="text-[10px] text-slate-500 leading-relaxed">Increase in monthly sales revenue.</p>
                       </div>
 
-                      <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/40 space-y-1">
+                      <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
                           <span>Time Savings</span>
                           <Clock className="w-4 h-4 text-cyan-400" />
@@ -247,7 +247,7 @@ export default function ROICalculatorClient() {
                         <p className="text-[10px] text-slate-500 leading-relaxed">Manual hours saved through smart automations.</p>
                       </div>
 
-                      <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/40 space-y-1">
+                      <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
                           <span>Time Cost Reclaimed</span>
                           <DollarSign className="w-4 h-4 text-cyan-400" />
@@ -256,7 +256,7 @@ export default function ROICalculatorClient() {
                         <p className="text-[10px] text-slate-500 leading-relaxed">Operational budget reclaimed.</p>
                       </div>
 
-                      <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/40 space-y-1">
+                      <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
                           <span>Estimated Lost Revenue</span>
                           <span className="text-red-400 font-extrabold text-[10px]">CURRENT</span>

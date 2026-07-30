@@ -104,7 +104,7 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
                       <div
                         className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-500`}
                       >
-                        <Icon className="w-5 h-5 text-white" />
+                        <Icon className="premium-icon w-5 h-5 text-white" aria-hidden="true" />
                       </div>
                       <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-700 group-hover:text-slate-500 transition-colors">
                         0{i + 1}

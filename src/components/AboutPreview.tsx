@@ -110,7 +110,7 @@ export function AboutPreview({ heading, description }: AboutPreviewProps) {
             {pillars.map((pillar) => (
               <div
                 key={pillar.title}
-                className="group p-5 rounded-xl bg-slate-950/40 border border-slate-800/30 hover:border-slate-700/50 transition-all duration-300 hover:-translate-y-0.5"
+                className="premium-card group rounded-2xl p-5"
               >
                 <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800/50 mb-3 group-hover:border-slate-700/60 transition-colors">
                   <pillar.icon className="w-4 h-4 text-cyan-400" />

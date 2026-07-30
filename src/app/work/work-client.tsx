@@ -84,7 +84,7 @@ export function WorkPageClient({ items }: { items?: WorkItem[] }) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.15 }}
-                className="group relative rounded-2xl overflow-hidden bg-slate-950/40 border border-slate-800/50 hover:border-slate-700/80 transition-all"
+                className="premium-card group relative overflow-hidden rounded-2xl"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <SmartImage

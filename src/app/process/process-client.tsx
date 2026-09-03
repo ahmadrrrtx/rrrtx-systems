@@ -43,7 +43,7 @@ export function ProcessPageClient() {
   return (
     <main className="relative min-h-screen bg-[#020617]">
 
-      <section className="pt-32 pb-24">
+      <section data-reveal className="pt-32 pb-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

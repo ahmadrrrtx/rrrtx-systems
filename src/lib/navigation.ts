@@ -21,6 +21,12 @@ export const defaultNavLinks: NavLink[] = [
     { label: "Search", href: "/search" },
   ] },
   { label: "Process", href: "/process" }, { label: "Pricing", href: "/pricing" },
+  { label: "Partners", href: "/partners", children: [
+    { label: "Partner Network", href: "/partners" },
+    { label: "Become a Partner", href: "/partners/apply" },
+    { label: "Partner Login", href: "/partner/login" },
+    { label: "Verify a Certificate", href: "/verify" },
+  ] },
   { label: "Blog", href: "/blog" }, { label: "About", href: "/about" },
 ];
 
@@ -35,9 +41,17 @@ export const defaultFooterServices: SimpleLink[] = [
 
 export const defaultFooterCompany: SimpleLink[] = [
   { label: "Work", href: "/work" }, { label: "Process", href: "/process" },
-  { label: "Pricing", href: "/pricing" }, { label: "Blog", href: "/blog" },
+  { label: "Pricing", href: "/pricing" }, { label: "Partners", href: "/partners" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" }, { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" }, { label: "Search", href: "/search" },
+];
+
+export const defaultFooterPartner: SimpleLink[] = [
+  { label: "Partner Network", href: "/partners" },
+  { label: "Become a Partner", href: "/partners/apply" },
+  { label: "Partner Login", href: "/partner/login" },
+  { label: "Verify a Certificate", href: "/verify" },
 ];
 
 const defaultSocials: SocialLink[] = [
@@ -67,6 +81,7 @@ export const getPublicChrome = cache(async () => {
     navbar_links: defaultNavLinks,
     footer_services_links: defaultFooterServices,
     footer_company_links: defaultFooterCompany,
+    footer_partner_links: defaultFooterPartner,
     social_profiles: defaultSocials,
     contact_email: "contact@rrrtx-systems.com",
   };
@@ -80,6 +95,7 @@ export const getPublicChrome = cache(async () => {
     navbar_links: normalizeLinks(raw.navbar_links, defaultNavLinks),
     footer_services_links: normalizeLinks(raw.footer_services_links, defaultFooterServices),
     footer_company_links: normalizeLinks(raw.footer_company_links, defaultFooterCompany),
+    footer_partner_links: normalizeLinks(raw.footer_partner_links, defaultFooterPartner),
     social_profiles: socials.length ? socials : defaultSocials,
     contact_email: typeof raw.contact_email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw.contact_email) ? raw.contact_email : defaults.contact_email,
   };

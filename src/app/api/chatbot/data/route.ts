@@ -8,6 +8,7 @@ import {
   getPublicTestimonials,
   getSettings,
 } from "@/lib/queries";
+import { DEFAULT_RANK_TIERS, PARTNER_COMMISSION_DEFAULT } from "@/lib/partner-constants";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,14 @@ export async function GET() {
         testimonials: testimonialRows.slice(0, 3).map(({ name, role, quote }) => ({ name, role, quote })),
         team: teamRows.map(({ name, role }) => ({ name, role })),
         blog: postRows.slice(0, 3).map(({ title, slug }) => ({ title, slug })),
+        partners: {
+          commissionRate: `${Math.round(PARTNER_COMMISSION_DEFAULT * 100)}%`,
+          ranks: DEFAULT_RANK_TIERS.map(({ key, label, minProjects, minRevenue, isAutomatic }) => ({ key, label, minProjects, minRevenue, isAutomatic })),
+          applyUrl: "/partners/apply",
+          loginUrl: "/partner/login",
+          verifyUrl: "/verify",
+          overviewUrl: "/partners",
+        },
       },
       { headers: { "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=3600" } }
     );

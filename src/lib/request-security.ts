@@ -4,12 +4,12 @@ import { SITE_URL } from "./site-config";
 type RateEntry = { count: number; resetAt: number };
 const rateStore = new Map<string, RateEntry>();
 
-function clientAddress(request: Request): string {
+export function clientAddress(request: Request): string {
   return (
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-real-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "unknown"
+    ""
   );
 }
 
@@ -48,6 +48,8 @@ export function enforceRateLimit(
   return null;
 }
 
+let warnedAnyOrigin = false;
+
 export function validateRequestOrigin(request: Request): NextResponse | null {
   const origin = request.headers.get("origin");
   if (!origin) return null;
@@ -57,6 +59,22 @@ export function validateRequestOrigin(request: Request): NextResponse | null {
     allowed.add("http://localhost:3000");
     allowed.add("http://127.0.0.1:3000");
   }
+
+  // Optional extra origins for staging / PR / sandbox previews (comma-separated).
+  // A literal "*" permits any origin and must NEVER be set in production —
+  // it exists solely for ephemeral preview environments.
+  const extra = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((entry) => entry.trim().replace(/\/$/, ""))
+    .filter(Boolean);
+  if (extra.includes("*")) {
+    if (!warnedAnyOrigin) {
+      warnedAnyOrigin = true;
+      console.warn("ALLOWED_ORIGINS=* is active — any Origin is permitted. Never enable in production.");
+    }
+    return null;
+  }
+  for (const entry of extra) allowed.add(entry);
 
   if (!allowed.has(origin.replace(/\/$/, ""))) {
     return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });

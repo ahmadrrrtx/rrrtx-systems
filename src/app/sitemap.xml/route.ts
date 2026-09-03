@@ -54,6 +54,8 @@ export async function GET() {
     "/faq",
     "/privacy",
     "/terms",
+    "/partners",
+    "/partners/apply",
   ];
   const staticPages = staticPaths.map((path) => ({
     url: `${baseUrl}${path === "/" ? "" : path}`,

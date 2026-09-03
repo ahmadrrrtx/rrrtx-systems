@@ -8,17 +8,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/api"],
+        disallow: ["/dashboard", "/api", "/partner"],
       },
       {
         userAgent: "OAI-SearchBot",
         allow: "/",
-        disallow: ["/dashboard", "/api"],
+        disallow: ["/dashboard", "/api", "/partner"],
       },
       {
         userAgent: "PerplexityBot",
         allow: "/",
-        disallow: ["/dashboard", "/api"],
+        disallow: ["/dashboard", "/api", "/partner"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

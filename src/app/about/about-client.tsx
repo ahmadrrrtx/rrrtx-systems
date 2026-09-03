@@ -32,7 +32,7 @@ export function AboutPageClient() {
     <main className="relative min-h-screen overflow-hidden bg-[#020617]">
       <div className="soft-grid absolute inset-0 opacity-25" aria-hidden="true" />
       <div className="absolute left-1/2 top-24 h-80 w-[720px] -translate-x-1/2 rounded-full bg-blue-500/[0.04] blur-[110px]" aria-hidden="true" />
-      <section className="relative pt-32 pb-24">
+      <section data-reveal className="relative pt-32 pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export function AboutPageClient() {
         </div>
       </section>
 
-      <section className="pb-24">
+      <section data-reveal className="pb-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-blue-950/30 to-purple-950/30 p-7 sm:p-9">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400 mb-3">How we reduce delivery risk</p>

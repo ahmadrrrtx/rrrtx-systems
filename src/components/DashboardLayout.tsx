@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { LayoutDashboard, Inbox, FolderOpen, Layers, MessageSquare, Image as ImageIcon, ChevronRight, LogOut, Star, Users, DollarSign, Settings, FileText, Download, Menu, X } from "lucide-react";
+import { LayoutDashboard, Inbox, FolderOpen, Layers, MessageSquare, Image as ImageIcon, ChevronRight, LogOut, Star, Users, DollarSign, Settings, FileText, Download, Menu, X, Handshake, Target } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -21,12 +21,35 @@ const navItems = [
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
+const partnerNavItems = [
+  { href: "/dashboard/partners", icon: Handshake, label: "Overview" },
+  { href: "/dashboard/partners/applications", icon: Inbox, label: "Applications" },
+  { href: "/dashboard/partners/partners", icon: Users, label: "Partner Accounts" },
+  { href: "/dashboard/partners/referrals", icon: Target, label: "Referrals" },
+  { href: "/dashboard/partners/commissions", icon: DollarSign, label: "Commissions" },
+];
+
 function Brand() {
   return (
     <div className="flex items-center gap-2">
       <div className="relative w-7 h-7"><Image src="/assets/rrrtx-logo.png" alt="" fill sizes="28px" className="object-contain" /></div>
       <div className="flex flex-col"><span className="text-sm font-bold text-white leading-none">RRRTX</span><span className="text-[8px] tracking-[0.25em] text-slate-400 uppercase leading-none mt-1">Dashboard</span></div>
     </div>
+  );
+}
+
+function NavLinkItem({ item, pathname, onNavigate }: { item: { href: string; icon: typeof Inbox; label: string }; pathname: string; onNavigate: () => void }) {
+  const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
+  return (
+    <Link
+      key={item.href}
+      href={item.href}
+      onClick={onNavigate}
+      aria-current={isActive ? "page" : undefined}
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${isActive ? "bg-white/5 text-cyan-400 border border-white/5" : "text-slate-300 hover:text-white hover:bg-white/5"}`}
+    >
+      <item.icon className="w-4 h-4" aria-hidden="true" />{item.label}{isActive && <ChevronRight className="w-3 h-3 ml-auto" aria-hidden="true" />}
+    </Link>
   );
 }
 
@@ -41,16 +64,19 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     router.refresh();
   };
 
+  const close = () => setMobileOpen(false);
+
   const navigation = (
     <nav aria-label="Dashboard navigation" className="flex-1 p-4 space-y-1 overflow-y-auto">
-      {navItems.map((item) => {
-        const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
-        return (
-          <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} aria-current={isActive ? "page" : undefined} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${isActive ? "bg-white/5 text-cyan-400 border border-white/5" : "text-slate-300 hover:text-white hover:bg-white/5"}`}>
-            <item.icon className="w-4 h-4" aria-hidden="true" />{item.label}{isActive && <ChevronRight className="w-3 h-3 ml-auto" aria-hidden="true" />}
-          </Link>
-        );
-      })}
+      {navItems.map((item) => (
+        <NavLinkItem key={item.href} item={item} pathname={pathname} onNavigate={close} />
+      ))}
+      <div className="pt-4 pb-1">
+        <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Partner Network</p>
+      </div>
+      {partnerNavItems.map((item) => (
+        <NavLinkItem key={item.href} item={item} pathname={pathname} onNavigate={close} />
+      ))}
     </nav>
   );
 

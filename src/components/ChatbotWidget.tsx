@@ -10,11 +10,24 @@ interface PricingSummary { title: string; startingPrice?: string | null; descrip
 interface ProjectSummary { title: string; industry?: string | null }
 interface TestimonialSummary { name: string; role?: string | null; quote: string }
 interface BlogSummary { title: string; slug: string }
+interface PartnerSummary {
+  commissionRate: string;
+  ranks: { key: string; label: string; minProjects: number; minRevenue: number; isAutomatic: boolean }[];
+  applyUrl: string;
+  loginUrl: string;
+  verifyUrl: string;
+  overviewUrl: string;
+}
 
 interface ChatMessage {
   sender: "user" | "bot";
   text: string;
   links?: { label: string; href: string }[];
+}
+
+/** Word-boundary keyword check — avoids false hits like "learn" matching "earn". */
+function hasAny(text: string, words: string[]): boolean {
+  return words.some((w) => new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text));
 }
 
 export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
@@ -31,6 +44,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
   const [projectsData, setProjectsData] = useState<ProjectSummary[]>([]);
   const [testimonialsData, setTestimonialsData] = useState<TestimonialSummary[]>([]);
   const [blogData, setBlogData] = useState<BlogSummary[]>([]);
+  const [partnersData, setPartnersData] = useState<PartnerSummary | null>(null);
   const [contactEmail, setContactEmail] = useState("admin@rrrtx.com");
 
   const [messages, setMessages] = useState<ChatMessage[]>([{ sender: "bot", text: "Hi there! I am your automated RRRTX Systems guide. Ask about our services, pricing, work, or process." }]);
@@ -44,6 +58,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
     "Pricing",
     "Portfolio",
     "Process",
+    "Partners",
     "Contact",
   ];
 
@@ -83,6 +98,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
         if (Array.isArray(data.projects)) setProjectsData(data.projects);
         if (Array.isArray(data.testimonials)) setTestimonialsData(data.testimonials);
         if (Array.isArray(data.blog)) setBlogData(data.blog);
+        if (data.partners) setPartnersData(data.partners);
       })
       .catch((err) => console.error("Failed to load chatbot data", err));
   }, []);
@@ -119,6 +135,25 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
 
   const generateBotResponse = (input: string): ChatMessage => {
     const q = input.toLowerCase().trim();
+
+    // 0. Partner Network (checked first so "RRRTX partner program" is not
+    //    swallowed by the general "about" match below)
+    if (hasAny(q, ["partner", "partners", "partnership", "referral", "referrals", "refer", "commission", "commissions", "earn", "earnings", "certificate", "certificates", "verify", "verification", "rank", "ranks", "affiliate", "reseller", "onboarding", "joining letter"])) {
+      const rate = partnersData?.commissionRate || "10%";
+      let ranksLine = "Starter → Bronze → Silver → Gold → Platinum → Elite";
+      if (partnersData?.ranks?.length) {
+        ranksLine = partnersData.ranks.map((r) => r.label).join(" → ");
+      }
+      return {
+        sender: "bot",
+        text: `RRRTX runs a Partner Network for agencies, consultants, and professionals who introduce prospective clients.\n\n• Commission: ${rate} of client payments actually received — payable only after RRRTX is paid.\n• Ranks: ${ranksLine}, based on won projects or attributed revenue.\n• Onboarding: apply → get approved → electronically sign the Partner Agreement → receive your Joining Letter and Partnership Certificate.\n• Every certificate carries a QR code anyone can verify on the site.\n\nIt is a professional referral program — no recruitment bonuses, no downlines, and no income guarantees.`,
+        links: [
+          { label: "Become a Partner", href: partnersData?.applyUrl || "/partners/apply" },
+          { label: "Partner Login", href: partnersData?.loginUrl || "/partner/login" },
+          { label: "Verify a Certificate", href: partnersData?.verifyUrl || "/verify" },
+        ],
+      };
+    }
 
     // 1. About RRRTX / Agency Summary
     if (q.includes("about") || q.includes("who are") || q.includes("agency") || q.includes("company") || q.includes("rrrtx")) {
@@ -237,7 +272,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
     // Default Fallback
     return {
       sender: "bot",
-      text: "I can help with RRRTX SYSTEMS services, pricing, portfolio, blog, contact, process, and testimonials. Let me know what you'd like to explore, or suggest booking a direct strategy session with us!",
+      text: "I can help with RRRTX SYSTEMS services, pricing, portfolio, blog, contact, process, testimonials, and the Partner Network (commission, ranks, and certificate verification). Let me know what you'd like to explore, or suggest booking a direct strategy session with us!",
       links: [{ label: contactText, href: "/contact" }]
     };
   };

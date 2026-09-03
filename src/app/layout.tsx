@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { StructuredData } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { LazyChatbot } from "@/components/LazyChatbot";
@@ -101,6 +102,11 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/assets/rrrtx-logo.png" />
         <meta name="theme-color" content="#020617" />
         <meta name="color-scheme" content="dark" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{document.documentElement.classList.add('rrrtx-js')}catch(e){}",
+          }}
+        />
       </head>
       <body className={`${inter.variable} font-sans bg-[#020617] text-white antialiased`}>
         <a href="#main-content" className="skip-link">Skip to main content</a>
@@ -109,6 +115,7 @@ export default function RootLayout({
         <div id="main-content" tabIndex={-1}>
           <SmoothScrollProvider>{children}</SmoothScrollProvider>
         </div>
+        <ScrollReveal />
         <LazyChatbot />
       </body>
     </html>

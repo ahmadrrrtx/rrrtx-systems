@@ -103,36 +103,70 @@ export default async function Home() {
   return (
     <main className="relative">
       <Navbar />
-      <Hero
-        titleLines={heroTitle || undefined}
-        subtitle={heroSubtitle || undefined}
-        ctaText={heroCtaText || undefined}
-        ctaLink={heroCtaLink || undefined}
-      />
-      <TrustBar
-        brands={trustedIntegrations.length ? trustedIntegrations : undefined}
-      />
-      {homepageStatsVerified && homepageStats.length > 0 && <StatsBar stats={homepageStats} />}
-      <ProblemSection
-        title={problemTitle || undefined}
-        description={problemDesc || undefined}
-        bullets={problemBullets.length ? problemBullets : undefined}
-      />
-      <ServicesGrid items={serviceItems.length ? serviceItems : undefined} />
-      <ProcessStrip />
-      <FeaturedWork items={workItems.length ? workItems : undefined} />
-      <TestimonialsSection />
-      <TeamSection />
-      <SecondaryServices />
-      <TechStack items={techStack.length ? techStack : undefined} />
-      <AboutPreview
-        heading={aboutHeading || undefined}
-        description={aboutDescription || undefined}
-      />
-      <PricingSection />
-      <ToolsCapsules />
-      <BlogTeaser posts={dbPosts.slice(0, 3)} />
-      <CTASection />
+      <div data-reveal>
+        <Hero
+          titleLines={heroTitle || undefined}
+          subtitle={heroSubtitle || undefined}
+          ctaText={heroCtaText || undefined}
+          ctaLink={heroCtaLink || undefined}
+        />
+      </div>
+      <div data-reveal>
+        <TrustBar
+          brands={trustedIntegrations.length ? trustedIntegrations : undefined}
+        />
+      </div>
+      {homepageStatsVerified && homepageStats.length > 0 && (
+        <div data-reveal>
+          <StatsBar stats={homepageStats} />
+        </div>
+      )}
+      <div data-reveal>
+        <ProblemSection
+          title={problemTitle || undefined}
+          description={problemDesc || undefined}
+          bullets={problemBullets.length ? problemBullets : undefined}
+        />
+      </div>
+      <div data-reveal>
+        <ServicesGrid items={serviceItems.length ? serviceItems : undefined} />
+      </div>
+      <div data-reveal>
+        <ProcessStrip />
+      </div>
+      <div data-reveal>
+        <FeaturedWork items={workItems.length ? workItems : undefined} />
+      </div>
+      <div data-reveal>
+        <TestimonialsSection />
+      </div>
+      <div data-reveal>
+        <TeamSection />
+      </div>
+      <div data-reveal>
+        <SecondaryServices />
+      </div>
+      <div data-reveal>
+        <TechStack items={techStack.length ? techStack : undefined} />
+      </div>
+      <div data-reveal>
+        <AboutPreview
+          heading={aboutHeading || undefined}
+          description={aboutDescription || undefined}
+        />
+      </div>
+      <div data-reveal>
+        <PricingSection />
+      </div>
+      <div data-reveal>
+        <ToolsCapsules />
+      </div>
+      <div data-reveal>
+        <BlogTeaser posts={dbPosts.slice(0, 3)} />
+      </div>
+      <div data-reveal>
+        <CTASection />
+      </div>
       <Footer />
     </main>
   );

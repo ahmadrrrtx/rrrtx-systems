@@ -8,6 +8,7 @@ type SessionPayload = {
   version: 1;
   email: string;
   role: string;
+  partnerId?: number;
   issuedAt: number;
   expiresAt: number;
   nonce: string;
@@ -56,6 +57,7 @@ async function getKey(secret: string, usages: KeyUsage[]): Promise<CryptoKey> {
 export async function createSessionToken(input: {
   email: string;
   role?: string | null;
+  partnerId?: number | null;
 }): Promise<string | null> {
   const secret = getSessionSecret();
   if (!secret) return null;
@@ -65,6 +67,7 @@ export async function createSessionToken(input: {
     version: 1,
     email: input.email,
     role: input.role || "admin",
+    ...(typeof input.partnerId === "number" ? { partnerId: input.partnerId } : {}),
     issuedAt: now,
     expiresAt: now + SESSION_MAX_AGE,
     nonce: crypto.randomUUID(),
@@ -103,6 +106,7 @@ export async function verifySessionToken(token?: string | null): Promise<Session
       payload.version !== 1 ||
       typeof payload.email !== "string" ||
       typeof payload.role !== "string" ||
+      (payload.partnerId !== undefined && typeof payload.partnerId !== "number") ||
       typeof payload.issuedAt !== "number" ||
       typeof payload.expiresAt !== "number" ||
       typeof payload.nonce !== "string" ||

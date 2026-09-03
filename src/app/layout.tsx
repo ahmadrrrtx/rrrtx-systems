@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { StructuredData } from "@/components/StructuredData";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { LazyChatbot } from "@/components/LazyChatbot";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -117,6 +118,7 @@ export default function RootLayout({
         </div>
         <ScrollReveal />
         <LazyChatbot />
+        <Analytics />
       </body>
     </html>
   );

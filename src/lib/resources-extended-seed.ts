@@ -8,7 +8,7 @@ async function seedExtendedResources() {
   const assets = [
     {
       title: "RRRTX Website Launch & Conversion Checklist",
-      description: "A comprehensive 45-point checklist covering core web vitals, speed audits, security, trust indicators, above-the-fold clarity, and checkout optimization to guarantee a high-converting launch.",
+      description: "A comprehensive 45-point checklist covering core web vitals, speed audits, security, trust indicators, above-the-fold clarity, and checkout optimization designed to support a conversion-ready launch.",
       category: "Checklist",
       fileType: "HTML",
       downloadUrl: "/downloads/website-launch-checklist.html",
@@ -17,7 +17,7 @@ async function seedExtendedResources() {
     },
     {
       title: "B2B Operations & AI Automation Playbook",
-      description: "An operational playbook to identifying high-friction manual tasks inside your agency. Learn exactly how to eliminate Zapier spaghetti, setup error logs, and deploy custom background Python agent nodes.",
+      description: "An operational playbook for identifying high-friction manual tasks inside your agency: which processes to move first, how to set up error logging, and how to deploy custom background Python agent nodes.",
       category: "Guide",
       fileType: "HTML",
       downloadUrl: "/downloads/business-automation-checklist.html",

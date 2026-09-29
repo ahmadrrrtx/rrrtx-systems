@@ -8,10 +8,10 @@ async function seedResources() {
   const assets = [
     {
       title: "RRRTX Website Launch & Conversion Checklist",
-      description: "A comprehensive 45-point checklist covering core web vitals, speed audits, security, trust indicators, above-the-fold clarity, and checkout optimization to guarantee a high-converting launch.",
+      description: "A comprehensive 45-point checklist covering core web vitals, speed audits, security, trust indicators, above-the-fold clarity, and checkout optimization, designed to support a conversion-ready launch.",
       category: "Checklist",
       fileType: "PDF",
-      downloadUrl: "https://github.com/ahmadrrrtx/rrrtx-systems/raw/main/README.md", // placeholder file path, safe for demo
+      downloadUrl: "/downloads/website-launch-checklist.html", // real asset in public/downloads; the previous README placeholder did not match the promised checklist
       isGated: true,
       coverImageUrl: "",
       sortOrder: 1,
@@ -28,7 +28,7 @@ async function seedResources() {
     },
     {
       title: "Custom NextJS Performance Benchmarking Sheet",
-      description: "An open, ungated spreadsheet mapping Core Web Vitals (LCP, FID, CLS) benchmarks against standard WordPress / Shopify themes vs modern React-based headless stacks.",
+      description: "An open, ungated sheet for recording Core Web Vitals (LCP, INP, CLS) measurements against your own baseline, so improvement can be tracked over time.",
       category: "Template",
       fileType: "XLSX",
       downloadUrl: "https://github.com/ahmadrrrtx/rrrtx-systems/raw/main/README.md",

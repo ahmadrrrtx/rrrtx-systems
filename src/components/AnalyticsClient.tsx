@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { isPrivateSurface } from "@/lib/consent";
 import { useReportWebVitals } from "next/web-vitals";
 
 export function AnalyticsClient() {
@@ -10,6 +11,8 @@ export function AnalyticsClient() {
 
   useEffect(() => {
     if (typeof window.gtag !== "function") return;
+    // Private surfaces are not reported: their URLs can contain record identifiers.
+    if (isPrivateSurface(pathname)) return;
     const query = searchParams.toString();
     window.gtag("event", "page_view", {
       page_location: window.location.href,

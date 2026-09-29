@@ -25,7 +25,9 @@ const pillars = [
     icon: Server,
     title: "Full Ownership",
     description:
-      "Source code, database, assets, deployment — everything is yours. Zero vendor lock-in. Zero surprises.",
+      // "Zero surprises" was removed: no delivery process can promise zero
+      // surprises, and an absolute guarantee of that kind is not defensible.
+      "Source code, database, assets, deployment — everything is yours, with no vendor lock-in.",
   },
 ];
 

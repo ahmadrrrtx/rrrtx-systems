@@ -22,7 +22,11 @@ const comparisonData = {
     title: "RRRTX Systems Approach",
     items: [
       "Architecture built for your model",
-      "Sub-2s loads, edge-deployed",
+      // Was "Sub-2s loads, edge-deployed". That number was never measured and
+      // no absolute load-time promise can hold across every device, network and
+      // region. Kept the positioning, dropped the unsupported figure.
+      // Measured lab figures for this site are recorded in AUDIT_REPORT.md §4.
+      "Edge-deployed, engineered for fast loads",
       "Real automation & AI integration",
       "You own everything, zero lock-in",
     ],

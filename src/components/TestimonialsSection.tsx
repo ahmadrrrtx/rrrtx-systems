@@ -19,8 +19,12 @@ export async function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-12">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">Proof</p>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4">Trusted by Founders Who Ship.</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">Real results from real systems.</p>
+          {/* Was "Trusted by Founders Who Ship." with "Real results from real
+              systems." Neither the breadth of trust nor the results could be
+              verified during the audit, so the heading now describes the
+              content rather than asserting an outcome. */}
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4">What Clients Say.</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto">Feedback from clients we have worked with.</p>
         </div>
         
         <TestimonialSlider testimonials={rows} />

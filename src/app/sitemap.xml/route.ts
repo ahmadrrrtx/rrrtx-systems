@@ -52,10 +52,14 @@ export async function GET() {
     "/roi",
     "/contact",
     "/faq",
-    "/privacy",
-    "/terms",
     "/partners",
     "/partners/apply",
+    // Legal pages are indexable so they can be found when needed, but they are
+    // listed after the marketing routes rather than treated as primary content.
+    "/privacy",
+    "/terms",
+    "/cookies",
+    "/refunds",
   ];
   const staticPages = staticPaths.map((path) => ({
     url: `${baseUrl}${path === "/" ? "" : path}`,

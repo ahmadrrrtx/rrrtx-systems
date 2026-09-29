@@ -44,7 +44,7 @@ const defaultProjects: WorkItem[] = [
     industry: "Automation / CRM",
     title: "Make.com → Custom Automation Migration",
     description:
-      "Replaced fragile Make.com spaghetti workflows with a robust custom Python automation pipeline. Lead scoring, CRM sync, and follow-up sequences now run without third-party failure points.",
+      "Rebuilt the client's chained automation workflows as a custom Python automation pipeline. Lead scoring, CRM sync, and follow-up sequences now run on infrastructure the client controls.",
     image: "/assets/hero-core-visual.webp",
     link: "#",
     tags: ["Make.com", "Python", "CRM Integration", "Lead Scoring"],

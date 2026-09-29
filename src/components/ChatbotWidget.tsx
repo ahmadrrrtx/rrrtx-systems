@@ -159,7 +159,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
     if (q.includes("about") || q.includes("who are") || q.includes("agency") || q.includes("company") || q.includes("rrrtx")) {
       return {
         sender: "bot",
-        text: `${aboutText} We build with custom codebases (using Next.js, Python, and Turso), prioritizing bulletproof performance and engineering-first lead automation.`,
+        text: `${aboutText} We build with custom codebases (using Next.js, Python, and Turso), prioritizing performance and engineering-first lead automation.`,
         links: [
           { label: "Learn More", href: "/about" },
           { label: "Our Pricing", href: "/pricing" }

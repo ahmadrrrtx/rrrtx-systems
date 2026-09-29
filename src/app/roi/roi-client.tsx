@@ -223,7 +223,7 @@ export default function ROICalculatorClient() {
                         +${results.annualImpact.toLocaleString()} <span className="text-sm font-semibold text-slate-500">/ yr</span>
                       </div>
                       <p className="text-xs text-slate-400 leading-relaxed max-w-md">
-                        This reflects the combined savings from automating manual operational workflows and scaling conversion conversion lift across your current business flows.
+                        This reflects the combined savings from automating manual operational workflows and scaling conversion lift across your current business flows.
                       </p>
                     </div>
 
@@ -231,11 +231,11 @@ export default function ROICalculatorClient() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
-                          <span>Monthly Revenue Gain</span>
+                          <span>Monthly Impact</span>
                           <TrendingUp className="w-4 h-4 text-cyan-400" />
                         </div>
                         <div className="text-xl font-bold text-white">+${results.roiUplift.toLocaleString()}</div>
-                        <p className="text-[10px] text-slate-500 leading-relaxed">Increase in monthly sales revenue.</p>
+                        <p className="text-[10px] text-slate-500 leading-relaxed">Modeled increase in sales revenue plus reclaimed operational cost.</p>
                       </div>
 
                       <div className="premium-card space-y-1 rounded-2xl p-4">
@@ -252,17 +252,17 @@ export default function ROICalculatorClient() {
                           <span>Time Cost Reclaimed</span>
                           <DollarSign className="w-4 h-4 text-cyan-400" />
                         </div>
-                        <div className="text-xl font-bold text-white">${Math.floor(results.timeSavings * (parseFloat(form.costManual) || 40))} / mo</div>
+                        <div className="text-xl font-bold text-white">${Math.max(0, results.roiUplift - results.conversionGain).toLocaleString()} / mo</div>
                         <p className="text-[10px] text-slate-500 leading-relaxed">Operational budget reclaimed.</p>
                       </div>
 
                       <div className="premium-card space-y-1 rounded-2xl p-4">
                         <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase">
-                          <span>Estimated Lost Revenue</span>
-                          <span className="text-red-400 font-extrabold text-[10px]">CURRENT</span>
+                          <span>Modeled Revenue Gap</span>
+                          <span className="text-red-400 font-extrabold text-[10px]">MODELED</span>
                         </div>
                         <div className="text-xl font-bold text-slate-400">${results.lostRevenue.toLocaleString()}</div>
-                        <p className="text-[10px] text-slate-500 leading-relaxed">Money lost currently to leaks.</p>
+                        <p className="text-[10px] text-slate-500 leading-relaxed">Additional revenue the modeled lift represents — not a measured loss.</p>
                       </div>
                     </div>
 

@@ -236,11 +236,35 @@ async function nextYearSeq(prefix: string, year: number): Promise<number> {
       .select({ documentId: partnerDocuments.documentId })
       .from(partnerDocuments)
       .where(like(partnerDocuments.documentId, `${prefix}-${year}-%`));
-    return rows.length + 1;
+    return (await maxSequenceForPrefix(rows.map((r) => r.documentId), prefix, year)) + 1;
   } catch (error) {
     console.error("nextYearSeq error:", error);
     return 1;
   }
+}
+
+/**
+ * Highest sequence already used for `prefix-year-####` identifiers.
+ *
+ * Derived from the maximum existing suffix rather than the row count, so
+ * deleted or re-keyed rows can never cause a previously issued identifier to be
+ * handed out a second time. Returns 0 when none exist.
+ */
+async function maxSequenceForPrefix(
+  rows: Array<string | null>,
+  prefix: string,
+  year: number
+): Promise<number> {
+  const pattern = new RegExp(`^${prefix}-${year}-(\\d+)$`);
+  let max = 0;
+  for (const value of rows) {
+    if (typeof value !== "string") continue;
+    const match = pattern.exec(value);
+    if (!match) continue;
+    const parsed = Number.parseInt(match[1], 10);
+    if (Number.isFinite(parsed) && parsed > max) max = parsed;
+  }
+  return max;
 }
 
 export async function nextApplicationSeq(year: number): Promise<number> {
@@ -249,10 +273,58 @@ export async function nextApplicationSeq(year: number): Promise<number> {
       .select({ applicationId: partnerApplications.applicationId })
       .from(partnerApplications)
       .where(like(partnerApplications.applicationId, `RRRTX-APP-${year}-%`));
-    return rows.length + 1;
+    return (await maxSequenceForPrefix(rows.map((r) => r.applicationId), "RRRTX-APP", year)) + 1;
   } catch (error) {
     console.error("nextApplicationSeq error:", error);
     return 1;
+  }
+}
+
+/** True when an error is a SQLite/libSQL UNIQUE constraint violation. */
+export function isUniqueConstraintError(error: unknown): boolean {
+  const message =
+    error instanceof Error ? `${error.name}: ${error.message}` : String(error ?? "");
+  return /UNIQUE constraint failed|SQLITE_CONSTRAINT|constraint failed/i.test(message);
+}
+
+/**
+ * Return the id of an equivalent application submitted moments ago.
+ *
+ * Guards against duplicate rows when a visitor double-submits (two tabs, a
+ * retry after a slow response, or a flaky connection). Deliberately narrow:
+ * same email + same name + same opening of the motivation text within a short
+ * window, so genuinely distinct applications are never merged.
+ */
+export async function findRecentDuplicateApplication(input: {
+  email: string;
+  name: string;
+  whyPartner: string;
+  withinMinutes?: number;
+}): Promise<string | null> {
+  try {
+    const since = new Date(Date.now() - (input.withinMinutes ?? 10) * 60 * 1000);
+    const rows = await db
+      .select({
+        applicationId: partnerApplications.applicationId,
+        createdAt: partnerApplications.createdAt,
+        whyPartner: partnerApplications.whyPartner,
+      })
+      .from(partnerApplications)
+      .where(and(eq(partnerApplications.email, input.email), eq(partnerApplications.name, input.name)))
+      .orderBy(desc(partnerApplications.createdAt))
+      .limit(5);
+
+    const fingerprint = input.whyPartner.trim().slice(0, 120).toLowerCase();
+    for (const row of rows) {
+      if (!row.createdAt || row.createdAt < since) continue;
+      if ((row.whyPartner || "").trim().slice(0, 120).toLowerCase() === fingerprint) {
+        return row.applicationId;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error("findRecentDuplicateApplication error:", error);
+    return null;
   }
 }
 
@@ -272,7 +344,7 @@ export async function nextAcceptanceSeq(year: number): Promise<number> {
       .select({ acceptanceRecordId: partnerAgreements.acceptanceRecordId })
       .from(partnerAgreements)
       .where(like(partnerAgreements.acceptanceRecordId, `RRRTX-ACC-${year}-%`));
-    return rows.length + 1;
+    return (await maxSequenceForPrefix(rows.map((r) => r.acceptanceRecordId), "RRRTX-ACC", year)) + 1;
   } catch (error) {
     console.error("nextAcceptanceSeq error:", error);
     return 1;

@@ -67,14 +67,14 @@ async function seedBlog() {
     {
       slug: "operational-workflow-automation",
       title: "The ROI of Operations: How B2B Agencies Automate Operational Workflows to Scale",
-      excerpt: "Most service agencies struggle to scale because they are crushed by operational overhead. Learn how to replace broken 'Zapier spaghetti' with persistent, secure background Python automation systems.",
+      excerpt: "Most service agencies struggle to scale because they are crushed by operational overhead. Learn how to move manual operational work onto persistent, self-hosted Python automation systems.",
       content: `Every successful agency founder knows the feeling: the business is growing, client demand is high, but the team is completely buried in manual back-office tasks. 
 
       You are copy-pasting lead details from your CRM, manually scheduling calendar events, chasing follow-ups, and spending hours compiling client updates. 
       
       This manual burden is known as the *operations tax*. It drains your profit margins, slows down client delivery, and restricts your ability to scale.
 
-      In this guide, we reveal how leading agencies deploy custom background Python automation systems to automate manual operational tasks on autopilot.
+      In this guide, we look at how custom background Python automation systems can take over manual operational tasks and run them reliably.
 
       ## Scaling Agencies Face an Operations Tax
       
@@ -84,7 +84,7 @@ async function seedBlog() {
 
       ## Why Generic Automation Tools Break at Scale
       
-      To solve this, many agencies build automation chains using generic tools like Zapier or Make. While helpful for basic triggers, these integrations represent *Zapier spaghetti*:
+      To solve this, many agencies build automation chains using general-purpose no-code tools. Those tools are genuinely useful for simple triggers, but once a process spans many steps the chains become hard to observe, hard to retry and hard to own:
       - They break frequently due to minor API payload modifications.
       - They carry massive, escalating per-task monthly operations fees.
       - They lack persistent error-logging, meaning a broken chain can remain unnoticed for days, leaking valuable client details.
@@ -119,7 +119,7 @@ async function seedBlog() {
       coverImageUrl: "/assets/blog-workflow-automation.webp",
       tags: "automation, python agents, workflow productivity",
       metaTitle: "Operational Workflow Automation for Scaling B2B Agencies | RRRTX",
-      metaDescription: "Are manual operational tasks dragging down agency margins? Replace Zapier spaghetti with persistent Python automation pipelines.",
+      metaDescription: "Are manual operational tasks dragging down agency margins? How to move them onto persistent, self-hosted Python automation pipelines.",
       status: "published",
       publishedAt: new Date(),
     },

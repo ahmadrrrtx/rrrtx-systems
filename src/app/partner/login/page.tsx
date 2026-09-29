@@ -6,11 +6,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, KeyRound, Lock } from "lucide-react";
 import { trackEvent } from "@/components/AnalyticsClient";
+import { safeNextPath } from "@/lib/safe-next";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") || "/partner/dashboard";
+  // `next` comes from the URL, so it is validated before use (open-redirect guard).
+  const next = safeNextPath(searchParams.get("next"), "/partner/dashboard", ["/partner"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

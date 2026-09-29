@@ -15,7 +15,15 @@ export default defineConfig({
     { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
-    command: "rm -f e2e.db e2e.db-shm e2e.db-wal && TURSO_DATABASE_URL=file:e2e.db npx drizzle-kit push --force && TURSO_DATABASE_URL=file:e2e.db ADMIN_EMAIL=admin@example.com ADMIN_PASSWORD=e2e-password-12345 ADMIN_SESSION_SECRET=e2e-session-secret-123456789012345 npm start -- -p 3200",
+    // ALLOWED_ORIGINS is required for browser form submissions in tests: a
+    // browser sends an Origin header on same-origin POSTs, and production
+    // rejects anything that is not a known site origin.
+    command:
+      "rm -f e2e.db e2e.db-shm e2e.db-wal && TURSO_DATABASE_URL=file:e2e.db npx drizzle-kit push --force && " +
+      "TURSO_DATABASE_URL=file:e2e.db ADMIN_EMAIL=admin@example.com ADMIN_PASSWORD=e2e-password-12345 " +
+      "ADMIN_SESSION_SECRET=e2e-session-secret-123456789012345 " +
+      "ALLOWED_ORIGINS=http://127.0.0.1:3200,http://localhost:3200 " +
+      "npm start -- -p 3200",
     url: "http://127.0.0.1:3200",
     reuseExistingServer: false,
     timeout: 120_000,

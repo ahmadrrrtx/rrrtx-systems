@@ -8,17 +8,23 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/api", "/partner"],
+        // NOTE: "/partner/" (with trailing slash) blocks the private partner portal
+        // without also blocking the public /partners landing page and application form.
+        disallow: ["/dashboard", "/api", "/partner/"],
       },
       {
         userAgent: "OAI-SearchBot",
         allow: "/",
-        disallow: ["/dashboard", "/api", "/partner"],
+        // NOTE: "/partner/" (with trailing slash) blocks the private partner portal
+        // without also blocking the public /partners landing page and application form.
+        disallow: ["/dashboard", "/api", "/partner/"],
       },
       {
         userAgent: "PerplexityBot",
         allow: "/",
-        disallow: ["/dashboard", "/api", "/partner"],
+        // NOTE: "/partner/" (with trailing slash) blocks the private partner portal
+        // without also blocking the public /partners landing page and application form.
+        disallow: ["/dashboard", "/api", "/partner/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

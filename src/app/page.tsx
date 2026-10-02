@@ -8,11 +8,10 @@ import { ServicesGrid } from "@/components/ServicesGrid";
 import { ProcessStrip } from "@/components/ProcessStrip";
 import { FeaturedWork } from "@/components/FeaturedWork";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
-import { TeamSection } from "@/components/TeamSection";
-import { SecondaryServices } from "@/components/SecondaryServices";
+import { PeopleSection } from "@/components/PeopleSection";
 import { TechStack } from "@/components/TechStack";
+import { AIToolkit } from "@/components/AIToolkit";
 import { PricingSection } from "@/components/PricingSection";
-import { AboutPreview } from "@/components/AboutPreview";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { ToolsCapsules } from "@/components/ToolsCapsules";
 import { CTASection } from "@/components/CTASection";
@@ -136,22 +135,19 @@ export default async function Home() {
         <FeaturedWork items={workItems.length ? workItems : undefined} />
       </div>
       <div data-reveal>
-        <TestimonialsSection />
-      </div>
-      <div data-reveal>
-        <TeamSection />
-      </div>
-      <div data-reveal>
-        <SecondaryServices />
-      </div>
-      <div data-reveal>
         <TechStack items={techStack.length ? techStack : undefined} />
       </div>
       <div data-reveal>
-        <AboutPreview
+        <AIToolkit />
+      </div>
+      <div data-reveal>
+        <PeopleSection
           heading={aboutHeading || undefined}
           description={aboutDescription || undefined}
         />
+      </div>
+      <div data-reveal>
+        <TestimonialsSection />
       </div>
       <div data-reveal>
         <PricingSection />

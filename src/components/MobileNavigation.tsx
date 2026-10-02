@@ -1,12 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { NavLink } from "@/lib/navigation";
 
 export function MobileNavigation({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
+
+  // Lock body scroll while the drawer is open, close on Escape.
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   return (
     <div className="lg:hidden">
       <button type="button" className="rounded-xl border border-transparent p-2.5 text-slate-300 transition-[color,background-color,border-color,transform] duration-200 hover:border-slate-700 hover:bg-white/[0.05] hover:text-white active:scale-95" onClick={() => setOpen((value) => !value)} aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="mobile-navigation">

@@ -34,6 +34,12 @@ export function Hero({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
+            <div>
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-950/50 px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-slate-300">
+                <span className="h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" aria-hidden="true" />
+                Currently accepting new engagements
+              </span>
+            </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight">
               {lines.map((line, index) => {
                 const isGradient = index === 2 || index === 3 || /lead|sale|scale|convert|roi/i.test(line);
@@ -56,9 +62,9 @@ export function Hero({
               <div className="absolute inset-[7%] rounded-full border border-cyan-400/[0.08] bg-gradient-to-br from-cyan-500/[0.055] via-transparent to-purple-500/[0.07] shadow-[inset_0_0_90px_rgba(34,211,238,.035),0_0_90px_-40px_rgba(139,92,246,.3)]" aria-hidden="true" />
               <div className="absolute inset-[16%] rounded-full border border-dashed border-slate-500/[0.14] animate-[spin_36s_linear_infinite] motion-reduce:animate-none" aria-hidden="true" />
               <Image src="/assets/hero-holographic-hand.webp" alt="RRRTX system architecture visualization" fill sizes="(min-width: 1280px) 600px, 50vw" className="object-contain drop-shadow-[0_28px_48px_rgba(8,145,178,.16)] animate-float" />
-              <div className="premium-surface animate-float absolute top-10 right-0 rounded-xl px-4 py-3" style={{ animationDelay: "-1.2s", animationDuration: "6.4s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">AI Automations</div><div className="text-sm font-semibold text-cyan-300">Workflows that save time</div></div>
-              <div className="premium-surface animate-float absolute top-1/3 -left-4 rounded-xl px-4 py-3" style={{ animationDelay: "-3s", animationDuration: "7.2s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">Lead Generation</div><div className="text-sm font-semibold text-purple-300">Get qualified leads on autopilot</div></div>
-              <div className="premium-surface animate-float absolute bottom-20 right-4 rounded-xl px-4 py-3" style={{ animationDelay: "-4.4s", animationDuration: "6.8s" }}><div className="text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1">Conversion Engineering</div><div className="text-sm font-semibold text-blue-300">Journeys designed to convert</div></div>
+              <div className="premium-surface animate-float absolute top-10 right-0 rounded-xl px-4 py-3" style={{ animationDelay: "-1.2s", animationDuration: "6.4s" }}><div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1"><span className="h-[6px] w-[6px] rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" aria-hidden="true" />AI Automations</div><div className="text-sm font-semibold text-cyan-300">Workflows that save time</div></div>
+              <div className="premium-surface animate-float absolute top-1/3 -left-4 rounded-xl px-4 py-3" style={{ animationDelay: "-3s", animationDuration: "7.2s" }}><div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1"><span className="h-[6px] w-[6px] rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" aria-hidden="true" />Lead Generation</div><div className="text-sm font-semibold text-purple-300">Get qualified leads on autopilot</div></div>
+              <div className="premium-surface animate-float absolute bottom-20 right-4 rounded-xl px-4 py-3" style={{ animationDelay: "-4.4s", animationDuration: "6.8s" }}><div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-slate-300 mb-1"><span className="h-[6px] w-[6px] rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" aria-hidden="true" />Conversion Engineering</div><div className="text-sm font-semibold text-blue-300">Journeys designed to convert</div></div>
             </div>
           </div>
         </div>

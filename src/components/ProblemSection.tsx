@@ -83,7 +83,7 @@ export function ProblemSection({
             {activeBullets.map((problem, i) => (
               <div
                 key={`${problem}-${i}`}
-                className="group flex items-start gap-4 p-4 rounded-xl bg-slate-950/50 border border-slate-800/40 hover:border-red-500/20 transition-all duration-300"
+                className="sym-card group flex items-start gap-4 p-4 rounded-xl bg-slate-950/50 border border-slate-800/40 transition-all duration-300"
               >
                 <div className="mt-0.5 shrink-0 w-6 h-6 rounded-md bg-red-500/10 flex items-center justify-center">
                   <X className="w-3.5 h-3.5 text-red-400/80" />
@@ -100,7 +100,9 @@ export function ProblemSection({
           <div
             className="p-6 rounded-2xl bg-slate-950/40 border border-red-500/10 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent" />
+            <span className="glow-node top-[18px] right-[22px]" aria-hidden="true" />
+            <span className="glow-node bottom-[26px] left-[30px] [animation-delay:-1.4s]" aria-hidden="true" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-red-400/60" />
               <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wider">
@@ -119,9 +121,12 @@ export function ProblemSection({
 
           {/* Custom side */}
           <div
-            className="premium-surface relative overflow-hidden rounded-2xl border-cyan-400/15 p-6"
+            className="cmp-good premium-surface relative overflow-hidden rounded-2xl border-cyan-400/15 p-6"
           >
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+            <span className="glow-node glow-node--ok top-[18px] right-[22px]" aria-hidden="true" />
+            <span className="glow-node glow-node--ok top-1/2 left-[14px] [animation-delay:-.9s]" aria-hidden="true" />
+            <span className="glow-node glow-node--ok bottom-[26px] right-[60px] [animation-delay:-2s]" aria-hidden="true" />
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-cyan-400/60" />
               <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">

@@ -167,6 +167,18 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
       };
     }
 
+    // 1b. Stack / technologies
+    if (q.includes("stack") || q.includes("tech") || q.includes("framework") || q.includes("language") || q.includes("javascript") || q.includes("typescript") || q.includes("rust") || q.includes("python") || q.includes("next")) {
+      return {
+        sender: "bot",
+        text: "Every layer is selected — never default. Fast, typed, maintainable, owned. Core stack: Next.js, React, TypeScript, Tailwind, Framer, Node.js, Python, Turso, Drizzle, PostgreSQL, Cloudflare, Vercel, GitHub and Stripe — plus JavaScript, Rust, C, Git, SQLite, Docker and more per system.",
+        links: [
+          { label: "See the Full Stack", href: "/stack" },
+          { label: "Our Services", href: "/services" }
+        ]
+      };
+    }
+
     // 2. Services
     if (q.includes("service") || q.includes("automation") || q.includes("agent") || q.includes("build") || q.includes("offer") || q.includes("ecommerce") || q.includes("shopify") || q.includes("ai") || q.includes("bot")) {
       let replyText = "We build custom premium systems. Our primary services include:\n\n";
@@ -175,7 +187,7 @@ export function ChatbotWidget({ initiallyOpen = false }: { initiallyOpen?: boole
           replyText += `• ${s.title}: ${s.shortDescription || ""}\n`;
         });
       } else {
-        replyText += "• Custom Ecommerce (NextJS systems built to convert)\n• AI Automations & Agents (Automate tasks on autopilot)\n• Lead Generation (Auto qualify and route leads)\n• Conversion Rebuilds (Technical optimizations)";
+        replyText += "• Custom Ecommerce (commerce systems with real business logic)\n• AI Systems & Agents (AI that works with real business data)\n• Automation & Workflow Engineering (connect your tools, remove repetitive work)\n• Lead Generation (capture, qualify, route and follow up automatically)\n• Graphic & Brand Design (visual systems that communicate clearly)\n• Conversion Engineering & Website Rebuilds\n• SEO & AEO";
       }
       return {
         sender: "bot",

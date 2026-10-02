@@ -59,6 +59,9 @@ const ROLES: Record<string, string> = {
   perplexity: "Answer & search APIs",
   codex: "AI engineering agent",
   claudecode: "AI engineering agent",
+  javascript: "Core web language",
+  typescript: "Typed engineering language",
+  c: "Systems language",
   nextjs: "Framework",
   react: "UI library",
   python: "AI & scripting",
@@ -71,8 +74,11 @@ const SATELLITES: Array<[string, number, number, string]> = [
   // id, x, y, anchor-node
   ["nextjs", 80, 80, "github"],
   ["react", 1120, 80, "openai"],
+  ["javascript", 62, 205, "vercel"],
+  ["typescript", 1148, 197, "claude"],
   ["googlecloud", 70, 320, "turso"],
   ["n8n", 1130, 320, "perplexity"],
+  ["c", 62, 470, "stripe"],
   ["python", 80, 580, "make"],
   ["whatsapp", 1120, 580, "claudecode"],
 ];
@@ -101,6 +107,9 @@ const SATELLITE_LINKS: Array<[string, string, string]> = [
   ["n8n", "perplexity", "M1108,322 Q1070,340 1032,378"],
   ["python", "make", "M105,568 Q170,564 226,528"],
   ["whatsapp", "claudecode", "M1095,568 Q1030,564 974,528"],
+  ["javascript", "vercel", "M88,210 Q120,214 143,219"],
+  ["typescript", "claude", "M1122,203 Q1085,210 1058,217"],
+  ["c", "stripe", "M88,472 Q155,476 222,480"],
 ];
 
 function buildNodes(extraNames: string[]): NodeDef[] {
@@ -200,7 +209,7 @@ export function IntegrationNetwork({ integrations }: { integrations?: string[] }
 
         <div className="net-stage">
           <NetworkInteractivity>
-            <svg className="net-svg" viewBox="0 0 1200 660" role="img" aria-label="Diagram: the RRRTX Systems logo at the center, connected to engineering platforms on the left — GitHub, Vercel, Cloudflare, Turso, Stripe and Make — and AI systems on the right — OpenAI, Claude, Gemini, Perplexity, Codex and Claude Code — with satellites Next.js, React, Google Cloud, n8n, Python and WhatsApp.">
+            <svg className="net-svg" viewBox="0 0 1200 660" role="img" aria-label="Diagram: the RRRTX Systems logo at the center, connected to engineering platforms on the left — GitHub, Vercel, Cloudflare, Turso, Stripe and Make — and AI systems on the right — OpenAI, Claude, Gemini, Perplexity, Codex and Claude Code — with satellites Next.js, React, JavaScript, TypeScript, C, Google Cloud, n8n, Python and WhatsApp.">
               <defs>
                 <radialGradient id="net-hub-halo-grad" cx="50%" cy="50%" r="50%">
                   <stop offset="0" stopColor="rgba(34,211,238,.28)" />

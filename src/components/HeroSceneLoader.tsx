@@ -9,7 +9,7 @@ export function HeroSceneLoader() {
   const [Scene, setScene] = useState<SceneComponent | null>(null);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)");
+    const desktop = window.matchMedia("(min-width: 768px)");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!desktop.matches || reducedMotion.matches) return;
     let active = true;
@@ -23,5 +23,5 @@ export function HeroSceneLoader() {
     };
   }, []);
 
-  return Scene ? <Scene /> : <div className="hero-scene hidden lg:block" aria-hidden="true" />;
+  return Scene ? <Scene /> : <div className="hero-scene hidden md:block" aria-hidden="true" />;
 }

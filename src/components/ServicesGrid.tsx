@@ -1,178 +1,198 @@
 import { SectionWrapper } from "./SectionWrapper";
 import Link from "next/link";
-import { ArrowRight, ShoppingCart, Bot, Target } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getIcon } from "@/lib/icon-map";
 
-type ServiceItem = {
+/**
+ * What We Build — "Systems designed around how your business actually
+ * operates." Primary cards come from the services table (same
+ * getPublicServices({ primaryOnly: true }) contract); the visual layout,
+ * family tags and capability tags follow the approved 2.0 design.
+ * Services without a DB row fall back to the same content below.
+ */
+
+type ServiceCard = {
   title: string;
   description: string;
   href: string;
-  iconName?: string | null;
-  gradient?: string;
+  slug: string;
+  iconName: string;
+  family: "build" | "automate" | "grow" | "design";
+  tags: string[];
+  cta?: string;
+  size: "wide" | "third" | "row";
 };
 
-const defaultServices: ServiceItem[] = [
+const serviceCards: ServiceCard[] = [
   {
     title: "Custom Ecommerce",
     description:
-      "Built-from-scratch online stores with real cart logic, payment flows, inventory management, and conversion architecture. No templates. No limits.",
+      "Built-from-scratch commerce systems with real business logic, conversion architecture and operational integrations.",
     href: "/services/ecommerce",
+    slug: "ecommerce",
     iconName: "ShoppingCart",
-    gradient: "from-cyan-500 to-blue-600",
+    family: "build",
+    tags: ["Custom checkout", "Real-time inventory", "Multi-currency", "Order workflows", "CRM / messaging"],
+    size: "wide",
   },
   {
-    title: "AI Automations & Agents",
+    title: "AI Systems & Agents",
     description:
-      "Custom agents that monitor, classify, summarize, and act on real business data. Running on your infrastructure, not someone else's API bill.",
+      "AI systems that work with real business data instead of generic chatbot wrappers.",
     href: "/services/ai-automation",
+    slug: "ai-automation",
     iconName: "Bot",
-    gradient: "from-purple-500 to-pink-600",
+    family: "build",
+    tags: ["Retrieval / RAG", "Classification", "Tool use", "Controlled inference", "Human escalation"],
+    size: "wide",
+  },
+  {
+    title: "Automation & Workflow Engineering",
+    description:
+      "Connect the systems your team already uses and remove repetitive operational work.",
+    href: "/services/automation-workflow-engineering",
+    slug: "automation-workflow-engineering",
+    iconName: "Workflow",
+    family: "automate",
+    tags: ["Make.com", "n8n", "Webhooks", "API integrations", "CRM workflows", "Scheduled sync"],
+    size: "third",
   },
   {
     title: "Lead Generation Systems",
-    description:
-      "Capture, qualify, and route leads automatically. Integrated forms, scoring, CRM handoffs, and follow-up sequences that actually convert.",
+    description: "Capture, qualify, route and follow up with leads automatically.",
     href: "/services/lead-generation",
+    slug: "lead-generation",
     iconName: "Target",
-    gradient: "from-blue-500 to-cyan-500",
-  },
-];
-
-const fallbackIcons = [ShoppingCart, Bot, Target];
-const gradients = [
-  "from-cyan-500 to-blue-600",
-  "from-purple-500 to-pink-600",
-  "from-blue-500 to-cyan-500",
-];
-
-const microDetails = [
-  ["Custom Checkout", "Real-time Inventory", "Multi-currency"],
-  ["Local LLMs", "Workflow Pipelines", "Controlled Inference Cost"],
-  ["Auto Scoring", "CRM Sync", "Follow-up Flows"],
-];
-
-const familyByIndex = ["build", "automate", "grow"] as const;
-
-/** Supporting services folded into the architecture (same copy as before). */
-const supportingServices: Array<{
-  title: string;
-  description: string;
-  href: string;
-  family: "automate" | "grow";
-  gradient: string;
-  wide?: boolean;
-}> = [
-  {
-    title: "Website Rebuilds & Conversion Upgrades",
-    description:
-      "Your existing site is underperforming. We audit, rebuild, and optimize — turning dead traffic into qualified leads and sales.",
-    href: "/services/rebuilds",
     family: "grow",
-    gradient: "from-blue-500 to-cyan-500",
+    tags: ["Lead capture", "Qualification & scoring", "CRM sync", "Routing", "Follow-up flows"],
+    size: "third",
   },
   {
-    title: "Chatbots & AI Assistants",
+    title: "Graphic & Brand Design",
     description:
-      "Intelligent support agents that understand context, answer questions, and escalate to humans when needed. Built on your data, not generic templates.",
-    href: "/services/chatbots",
-    family: "automate",
-    gradient: "from-violet-500 to-purple-600",
+      "Visual systems that make the business look credible and communicate clearly.",
+    href: "/services/graphic-design",
+    slug: "graphic-design",
+    iconName: "Palette",
+    family: "design",
+    tags: ["Brand identity", "Social creatives", "Campaign assets", "Presentation design"],
+    cta: "Start a design project",
+    size: "third",
+  },
+  {
+    title: "Conversion Engineering & Website Rebuilds",
+    description:
+      "Turn existing traffic into clearer journeys, stronger actions and measurable outcomes — rebuilds without losing what already works.",
+    href: "/services/rebuilds",
+    slug: "rebuilds",
+    iconName: "RefreshCw",
+    family: "grow",
+    tags: ["UX audits", "Landing pages", "CRO", "Performance", "CTA architecture"],
+    size: "row",
   },
   {
     title: "SEO & AEO",
     description:
-      "Technical foundation, structured data, and answer-engine optimization so your site ranks for what actually drives revenue — not vanity keywords.",
+      "Technical foundation, structured data and answer-engine optimization — visible in classic search and AI answers.",
     href: "/services/seo",
+    slug: "seo",
+    iconName: "Search",
     family: "grow",
-    gradient: "from-cyan-500 to-blue-600",
-    wide: true,
+    tags: ["Technical SEO", "Structured data", "Answer engines", "Content architecture"],
+    size: "row",
   },
 ];
 
-export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
-  const services = items && items.length > 0 ? items : defaultServices;
+function cardMeta(slug: string, index: number): ServiceCard {
+  const found = serviceCards.find((c) => c.slug === slug);
+  if (found) return found;
+  // CMS-added service without local metadata: sane defaults by position.
+  const base = serviceCards[index % serviceCards.length];
+  return { ...base, slug, title: "", description: "", href: `/services/${slug}`, tags: base.tags };
+}
+
+export function ServicesGrid({ items }: { items?: Array<{ title: string; description: string; href: string; iconName?: string | null; slug?: string }> }) {
+  const cards: ServiceCard[] =
+    items && items.length > 0
+      ? items.map((item, i) => {
+          const meta = cardMeta(item.slug ?? "", i);
+          return {
+            ...meta,
+            title: item.title || meta.title,
+            description: item.description || meta.description,
+            href: item.href,
+            iconName: item.iconName || meta.iconName,
+          };
+        })
+      : serviceCards;
+
+  let wideIndex = 0;
+  let thirdIndex = 0;
+  let rowIndex = 0;
 
   return (
-    <SectionWrapper id="services" className="py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <SectionWrapper id="services" className="py-24 lg:py-32 relative overflow-hidden">
+      <div className="absolute left-1/2 top-0 h-[300px] w-[720px] -translate-x-1/2 rounded-full bg-cyan-500/[0.03] blur-[120px]" aria-hidden="true" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center mb-14">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400 mb-4">
             What We Build
           </p>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3">
-            Built for Revenue. Not Decoration.
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight">
+            Systems designed around how<br className="hidden sm:block" /> your business <span className="text-gradient">actually operates.</span>
           </h2>
-          <p className="text-sm text-slate-500 max-w-lg mx-auto">
-            Every system we ship is engineered to convert, automate, and scale — from day one.
+          <p className="text-sm lg:text-base text-slate-400 max-w-2xl mx-auto">
+            We don&rsquo;t sell isolated pages. We build connected business systems — each engagement picks the right subset and wires it together.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-6">
-          {services.map((service, i) => {
-            const Icon = service.iconName
-              ? getIcon(service.iconName)
-              : fallbackIcons[i % fallbackIcons.length];
-            const gradient = service.gradient || gradients[i % gradients.length];
-            const details = microDetails[i % microDetails.length];
-            const family = familyByIndex[i % familyByIndex.length];
-            const featured = i < 2; // first two span wider
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-6">
+          {cards.map((service, i) => {
+            const Icon = getIcon(service.iconName);
+            const num = service.size === "row" ? (++rowIndex === 1 ? "06" : "+") : service.size === "wide" ? String(++wideIndex).padStart(2, "0") : String(2 + ++thirdIndex).padStart(2, "0");
+            const isRow = service.size === "row";
+            const isWide = service.size === "wide";
 
             return (
               <div
-                key={service.title}
-                className={`svc-card ${featured ? "lg:col-span-3" : "lg:col-span-2"}`}
+                key={`${service.slug}-${i}`}
+                className={`svc-card ${isRow ? "lg:col-span-6" : isWide ? "lg:col-span-3" : "lg:col-span-2"} ${isRow ? "md:col-span-2" : ""}`}
                 style={{ "--i": i } as React.CSSProperties}
               >
                 <Link
                   href={service.href}
-                  className="group relative block h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-950/50"
+                  prefetch={false}
+                  className="group relative block h-full rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-slate-950/60"
                 >
-                  {/* Glass background */}
                   <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm border border-slate-800/40 rounded-2xl group-hover:border-slate-700/50 transition-colors duration-500" />
+                  <div className="absolute top-0 left-5 right-5 h-[2px] bg-gradient-to-r from-cyan-500/50 via-blue-500/40 to-purple-500/40 opacity-30 group-hover:opacity-70 transition-opacity duration-500 rounded-full" />
 
-                  {/* Top gradient accent line */}
-                  <div
-                    className={`absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r ${gradient} opacity-20 group-hover:opacity-50 transition-opacity duration-500 rounded-full`}
-                  />
+                  <span className={`family-tag family-tag--${service.family} opacity-70 group-hover:opacity-100 transition-opacity`}>
+                    {service.family.toUpperCase()}
+                  </span>
 
-                  {/* Hover glow */}
-                  <div
-                    className={`absolute -top-24 left-1/2 -translate-x-1/2 w-[240px] h-[240px] bg-gradient-to-br ${gradient} rounded-full blur-[100px] opacity-0 group-hover:opacity-[0.07] transition-opacity duration-700`}
-                  />
-
-                  {/* Family tag */}
-                  <span className={`family-tag family-tag--${family} group-hover:opacity-100 opacity-70 transition-opacity`}>{family.toUpperCase()}</span>
-
-                  <div className="relative p-7 flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-5">
-                      <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} shadow-lg opacity-85 group-hover:opacity-100 transition-opacity duration-300`}>
-                        <Icon className="premium-icon w-5 h-5 text-white" aria-hidden="true" />
+                  <div className={`relative p-7 h-full flex flex-col ${isRow ? "sm:flex-row sm:items-center gap-5" : ""}`}>
+                    <div className={isRow ? "flex-1 min-w-0" : ""}>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-mono text-[11px] tracking-[0.14em] text-slate-500">{num}</span>
+                        <Icon className="premium-icon w-5 h-5 text-cyan-300/80" aria-hidden="true" />
                       </div>
-                      <span className="font-mono text-[11px] tracking-[0.12em] text-slate-500">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                      <h3 className="text-lg lg:text-xl font-bold text-white mb-2.5 group-hover:text-cyan-300 transition-colors duration-300">
+                        {service.title}
+                      </h3>
+                      <p className="text-sm text-slate-400 leading-relaxed mb-4">
+                        {service.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {service.tags.map((tag) => (
+                          <span key={tag} className="px-2.5 py-1 text-[10px] font-medium text-slate-300 rounded-md bg-slate-900/70 border border-slate-800/70">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-
-                    <h3 className="text-lg lg:text-xl font-bold text-white mb-2.5 group-hover:text-cyan-400 transition-colors duration-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm text-slate-400 leading-relaxed mb-5">
-                      {service.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mt-auto mb-5">
-                      {details.map((detail) => (
-                        <span
-                          key={detail}
-                          className="px-2.5 py-1 text-[10px] font-medium text-slate-300 rounded-md bg-slate-900/70 border border-slate-800/70"
-                        >
-                          {detail}
-                        </span>
-                      ))}
-                    </div>
-
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400">
-                      Explore service
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 shrink-0 ${isRow ? "sm:self-center" : "mt-auto"}`}>
+                      {service.cta || "Explore service"}
                       <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                     </span>
                   </div>
@@ -180,45 +200,6 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
               </div>
             );
           })}
-
-          {/* Supporting service cards (static, real routes) */}
-          {supportingServices.map((service, i) => (
-            <div
-              key={service.title}
-              className={`svc-card ${service.wide ? "lg:col-span-6" : "lg:col-span-2 md:col-span-1"}`}
-              style={{ "--i": services.length + i } as React.CSSProperties}
-            >
-              <Link
-                href={service.href}
-                className={`group relative block h-full rounded-2xl overflow-hidden transition-all duration-500 ${service.wide ? "" : "hover:-translate-y-1"}`}
-              >
-                <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm border border-slate-800/40 rounded-2xl group-hover:border-slate-700/60 transition-colors duration-500" />
-                <div className={`absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r ${service.gradient} opacity-20 group-hover:opacity-50 transition-opacity duration-500`} />
-
-                <span className={`family-tag family-tag--${service.family} opacity-70 group-hover:opacity-100 transition-opacity`}>
-                  {service.family.toUpperCase()}
-                </span>
-
-                <div className={`relative p-6 h-full ${service.wide ? "flex flex-col sm:flex-row sm:items-center gap-4" : "flex flex-col"}`}>
-                  <div className="flex-1">
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-slate-500">
-                      {String(services.length + i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="mt-1 text-base font-bold text-white mb-1.5 group-hover:text-cyan-400 transition-colors duration-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 sm:shrink-0">
-                    Learn more
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                  </span>
-                </div>
-              </Link>
-            </div>
-          ))}
         </div>
       </div>
     </SectionWrapper>

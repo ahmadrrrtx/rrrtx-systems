@@ -115,8 +115,8 @@ export function ProcessStages() {
               </button>
 
               <div
-                className={`relative mt-4 md:mt-0 ${
-                  above ? "md:row-start-1" : "md:row-start-3"
+                className={`pcard-cell relative mt-4 md:mt-0 ${
+                  above ? "md:row-start-1" : "pcard-cell--below md:row-start-3"
                 } md:self-center`}
               >
                 <button
@@ -137,7 +137,7 @@ export function ProcessStages() {
 
                 <div
                   id={`process-detail-${index}`}
-                  className="pcard-pop"
+                  className={`pcard-pop ${above ? "" : "pcard-pop--up"}`}
                   aria-hidden={!isOpen}
                 >
                   <div className="pcard-pop-in">

@@ -103,6 +103,11 @@ export function NetworkInteractivity({ children }: { children: React.ReactNode }
     const onEnter = (n: SVGGElement) => () => activate(n, true);
     const onLeave = () => clear();
 
+    // Hovering the core hub lights every platform — "everything connects".
+    const hub = nodes.find((n) => n.dataset.node === "center");
+    const hubEnter = () => svg.classList.add("hub-hot");
+    const hubLeave = () => svg.classList.remove("hub-hot");
+
     const cleanups: Array<() => void> = [];
     nodes.forEach((n) => {
       const enter = onEnter(n);
@@ -119,9 +124,19 @@ export function NetworkInteractivity({ children }: { children: React.ReactNode }
       });
     });
 
+    if (hub) {
+      hub.addEventListener("mouseenter", hubEnter);
+      hub.addEventListener("mouseleave", hubLeave);
+      cleanups.push(() => {
+        hub.removeEventListener("mouseenter", hubEnter);
+        hub.removeEventListener("mouseleave", hubLeave);
+      });
+    }
+
     return () => {
       cleanups.forEach((fn) => fn());
       pulses.forEach((p) => p.remove());
+      svg.classList.remove("hub-hot");
       clear();
     };
   }, []);

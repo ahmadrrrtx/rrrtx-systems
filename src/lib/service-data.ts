@@ -25,7 +25,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
     image: "/assets/abstract-commerce-grid.webp",
   },
   "ai-automation": {
-    title: "AI Automations & Agents",
+    title: "AI Systems & Agents",
     headline: "Intelligence That Works While You Sleep.",
     description:
       "We engineer reliable AI-assisted workflows that monitor, classify, summarize, and act on business data. Each system is designed around measurable operations, explicit guardrails, observable failures, and infrastructure you control.",
@@ -56,8 +56,38 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
     ],
     image: "/assets/hero-core-visual.webp",
   },
+  "automation-workflow-engineering": {
+    title: "Automation & Workflow Engineering",
+    headline: "Your Systems, Talking To Each Other. Finally.",
+    description:
+      "We connect the tools your team already uses and remove the repetitive operational work between them. Make.com scenarios, n8n workflows, webhooks, API integrations, CRM workflows and scheduled syncs are engineered as one monitored pipeline — with retries, alerts and documentation, not fragile glue.",
+    features: [
+      "Make.com and n8n scenario design & rebuilds",
+      "Webhook and API integrations between your tools",
+      "CRM workflows and scheduled data syncs",
+      "Error handling, retries and alerting",
+      "Run logs and handover documentation",
+      "Infrastructure you control and own",
+    ],
+    image: "/assets/ai-agent-network.webp",
+  },
+  "graphic-design": {
+    title: "Graphic & Brand Design",
+    headline: "Visual Systems That Make You Look Established.",
+    description:
+      "Visual systems that make the business look credible and communicate clearly. Brand identity, social creatives, campaign assets and presentation design — produced with the same engineering discipline as the systems behind them, so every asset ships on brand and on time.",
+    features: [
+      "Brand identity systems (logo, type, color, usage)",
+      "Social creatives and campaign asset kits",
+      "Presentation and pitch design",
+      "Figma, Canva and Adobe pipelines",
+      "Templates your team can reuse",
+      "Consistent handoff into the web build",
+    ],
+    image: "/assets/gradient-ambient-bg.webp",
+  },
   rebuilds: {
-    title: "Website Rebuilds & Conversion Upgrades",
+    title: "Conversion Engineering & Website Rebuilds",
     headline: "Fix What's Broken. Scale What Works.",
     description:
       "We audit underperforming journeys, preserve what already works, and improve the weakest technical and conversion layers incrementally. The result is a faster, clearer platform without an unnecessary all-at-once rewrite.",

@@ -9,8 +9,10 @@ export const defaultNavLinks: NavLink[] = [
   { label: "Home", href: "/" }, { label: "Work", href: "/work" },
   { label: "Services", href: "/services", children: [
     { label: "Custom Ecommerce", href: "/services/ecommerce" },
-    { label: "AI Automations & Agents", href: "/services/ai-automation" },
+    { label: "AI Systems & Agents", href: "/services/ai-automation" },
+    { label: "Automation & Workflow", href: "/services/automation-workflow-engineering" },
     { label: "Lead Generation Systems", href: "/services/lead-generation" },
+    { label: "Graphic & Brand Design", href: "/services/graphic-design" },
     { label: "Website Rebuilds", href: "/services/rebuilds" },
     { label: "Chatbots & AI Assistants", href: "/services/chatbots" },
     { label: "SEO & AEO", href: "/services/seo" },
@@ -21,6 +23,7 @@ export const defaultNavLinks: NavLink[] = [
     { label: "Search", href: "/search" },
   ] },
   { label: "Process", href: "/process" }, { label: "Pricing", href: "/pricing" },
+  { label: "Stack", href: "/stack" },
   { label: "Partners", href: "/partners", children: [
     { label: "Partner Network", href: "/partners" },
     { label: "Become a Partner", href: "/partners/apply" },
@@ -32,8 +35,10 @@ export const defaultNavLinks: NavLink[] = [
 
 export const defaultFooterServices: SimpleLink[] = [
   { label: "Custom Ecommerce", href: "/services/ecommerce" },
-  { label: "AI Automations & Agents", href: "/services/ai-automation" },
+  { label: "AI Systems & Agents", href: "/services/ai-automation" },
+  { label: "Automation & Workflow", href: "/services/automation-workflow-engineering" },
   { label: "Lead Generation", href: "/services/lead-generation" },
+  { label: "Graphic & Brand Design", href: "/services/graphic-design" },
   { label: "Website Rebuilds", href: "/services/rebuilds" },
   { label: "Chatbots & AI Assistants", href: "/services/chatbots" },
   { label: "SEO & AEO", href: "/services/seo" },
@@ -41,7 +46,8 @@ export const defaultFooterServices: SimpleLink[] = [
 
 export const defaultFooterCompany: SimpleLink[] = [
   { label: "Work", href: "/work" }, { label: "Process", href: "/process" },
-  { label: "Pricing", href: "/pricing" }, { label: "Partners", href: "/partners" },
+  { label: "Pricing", href: "/pricing" }, { label: "Stack", href: "/stack" },
+  { label: "Partners", href: "/partners" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" }, { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" }, { label: "Search", href: "/search" },

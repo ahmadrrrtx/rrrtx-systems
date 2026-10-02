@@ -117,11 +117,11 @@ export async function PeopleSection({
                         <img
                           src={member.imageUrl}
                           alt={member.name}
-                          className="mb-4 h-24 w-24 rounded-full border border-cyan-500/30 object-cover"
+                          className="mb-4 h-24 w-24 rounded-full border border-cyan-500/30 object-cover shadow-[0_0_28px_-8px_rgba(34,211,238,.5)]"
                         />
                       ) : (
-                        <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-500/30 bg-gradient-to-br from-cyan-900 to-slate-900 text-2xl font-extrabold text-white">
-                          {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                        <div className="mb-4 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-cyan-500/30 bg-gradient-to-br from-cyan-900 to-slate-900 shadow-[0_0_28px_-8px_rgba(34,211,238,.5)]">
+                          <span className="text-2xl font-extrabold text-white">{member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}</span>
                         </div>
                       )}
                       <h3 className="text-lg font-bold text-white">{member.name}</h3>

@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, HelpCircle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { SectionWrapper } from "./SectionWrapper";
 import { faqs } from "@/lib/faq-content";
 
@@ -43,19 +42,6 @@ export function HomeFAQSection() {
               ))}
             </div>
 
-            <div className="mt-10 rounded-2xl border border-purple-500/20 bg-purple-500/5 p-7 text-center">
-              <h3 className="mb-2 text-xl font-bold text-white">Still evaluating the right next step?</h3>
-              <p className="mb-5 text-sm text-slate-400">
-                Share the constraint and desired outcome. We will help determine whether an audit, discovery phase, or build is appropriate.
-              </p>
-              <Link
-                prefetch={false}
-                href="/contact"
-                className="premium-button inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white"
-              >
-                Book a Strategy Call <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
           </div>
 
           {/* Generated brand visual */}

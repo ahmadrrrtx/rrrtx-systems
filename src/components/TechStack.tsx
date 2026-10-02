@@ -2,6 +2,8 @@ import { SectionWrapper } from "./SectionWrapper";
 import { PLATFORM_ICON_PATHS } from "@/lib/platform-icons";
 import { STACK_NAME_TO_SLUG } from "./BrandIcon";
 import { StackFlipCard } from "./StackFlipCard";
+import { BrandIcon } from "./BrandIcon";
+import { Lock, Webhook } from "lucide-react";
 
 /**
  * Our Stack — logo-first flip cards.
@@ -41,6 +43,66 @@ function slugFor(name: string): string | undefined {
   return STACK_NAME_TO_SLUG[name.toLowerCase().trim()];
 }
 
+/* ── Extended-stack ticker strips (below the flip grid) ── */
+type StripItem = { name: string; slug?: string; cat: string; glyph?: "https" | "webhooks" };
+export const STRIPS: Array<{ label: string; sub: string; items: StripItem[] }> = [
+  {
+    label: "Frontend & Framework",
+    sub: "Fast · Typed · Accessible",
+    items: [
+      { name: "Next.js", slug: "nextdotjs", cat: "Framework" },
+      { name: "React", slug: "react", cat: "Library" },
+      { name: "TypeScript", slug: "typescript", cat: "Language" },
+      { name: "Tailwind", slug: "tailwindcss", cat: "Styling" },
+      { name: "Framer", slug: "framer", cat: "Motion" },
+      { name: "JavaScript", slug: "javascript", cat: "Language" },
+      { name: "HTML5", slug: "html5", cat: "Markup" },
+      { name: "CSS", slug: "css3", cat: "Styling" },
+    ],
+  },
+  {
+    label: "Backend & Data",
+    sub: "APIs · Workflows · Data",
+    items: [
+      { name: "Node.js", slug: "nodedotjs", cat: "Runtime" },
+      { name: "Python", slug: "python", cat: "AI & Scripts" },
+      { name: "Turso", slug: "turso", cat: "Database" },
+      { name: "Drizzle", slug: "drizzle", cat: "ORM" },
+      { name: "PostgreSQL", slug: "postgresql", cat: "Database" },
+      { name: "SQLite", slug: "sqlite", cat: "Embedded DB" },
+      { name: "C", slug: "c", cat: "Systems" },
+    ],
+  },
+  {
+    label: "Infrastructure",
+    sub: "Deployment · Delivery",
+    items: [
+      { name: "Cloudflare", slug: "cloudflare", cat: "CDN & Security" },
+      { name: "Vercel", slug: "vercel", cat: "Hosting" },
+      { name: "GitHub", slug: "github", cat: "Version Control" },
+      { name: "Git", slug: "git", cat: "Version Control" },
+      { name: "Stripe", slug: "stripe", cat: "Payments" },
+      { name: "Docker", slug: "docker", cat: "Containers" },
+      { name: "Nginx", slug: "nginx", cat: "Web Server" },
+      { name: "HTTPS", glyph: "https", cat: "SSL / TLS" },
+    ],
+  },
+  {
+    label: "Automation & AI",
+    sub: "Workflows · Intelligent Systems",
+    items: [
+      { name: "OpenAI", slug: "openai", cat: "Models" },
+      { name: "Claude", slug: "claude", cat: "Reasoning" },
+      { name: "Gemini", slug: "googlegemini", cat: "Multimodal" },
+      { name: "Perplexity", slug: "perplexity", cat: "Answers" },
+      { name: "Make.com", slug: "make", cat: "Automation" },
+      { name: "n8n", slug: "n8n", cat: "Workflows" },
+      { name: "Rust", slug: "rust", cat: "Performance" },
+      { name: "Webhooks", glyph: "webhooks", cat: "Glue" },
+    ],
+  },
+];
+
 export function TechStack({ items }: { items?: StackItem[] }) {
   const stack = items?.length ? items : defaultStack;
 
@@ -73,6 +135,41 @@ export function TechStack({ items }: { items?: StackItem[] }) {
             </div>
           ))}
         </div>
+        <div className="mt-10 space-y-3" aria-label="Extended technology stack by layer">
+          {STRIPS.map((strip, si) => (
+            <div key={strip.label} className="stack-strip" style={{ "--strip-i": si } as React.CSSProperties}>
+              <div className="stack-strip-label">
+                <b>{strip.label}</b>
+                <small>{strip.sub}</small>
+              </div>
+              <div className="stack-strip-viewport">
+                <div className={`stack-strip-track ${si % 2 ? "stack-strip-track--rev" : ""}`}>
+                  {[...strip.items, ...strip.items].map((item, ii) => (
+                    <span
+                      key={`${item.name}-${ii}`}
+                      className="stack-strip-chip"
+                      aria-hidden={ii >= strip.items.length}
+                    >
+                      {item.glyph === "https" ? (
+                        <Lock className="h-3.5 w-3.5 text-cyan-300/80" aria-hidden="true" />
+                      ) : item.glyph === "webhooks" ? (
+                        <Webhook className="h-3.5 w-3.5 text-cyan-300/80" aria-hidden="true" />
+                      ) : (
+                        <BrandIcon paths={PLATFORM_ICON_PATHS[item.slug ?? ""]} className="h-3.5 w-3.5" />
+                      )}
+                      <b>{item.name}</b>
+                      <small>{item.cat}</small>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="mx-auto mt-8 max-w-xl text-center text-[13px] leading-relaxed text-slate-400">
+          Not every project uses every technology. The stack is selected per system — the tool earns its place, or it isn&rsquo;t in the build.
+        </p>
       </div>
     </SectionWrapper>
   );

@@ -57,8 +57,8 @@ export function Hero({
             </div>
           </div>
 
-          <div className="relative hidden lg:block">
-            <div className="relative aspect-square max-w-[600px] mx-auto">
+          <div className="relative hidden md:block">
+            <div className="relative mx-auto aspect-square w-full max-w-[430px] lg:max-w-[600px]">
               <div className="absolute inset-[7%] rounded-full border border-cyan-400/[0.08] bg-gradient-to-br from-cyan-500/[0.055] via-transparent to-purple-500/[0.07] shadow-[inset_0_0_90px_rgba(34,211,238,.035),0_0_90px_-40px_rgba(139,92,246,.3)]" aria-hidden="true" />
               <div className="absolute inset-[16%] rounded-full border border-dashed border-slate-500/[0.14] animate-[spin_36s_linear_infinite] motion-reduce:animate-none" aria-hidden="true" />
               <Image src="/assets/hero-holographic-hand.webp" alt="RRRTX system architecture visualization" fill sizes="(min-width: 1280px) 600px, 50vw" className="object-contain drop-shadow-[0_28px_48px_rgba(8,145,178,.16)] animate-float" />

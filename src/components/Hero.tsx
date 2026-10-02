@@ -32,9 +32,9 @@ export function Hero({
         <div className="absolute left-1/2 top-1/3 w-[340px] h-[340px] -translate-x-1/2 rounded-full bg-blue-500/[0.045] blur-[90px]" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-8 items-center">
           <div className="space-y-8">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-[5.25rem] font-bold leading-[1.04] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-[clamp(2.6rem,5.5vw,4.75rem)] font-bold leading-[1.04] tracking-tight">
               {lines.map((line, index) => {
                 const isGradient = index === 2 || index === 3 || index === 4;
                 return <span key={`${line}-${index}`} className={isGradient ? "text-gradient" : "text-white"}>{line}{index < lines.length - 1 && <br />}</span>;

@@ -9,7 +9,7 @@ export function HeroScene() {
   useEffect(() => {
     const host = hostRef.current;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = window.matchMedia("(min-width: 1024px)");
+    const desktop = window.matchMedia("(min-width: 768px)");
     const device = navigator as Navigator & { deviceMemory?: number };
     if (!host || motion.matches || !desktop.matches || (device.deviceMemory && device.deviceMemory < 2)) return;
 

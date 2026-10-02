@@ -104,7 +104,18 @@ export const STRIPS: Array<{ label: string; sub: string; items: StripItem[] }> =
 ];
 
 export function TechStack({ items }: { items?: StackItem[] }) {
-  const stack = items?.length ? items : defaultStack;
+  // Settings-managed lists may hold legacy shapes (e.g. plain strings) —
+  // normalize so prerender never iterates/reads past a bad entry.
+  const stack = (items?.length ? items : defaultStack)
+    .map((item) => {
+      if (typeof item === "string") return { name: item, category: "Stack" };
+      const rec = item as unknown as Record<string, unknown>;
+      return {
+        name: typeof rec?.name === "string" ? rec.name : "",
+        category: typeof rec?.category === "string" ? rec.category : "Stack",
+      };
+    })
+    .filter((item) => item.name.length > 0);
 
   return (
     <SectionWrapper className="relative overflow-hidden py-24 lg:py-32">

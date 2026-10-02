@@ -85,20 +85,36 @@ export default async function Home() {
   }));
 
   const {
-    hero_title: heroTitle,
-    hero_subtitle: heroSubtitle,
-    hero_cta_text: heroCtaText,
-    hero_cta_link: heroCtaLink,
-    problem_title: problemTitle,
-    problem_desc: problemDesc,
-    problem_bullets: problemBullets,
-    trusted_integrations: trustedIntegrations,
-    homepage_stats: homepageStats,
+    hero_title: heroTitleRaw,
+    hero_subtitle: heroSubtitleRaw,
+    hero_cta_text: heroCtaTextRaw,
+    hero_cta_link: heroCtaLinkRaw,
+    problem_title: problemTitleRaw,
+    problem_desc: problemDescRaw,
+    problem_bullets: problemBulletsRaw,
+    trusted_integrations: trustedIntegrationsRaw,
+    homepage_stats: homepageStatsRaw,
     homepage_stats_verified: homepageStatsVerified,
-    tech_stack: techStack,
-    about_heading: aboutHeading,
-    about_description: aboutDescription,
+    tech_stack: techStackRaw,
+    about_heading: aboutHeadingRaw,
+    about_description: aboutDescriptionRaw,
   } = settings;
+
+  // Production settings rows may hold legacy shapes — never let a non-string
+  // or non-array reach a component that reads/iterates during prerender.
+  const asText = (value: unknown) => (typeof value === "string" ? value : "");
+  const problemBullets = Array.isArray(problemBulletsRaw) ? problemBulletsRaw : [];
+  const trustedIntegrations = Array.isArray(trustedIntegrationsRaw) ? trustedIntegrationsRaw : [];
+  const homepageStats = Array.isArray(homepageStatsRaw) ? homepageStatsRaw : [];
+  const techStack = Array.isArray(techStackRaw) ? techStackRaw : [];
+  const heroTitle = asText(heroTitleRaw);
+  const heroSubtitle = asText(heroSubtitleRaw);
+  const heroCtaText = asText(heroCtaTextRaw);
+  const heroCtaLink = asText(heroCtaLinkRaw);
+  const problemTitle = asText(problemTitleRaw);
+  const problemDesc = asText(problemDescRaw);
+  const aboutHeading = asText(aboutHeadingRaw);
+  const aboutDescription = asText(aboutDescriptionRaw);
 
   return (
     <main className="relative">

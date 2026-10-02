@@ -57,7 +57,10 @@ export async function getSettings<T extends Record<string, unknown>>(
     for (const row of rows) {
       if (row.value === null) continue;
       try {
-        result[row.key] = JSON.parse(row.value);
+        const parsed: unknown = JSON.parse(row.value);
+        // A JSON "null" value must never override a sane default.
+        if (parsed === null) continue;
+        result[row.key] = parsed;
       } catch {
         result[row.key] = row.value;
       }

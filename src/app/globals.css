@@ -921,9 +921,11 @@ html.rrrtx-js [data-reveal].rrrtx-revealed {
 }
 
 /* ── Stack: flip cards ── */
-.stack-flip { perspective: 900px; background: none; border: none; padding: 0; cursor: pointer; }
+.stack-flip { display: block; width: 100%; background: none; border: none; padding: 0; cursor: pointer; }
 .stack-flip-in {
   position: relative;
+  display: block;
+  width: 100%;
   aspect-ratio: .86;
   transform-style: preserve-3d;
   transition: transform 650ms var(--ease-premium);

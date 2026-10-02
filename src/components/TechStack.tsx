@@ -22,6 +22,7 @@ const defaultStack: StackItem[] = [
   { name: "React", category: "Frontend" },
   { name: "TypeScript", category: "Language" },
   { name: "Tailwind CSS", category: "Styling" },
+  { name: "Framer", category: "Motion" },
   { name: "Node.js", category: "Runtime" },
   { name: "Python", category: "AI & Scripts" },
   { name: "Turso", category: "Database" },
@@ -31,7 +32,6 @@ const defaultStack: StackItem[] = [
   { name: "Vercel", category: "Hosting" },
   { name: "GitHub", category: "Version Control" },
   { name: "Stripe", category: "Payments" },
-  { name: "WhatsApp API", category: "Messaging" },
 ];
 
 const FLOAT_DURATIONS = ["5.2s", "6.1s", "5.6s", "6.4s", "5.1s", "6s", "5.4s", "6.2s", "5.8s", "5.3s", "6.3s", "5.5s", "5.9s", "6.5s"];
@@ -53,7 +53,10 @@ export function TechStack({ items }: { items?: StackItem[] }) {
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-slate-300">Built With the Right Tools</p>
           <h2 className="mb-3 text-3xl font-bold tracking-[-0.025em] text-white lg:text-4xl">Our Stack</h2>
           <p className="mx-auto max-w-lg text-sm leading-relaxed text-slate-300">
-            Every layer is selected for performance, ownership, and long-term maintainability.
+            Every layer is selected — never default. Fast, typed, maintainable, owned.
+          </p>
+          <p className="mx-auto mt-2 max-w-xl text-[13px] leading-relaxed text-slate-400">
+            Every layer is chosen for performance, ownership and the specific system being built — never included because it is fashionable.
           </p>
         </header>
 
@@ -70,10 +73,6 @@ export function TechStack({ items }: { items?: StackItem[] }) {
             </div>
           ))}
         </div>
-
-        <p className="mx-auto mt-7 max-w-xl text-center text-[13px] text-slate-400">
-          The stack is selected per system — each technology earns its place in the build.
-        </p>
       </div>
     </SectionWrapper>
   );

@@ -1,10 +1,17 @@
 import Link from "next/link";
-import { ClipboardCheck, Calculator, Download, ArrowRight } from "lucide-react";
+import { ClipboardCheck, Calculator, Download, ListChecks, Sparkles, ArrowRight } from "lucide-react";
 
+/**
+ * Free Tools & Resources — three established capsules plus the two new
+ * static tools (Automation Readiness Check, AI Opportunity Mapper).
+ * Existing labels/descriptions unchanged.
+ */
 const tools = [
   { label: "Free Website Audit", href: "/audit", icon: ClipboardCheck, description: "Get a focused conversion and performance review of your current site.", accent: "from-cyan-400/20 to-blue-500/5", iconColor: "text-cyan-300" },
   { label: "ROI Calculator", href: "/roi", icon: Calculator, description: "Model a transparent improvement scenario using your own business inputs.", accent: "from-blue-400/20 to-purple-500/5", iconColor: "text-blue-300" },
   { label: "Free Resources", href: "/resources", icon: Download, description: "Browse instant and email-gated checklists, guides, and templates.", accent: "from-purple-400/20 to-pink-500/5", iconColor: "text-purple-300" },
+  { label: "Automation Readiness Check", href: "/resources/automation-readiness-check", icon: ListChecks, description: "Eight quick questions — score how ready your operations are for automation.", accent: "from-emerald-400/20 to-cyan-500/5", iconColor: "text-emerald-300" },
+  { label: "AI Opportunity Mapper", href: "/resources/ai-opportunity-mapper", icon: Sparkles, description: "Map your bottleneck to a concrete AI system pattern and a first step.", accent: "from-violet-400/20 to-purple-500/5", iconColor: "text-violet-300" },
 ];
 
 export function ToolsCapsules() {
@@ -18,9 +25,14 @@ export function ToolsCapsules() {
           <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-700/60" />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-3">
-          {tools.map((tool) => (
-            <Link key={tool.label} href={tool.href} className="premium-card group/tool flex min-h-40 items-start gap-4 overflow-hidden rounded-2xl p-5 sm:p-6">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+          {tools.map((tool, i) => (
+            <Link
+              key={tool.label}
+              href={tool.href}
+              className={`premium-card svc-card group/tool flex min-h-40 items-start gap-4 overflow-hidden rounded-2xl p-5 sm:p-6 ${i < 3 ? "lg:col-span-2" : "lg:col-span-3"}`}
+              style={{ "--i": i } as React.CSSProperties}
+            >
               <div className={`absolute inset-0 bg-gradient-to-br ${tool.accent} opacity-35 transition-opacity duration-500 group-hover/tool:opacity-70`} aria-hidden="true" />
               <div className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.07] bg-slate-950/65 shadow-[inset_0_1px_0_rgba(255,255,255,.07),0_14px_30px_-18px_rgba(34,211,238,.45)] ${tool.iconColor}`}>
                 <tool.icon className="premium-icon h-5 w-5" aria-hidden="true" />

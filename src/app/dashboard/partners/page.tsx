@@ -57,7 +57,18 @@ export default function PartnersOverview() {
         </div>
 
         {loading || !data ? (
-          <div className="p-8 text-center text-sm text-slate-500">Loading…</div>
+          <div className="space-y-6" aria-busy="true" aria-label="Loading partner overview">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-slate-800/50 bg-slate-950/40 p-4">
+                  <div className="skeleton mb-3 h-7 w-7 rounded-lg" />
+                  <div className="skeleton mb-2 h-2.5 w-20 rounded-full" />
+                  <div className="skeleton h-5 w-12 rounded-full" />
+                </div>
+              ))}
+            </div>
+            <div className="p-8 text-center text-sm text-slate-500">Loading partner network…</div>
+          </div>
         ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

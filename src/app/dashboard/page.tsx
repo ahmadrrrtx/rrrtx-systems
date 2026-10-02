@@ -127,7 +127,18 @@ export default function DashboardPage() {
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-sm text-slate-500">Loading leads...</div>
+<div className="space-y-2 p-4" aria-busy="true" aria-label="Loading leads">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-4 border-b border-slate-800/40 py-3 last:border-0">
+                  <div className="skeleton h-8 w-8 shrink-0 rounded-full" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="skeleton h-3 w-1/3 rounded-full" />
+                    <div className="skeleton h-2.5 w-1/2 rounded-full" />
+                  </div>
+                  <div className="skeleton h-5 w-16 rounded-md" />
+                </div>
+              ))}
+            </div>
           ) : recentLeads.length === 0 ? (
             <div className="p-8 text-center">
               <Inbox className="w-6 h-6 text-slate-600 mx-auto mb-2" />

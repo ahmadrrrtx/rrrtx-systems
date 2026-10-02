@@ -54,7 +54,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Funnel analytics and source attribution",
       "Privacy-conscious data collection",
     ],
-    image: "/assets/hero-core-visual.webp",
+    image: "/assets/service-lead-generation.webp",
   },
   "automation-workflow-engineering": {
     title: "Automation & Workflow Engineering",
@@ -69,7 +69,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Run logs and handover documentation",
       "Infrastructure you control and own",
     ],
-    image: "/assets/ai-agent-network.webp",
+    image: "/assets/service-automation-workflow.webp",
   },
   "graphic-design": {
     title: "Graphic & Brand Design",
@@ -84,7 +84,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Templates your team can reuse",
       "Consistent handoff into the web build",
     ],
-    image: "/assets/gradient-ambient-bg.webp",
+    image: "/assets/service-graphic-design.webp",
   },
   rebuilds: {
     title: "Conversion Engineering & Website Rebuilds",
@@ -100,7 +100,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Measurement and experiment foundations",
       "SEO and structured-data remediation",
     ],
-    image: "/assets/gradient-ambient-bg.webp",
+    image: "/assets/service-rebuilds.webp",
   },
   chatbots: {
     title: "Chatbots & AI Assistants",
@@ -116,7 +116,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Resolution and escalation analytics",
       "Privacy, retention, and quality controls",
     ],
-    image: "/assets/hero-holographic-hand.webp",
+    image: "/assets/service-chatbots.webp",
   },
   seo: {
     title: "SEO & AEO",
@@ -132,7 +132,7 @@ export const serviceData: Record<string, Omit<ServiceDetail, "slug">> = {
       "Content quality and evidence workflows",
       "Search Console and conversion reporting",
     ],
-    image: "/assets/gradient-ambient-bg.webp",
+    image: "/assets/service-seo.webp",
   },
 };
 

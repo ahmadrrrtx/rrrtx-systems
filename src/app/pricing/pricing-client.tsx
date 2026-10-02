@@ -135,7 +135,7 @@ export function PricingPageClient({ items }: { items?: Tier[] }) {
 
                 <ul className="space-y-3 mb-8 flex-1">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-slate-300">
+                    <li key={feature} className="group/feat flex items-start gap-3 text-sm text-slate-300 transition-colors hover:text-white">
                       <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                       {feature}
                     </li>

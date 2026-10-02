@@ -80,7 +80,7 @@ export function ProblemSection({
             {activeBullets.map((problem, i) => (
               <div
                 key={`${problem}-${i}`}
-                className="sym-card group flex items-start gap-4 p-4 rounded-xl bg-slate-950/50 border border-slate-800/40 transition-all duration-300"
+                className="sym-card group flex items-start gap-4 p-4 rounded-xl bg-slate-950/50 border border-slate-800/40 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-900/60"
               >
                 <div className="mt-0.5 shrink-0 w-6 h-6 rounded-md bg-red-500/10 flex items-center justify-center">
                   <X className="w-3.5 h-3.5 text-red-400/80" />
@@ -94,7 +94,7 @@ export function ProblemSection({
         {/* Template vs System — visual panels */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {/* A TEMPLATE — identical, isolated */}
-          <div className="prob-panel relative overflow-hidden rounded-2xl border border-red-500/10 bg-slate-950/40 p-7">
+          <div className="prob-panel group relative overflow-hidden rounded-2xl border border-red-500/10 bg-slate-950/40 p-7 transition-all duration-300 hover:border-red-500/30 hover:-translate-y-1 hover:shadow-[0_0_44px_-16px_rgba(248,113,113,.35)]">
             <span className="glow-node top-[18px] right-[22px]" aria-hidden="true" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" aria-hidden="true" />
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-red-400/90 mb-6">A Template</p>
@@ -113,7 +113,7 @@ export function ProblemSection({
           </div>
 
           {/* A SYSTEM — connected, purpose-built */}
-          <div className="prob-panel relative overflow-hidden rounded-2xl border border-cyan-400/15 bg-slate-950/40 p-7">
+          <div className="prob-panel group relative overflow-hidden rounded-2xl border border-cyan-400/15 bg-slate-950/40 p-7 transition-all duration-300 hover:border-cyan-400/40 hover:-translate-y-1 hover:shadow-[0_0_44px_-16px_rgba(34,211,238,.4)]">
             <span className="glow-node glow-node--ok top-[18px] right-[22px]" aria-hidden="true" />
             <span className="glow-node glow-node--ok bottom-[30px] left-[26px] [animation-delay:-1.6s]" aria-hidden="true" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" aria-hidden="true" />
@@ -155,7 +155,7 @@ export function ProblemSection({
         {/* Before / After comparison strip */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Template side */}
-          <div className="p-6 rounded-2xl bg-slate-950/40 border border-red-500/10 relative overflow-hidden">
+          <div className="p-6 rounded-2xl bg-slate-950/40 border border-red-500/10 relative overflow-hidden transition-all duration-300 hover:border-red-500/30 hover:-translate-y-1 hover:shadow-[0_0_40px_-18px_rgba(248,113,113,.3)]">
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" aria-hidden="true" />
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-red-400/60" />
@@ -174,7 +174,7 @@ export function ProblemSection({
           </div>
 
           {/* Custom side */}
-          <div className="cmp-good premium-surface relative overflow-hidden rounded-2xl border-cyan-400/15 p-6">
+          <div className="cmp-good premium-surface relative overflow-hidden rounded-2xl border-cyan-400/15 p-6 transition-all duration-300 hover:-translate-y-1">
             <span className="glow-node glow-node--ok top-[18px] right-[22px]" aria-hidden="true" />
             <span className="glow-node glow-node--ok top-1/2 left-[14px] [animation-delay:-.9s]" aria-hidden="true" />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" aria-hidden="true" />

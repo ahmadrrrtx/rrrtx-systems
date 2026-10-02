@@ -16,7 +16,7 @@ export function Hero({
 }) {
   const lines = titleLines
     ? titleLines.split(",").map((line) => line.trim()).filter(Boolean)
-    : ["We Build", "Systems That", "Attract Leads,", "Close Sales & Scale", "Your Business"];
+    : ["We Build", "Systems That", "Attract Leads,", "Close Sales &", "Scale", "Your Business"];
   const activeSubtitle = subtitle || "Custom ecommerce websites and AI systems built to convert. We build premium sites from scratch with dashboards, automations, and AI tools that help your brand sell better, work faster, and scale globally.";
   const activeCtaText = ctaText || "Get Your Free Strategy Call";
   const activeCtaLink = ctaLink || "/contact";
@@ -34,15 +34,9 @@ export function Hero({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
-            <div>
-              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-950/50 px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-slate-300">
-                <span className="h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" aria-hidden="true" />
-                Currently accepting new engagements
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-[5.25rem] font-bold leading-[1.04] tracking-tight">
               {lines.map((line, index) => {
-                const isGradient = index === 2 || index === 3 || /lead|sale|scale|convert|roi/i.test(line);
+                const isGradient = index === 2 || index === 3 || index === 4;
                 return <span key={`${line}-${index}`} className={isGradient ? "text-gradient" : "text-white"}>{line}{index < lines.length - 1 && <br />}</span>;
               })}
             </h1>

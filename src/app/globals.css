@@ -1302,3 +1302,14 @@ html.rrrtx-js [data-reveal].rrrtx-revealed .faq-item {
   .ait-row .ait-tile { min-width: 0; flex: 1 1 40%; }
   .ait-row[aria-hidden] { display: none; }
 }
+
+/* Approach list items — subtle highlight on hover */
+.transition-all.duration-300:hover li { transition: color .2s ease; }
+
+/* Cookie banner — enter animation (respect reduced motion) */
+.cookie-card { animation: cookie-in .45s var(--ease-premium) both; }
+@keyframes cookie-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .cookie-card { animation: none; } }

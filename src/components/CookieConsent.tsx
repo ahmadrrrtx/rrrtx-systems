@@ -88,9 +88,12 @@ export function CookieConsent() {
       aria-label="Cookie settings"
       className="fixed inset-x-0 bottom-0 z-[70] px-4 pb-4 sm:px-6 sm:pb-6"
     >
-      <div className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-950/95 backdrop-blur-md shadow-2xl p-5 sm:p-6">
+      <div className="cookie-card relative mx-auto max-w-3xl overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-950/90 backdrop-blur-xl shadow-[0_24px_70px_-20px_rgba(0,0,0,.9)] p-5 sm:p-6">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" aria-hidden="true" />
         <div className="flex items-start gap-3">
-          <Cookie className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" aria-hidden="true" />
+          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-500/25 bg-cyan-500/[0.07]">
+            <Cookie className="h-4 w-4 text-cyan-300" aria-hidden="true" />
+          </span>
           <div className="flex-1 min-w-0">
             <h2 className="text-sm font-semibold text-white mb-2">
               {showDetails ? "Cookie settings" : "Cookies on this site"}
@@ -110,13 +113,13 @@ export function CookieConsent() {
               </p>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 p-3">
+                <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 p-3 transition-colors duration-200 hover:border-slate-700/80">
                   <p className="text-xs font-medium text-slate-200">Strictly necessary</p>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                     Required for sign-in and to remember this choice. Always active.
                   </p>
                 </div>
-                <label className="flex items-start gap-3 rounded-xl border border-slate-800/60 bg-slate-900/40 p-3 cursor-pointer">
+                <label className="flex items-start gap-3 rounded-xl border border-slate-800/60 bg-slate-900/40 p-3 cursor-pointer transition-colors duration-200 hover:border-cyan-500/30">
                   <input
                     type="checkbox"
                     checked={analyticsOn}
@@ -140,21 +143,21 @@ export function CookieConsent() {
                   <button
                     type="button"
                     onClick={() => decide(analyticsOn)}
-                    className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-xs font-semibold text-white"
+                    className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-xs font-semibold text-white transition-all duration-200 hover:from-blue-500 hover:to-purple-500 hover:shadow-[0_0_22px_-6px_rgba(139,92,246,.6)] active:scale-[.98]"
                   >
                     Save preferences
                   </button>
                   <button
                     type="button"
                     onClick={() => decide(true)}
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800/60"
+                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 transition-all duration-200 hover:border-slate-500 hover:bg-slate-800/60 hover:text-white active:scale-[.98]"
                   >
                     Accept all
                   </button>
                   <button
                     type="button"
                     onClick={() => decide(false)}
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800/60"
+                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 transition-all duration-200 hover:border-slate-500 hover:bg-slate-800/60 hover:text-white active:scale-[.98]"
                   >
                     Reject non-essential
                   </button>
@@ -164,14 +167,14 @@ export function CookieConsent() {
                   <button
                     type="button"
                     onClick={() => decide(true)}
-                    className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-xs font-semibold text-white"
+                    className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-xs font-semibold text-white transition-all duration-200 hover:from-blue-500 hover:to-purple-500 hover:shadow-[0_0_22px_-6px_rgba(139,92,246,.6)] active:scale-[.98]"
                   >
                     Accept
                   </button>
                   <button
                     type="button"
                     onClick={() => decide(false)}
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800/60"
+                    className="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium text-slate-200 transition-all duration-200 hover:border-slate-500 hover:bg-slate-800/60 hover:text-white active:scale-[.98]"
                   >
                     Reject
                   </button>

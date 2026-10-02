@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Search, Code, Rocket, BarChart3, ArrowRight } from "lucide-react";
+import { ProcessStages } from "@/components/ProcessStages";
 import Link from "next/link";
 
 const steps = [
@@ -63,14 +64,19 @@ export function ProcessPageClient() {
             </p>
           </motion.div>
 
-          <div className="space-y-12">
+          <ProcessStages />
+
+          <div className="mt-24 space-y-8">
+            <h2 className="text-center text-xl font-bold text-white lg:text-2xl">
+              What each stage <span className="text-gradient">delivers.</span>
+            </h2>
             {steps.map((step, i) => (
               <motion.div
                 key={step.title}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.15 }}
-                className="premium-card relative grid gap-8 rounded-3xl p-8 md:grid-cols-[1fr_2fr]"
+                className="premium-card relative grid gap-8 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-[0_0_46px_-18px_rgba(34,211,238,.35)] md:grid-cols-[1fr_2fr]"
               >
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-3">
@@ -89,7 +95,7 @@ export function ProcessPageClient() {
                     {step.deliverables.map((d) => (
                       <span
                         key={d}
-                        className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-slate-900 text-slate-400 border border-slate-800"
+                        className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-slate-900 text-slate-400 border border-slate-800 transition-colors duration-200 hover:border-cyan-500/40 hover:text-cyan-200"
                       >
                         {d}
                       </span>

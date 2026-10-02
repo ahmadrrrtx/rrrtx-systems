@@ -171,11 +171,13 @@ export function ServicesGrid({ items }: { items?: Array<{ title: string; descrip
                     {service.family.toUpperCase()}
                   </span>
 
-                  <div className={`relative p-7 h-full flex flex-col ${isRow ? "sm:flex-row sm:items-center gap-5" : ""}`}>
+                  <div className={`relative h-full p-7 pt-12 flex flex-col ${isRow ? "sm:flex-row sm:items-center gap-5 sm:pt-7" : ""}`}>
                     <div className={isRow ? "flex-1 min-w-0" : ""}>
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="mb-4 flex items-center gap-3">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/[0.06]">
+                          <Icon className="premium-icon h-4 w-4 text-cyan-300" aria-hidden="true" />
+                        </span>
                         <span className="font-mono text-[11px] tracking-[0.14em] text-slate-500">{num}</span>
-                        <Icon className="premium-icon w-5 h-5 text-cyan-300/80" aria-hidden="true" />
                       </div>
                       <h3 className="text-lg lg:text-xl font-bold text-white mb-2.5 group-hover:text-cyan-300 transition-colors duration-300">
                         {service.title}
@@ -185,7 +187,7 @@ export function ServicesGrid({ items }: { items?: Array<{ title: string; descrip
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {service.tags.map((tag) => (
-                          <span key={tag} className="px-2.5 py-1 text-[10px] font-medium text-slate-300 rounded-md bg-slate-900/70 border border-slate-800/70">
+                          <span key={tag} className="px-2.5 py-1 text-[10px] font-medium text-slate-300 rounded-md bg-slate-900/70 border border-slate-800/70 transition-colors duration-200 hover:border-cyan-500/40 hover:text-cyan-200">
                             {tag}
                           </span>
                         ))}

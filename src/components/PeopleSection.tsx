@@ -76,7 +76,7 @@ export async function PeopleSection({
               {pillars.map((pillar, i) => (
                 <div
                   key={pillar.title}
-                  className="flex items-start gap-4 rounded-2xl border border-slate-800/50 bg-slate-950/40 px-[18px] py-[15px] transition-colors duration-300 hover:border-cyan-500/25"
+                  className="pillar-card group flex items-start gap-4 rounded-2xl border border-slate-800/50 bg-slate-950/40 px-[18px] py-[15px] transition-all duration-300 hover:border-cyan-500/35 hover:bg-slate-900/50 hover:shadow-[0_0_36px_-14px_rgba(34,211,238,.35)] hover:-translate-y-0.5"
                 >
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/[0.07]">
                     <pillar.icon className={`h-4 w-4 ${pillarAccents[i % pillarAccents.length]}`} aria-hidden="true" />
@@ -94,13 +94,13 @@ export async function PeopleSection({
                 <span className="h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" aria-hidden="true" />
                 Currently accepting new engagements
               </span>
-              <span className="text-xs text-slate-400">🌍 Working globally · async-first</span>
+              <span className="inline-flex items-center gap-1.5 text-xs text-slate-400"><Globe className="h-3.5 w-3.5 text-cyan-400/80" aria-hidden="true" />Working globally · async-first</span>
             </div>
           </div>
 
           {/* Team card(s) — real records only */}
           <div>
-            <div className="premium-surface rounded-3xl p-7 sm:p-8 text-center relative overflow-hidden">
+            <div className="premium-surface rounded-3xl p-7 sm:p-8 text-center relative overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_50px_-20px_rgba(34,211,238,.4)]">
               <div className="absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" aria-hidden="true" />
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-300 mb-6">The Team</p>
 

@@ -8,9 +8,11 @@ import { trackEvent } from "@/components/AnalyticsClient";
 
 const services = [
   "Custom Ecommerce",
-  "AI Automations & Agents",
+  "AI Systems & Agents",
+  "Automation & Workflow Engineering",
   "Lead Generation Systems",
-  "Website Rebuilds",
+  "Graphic & Brand Design",
+  "Conversion Engineering & Website Rebuilds",
   "Chatbots & AI Assistants",
   "SEO & AEO",
   "Not sure yet — let's talk",
@@ -103,7 +105,7 @@ export function ContactPageClient() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               onSubmit={handleSubmit}
-              className="space-y-6 rounded-2xl border border-slate-800/60 bg-slate-950/40 p-8"
+              className="space-y-6 rounded-2xl border border-slate-800/60 bg-slate-950/40 p-8 transition-shadow duration-300 hover:shadow-[0_0_60px_-24px_rgba(34,211,238,.35)]"
             >
               <div className="hidden" aria-hidden="true">
                 <label htmlFor="contact-website">Leave this field empty</label>
@@ -121,7 +123,7 @@ export function ContactPageClient() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 transition-all duration-200 hover:border-slate-700 focus:outline-none focus:border-cyan-500/60 focus:ring-2 focus:ring-cyan-500/15 focus:shadow-[0_0_26px_-8px_rgba(34,211,238,.4)]"
                     placeholder="Your name"
                   />
                 </div>
@@ -136,7 +138,7 @@ export function ContactPageClient() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 transition-all duration-200 hover:border-slate-700 focus:outline-none focus:border-cyan-500/60 focus:ring-2 focus:ring-cyan-500/15 focus:shadow-[0_0_26px_-8px_rgba(34,211,238,.4)]"
                     placeholder="you@company.com"
                   />
                 </div>
@@ -152,7 +154,7 @@ export function ContactPageClient() {
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 transition-all duration-200 hover:border-slate-700 focus:outline-none focus:border-cyan-500/60 focus:ring-2 focus:ring-cyan-500/15 focus:shadow-[0_0_26px_-8px_rgba(34,211,238,.4)]"
                   placeholder="Company or brand name"
                 />
               </div>

@@ -582,3 +582,170 @@ html.rrrtx-js [data-reveal].rrrtx-revealed {
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   RRRTX 2.0 — design tokens (additive)
+   Codifies the existing visual language: same palette, one
+   radius scale, three canonical gradients. Nothing above is
+   modified; legacy utilities keep working unchanged.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* radius scale — the only radii used by new sections */
+  --rrrtx-radius-chip: 6px;
+  --rrrtx-radius-control: 10px;
+  --rrrtx-radius-card: 14px;
+  --rrrtx-radius-feature: 22px;
+
+  /* accent ramp (existing colors, named for reuse) */
+  --rrrtx-cyan: #22d3ee;
+  --rrrtx-blue: #3b82f6;
+  --rrrtx-violet: #8b5cf6;
+  --rrrtx-ok: #34d399;
+
+  /* the three canonical gradients */
+  --rrrtx-grad-build: linear-gradient(90deg, #22d3ee, #3b82f6);
+  --rrrtx-grad-systems: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  --rrrtx-grad-identity: linear-gradient(90deg, #8b5cf6, #22d3ee);
+}
+
+@utility tophair {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 2px;
+  border-radius: 2px;
+  opacity: .35;
+  transition: opacity var(--motion-base) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .tophair, .tophair.group-hover\:opacity-90:hover { opacity: .9; }
+}
+
+/* ── Integration network (hero companion section) ─────────── */
+.net-stage {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.125rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--rrrtx-radius-feature);
+  background:
+    radial-gradient(ellipse 62% 58% at 50% 50%, rgba(59, 130, 246, .07), rgba(139, 92, 246, .045) 55%, transparent 75%);
+}
+
+.net-svg { width: 100%; height: auto; }
+
+.net-node { cursor: pointer; transition: opacity .25s ease; }
+.net-node .net-chip {
+  fill: rgba(15, 23, 42, .88);
+  stroke: rgba(148, 163, 184, .28);
+  stroke-width: 1.2;
+  transition: stroke .25s ease, filter .25s ease;
+}
+.net-node .net-glyph {
+  color: #e2e8f0;
+  filter: drop-shadow(0 0 5px var(--node-glow, var(--rrrtx-cyan)));
+  transition: filter .25s ease;
+}
+.net-node[data-glow="ai"] { --node-glow: var(--rrrtx-violet); }
+.net-node[data-glow="infra"] { --node-glow: var(--rrrtx-cyan); }
+.net-node[data-glow="sat"] { --node-glow: var(--rrrtx-blue); }
+.net-node[data-glow="sat"] .net-chip { fill: rgba(15, 23, 42, .7); stroke: rgba(148, 163, 184, .18); }
+.net-node[data-glow="sat"] .net-glyph { color: #cbd5e1; }
+.net-node:hover .net-chip,
+.net-node:focus-visible .net-chip,
+.net-node.is-active .net-chip {
+  stroke: var(--node-glow, var(--rrrtx-cyan));
+  filter: drop-shadow(0 0 12px var(--node-glow, var(--rrrtx-cyan)));
+}
+.net-node.is-dim { opacity: .16; }
+
+.net-link {
+  fill: none;
+  stroke: rgba(148, 163, 184, .2);
+  stroke-width: 1.3;
+  transition: stroke .25s ease, opacity .25s ease;
+}
+.net-link[data-kind="satellite"] { stroke: rgba(148, 163, 184, .12); stroke-dasharray: 3 7; }
+.net-link.is-lit { stroke: var(--node-glow, var(--rrrtx-cyan)); opacity: 1; stroke-width: 1.8; }
+.net-link.is-dim { opacity: .16; }
+
+.net-pulse {
+  fill: var(--node-glow, var(--rrrtx-cyan));
+  offset-rotate: 0deg;
+  animation: net-pulse-move var(--pulse-duration, 5s) linear infinite;
+  animation-delay: var(--pulse-delay, 0s);
+}
+.net-pulse.is-muted { opacity: 0; }
+.net-pulse.is-paused { animation-play-state: paused; }
+@keyframes net-pulse-move {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+.net-hub-orbit { animation: spin 46s linear infinite; transform-origin: 600px 330px; }
+.net-hub-halo { animation: net-halo 4.5s ease-in-out infinite; transform-origin: 600px 330px; }
+@keyframes net-halo { 50% { opacity: .55; } }
+
+.net-pill {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  transform: translate(-50%, -135%);
+  border: 1px solid rgba(34, 211, 238, .3);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, .96);
+  box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .9), 0 0 20px -6px rgba(34, 211, 238, .3);
+  padding: .4rem .9rem;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.net-pill b { color: var(--rrrtx-cyan); }
+.net-pill[data-glow="ai"] { border-color: rgba(167, 139, 250, .35); }
+.net-pill[data-glow="ai"] b { color: #c4b5fd; }
+.net-pill small { color: rgb(148 163 184); margin-left: .35rem; font-size: 10.5px; }
+
+.net-mobile-grid { display: none; }
+
+@media (max-width: 767px) {
+  .net-svg-wrap { display: none; }
+  .net-mobile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; padding: 1.4rem 1.1rem 1.6rem; }
+  .net-mobile-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    width: max-content;
+    margin: 0 auto 1.1rem;
+    padding: 1.1rem 1.6rem;
+    border: 1px solid rgba(34, 211, 238, .3);
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, .7);
+    box-shadow: 0 0 40px -12px rgba(34, 211, 238, .35);
+  }
+  .net-mobile-core small { font-family: var(--mono-font, ui-monospace, monospace); font-size: 9.5px; letter-spacing: .2em; color: rgb(148 163 184); }
+  .net-mobile-cat { grid-column: 1 / -1; margin-top: .5rem; font-family: var(--mono-font, ui-monospace, monospace); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgb(148 163 184); }
+  .net-mobile-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+    padding: .7rem .4rem;
+    border: 1px solid var(--color-border);
+    border-radius: .75rem;
+    background: rgba(15, 23, 42, .45);
+    text-align: center;
+  }
+  .net-mobile-cell svg { width: 22px; height: 22px; color: #e2e8f0; }
+  .net-mobile-cell b { font-size: 10.5px; font-weight: 600; line-height: 1.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .net-pulse { display: none; }
+  .net-hub-orbit, .net-hub-halo { animation: none; }
+}

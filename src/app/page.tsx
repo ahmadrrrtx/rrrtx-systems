@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { TrustBar } from "@/components/TrustBar";
+import { IntegrationNetwork } from "@/components/IntegrationNetwork";
 import { StatsBar } from "@/components/StatsBar";
 import { ProblemSection } from "@/components/ProblemSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
@@ -112,9 +112,7 @@ export default async function Home() {
         />
       </div>
       <div data-reveal>
-        <TrustBar
-          brands={trustedIntegrations.length ? trustedIntegrations : undefined}
-        />
+        <IntegrationNetwork integrations={trustedIntegrations} />
       </div>
       {homepageStatsVerified && homepageStats.length > 0 && (
         <div data-reveal>

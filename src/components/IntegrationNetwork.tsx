@@ -170,7 +170,7 @@ function MobileCell({ id, label }: { id: string; label: string }) {
 }
 
 export function IntegrationNetwork({ integrations }: { integrations?: string[] }) {
-  const adminList = (integrations ?? []).map((s) => s.trim()).filter(Boolean);
+  const adminList = (Array.isArray(integrations) ? integrations : []).map((s) => String(s).trim()).filter(Boolean);
   const knownIds = new Set([
     ...LEFT_FLANK.map(([id]) => id),
     ...RIGHT_FLANK.map(([id]) => id),
@@ -185,7 +185,9 @@ export function IntegrationNetwork({ integrations }: { integrations?: string[] }
     if (Object.keys(aliases).includes(key) && !knownIds.has(aliases[key])) missing.push(name);
   }
   const nodes = buildNodes(missing);
-  const extraDefs = missing.map((name, i) => {
+  // Cap extras to the 4 rendered satellite slots — lists longer than the
+  // slot pool must never index past it during prerender.
+  const extraDefs = missing.slice(0, 4).map((name, i) => {
     const id = `extra-${i}`;
     const [x, y] = [[400, 88], [800, 88], [330, 570], [870, 570]][i];
     const anchor = x < 600 ? "github" : "openai";

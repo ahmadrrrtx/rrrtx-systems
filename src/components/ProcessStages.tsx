@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, Code2, Rocket, BarChart3 } from "lucide-react";
 
 /**
@@ -58,6 +58,16 @@ const STEPS = [
 export function ProcessStages() {
   const [open, setOpen] = useState<number | null>(null);
 
+  // Escape closes the open stage detail.
+  useEffect(() => {
+    if (open === null) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   return (
     <div className="relative mt-16">
       {/* Spine with flowing dots (desktop); vertical on mobile via CSS */}
@@ -69,8 +79,16 @@ export function ProcessStages() {
             style={{ "--spine-delay": `${delay}s` } as React.CSSProperties}
           />
         ))}
+        {/* Diamond connector stations between the stage circles */}
+        {[25, 50, 75].map((left) => (
+          <span key={left} className="proc-diamond" style={{ left: `${left}%` }} />
+        ))}
       </div>
-      <div className="proc-spine md:hidden" aria-hidden="true" />
+      <div className="proc-spine md:hidden" aria-hidden="true">
+        {[25, 50, 75].map((top) => (
+          <span key={top} className="proc-diamond" style={{ top: `${top}%` }} />
+        ))}
+      </div>
 
       <ol className="relative grid gap-5 md:grid-cols-4 md:gap-5">
         {STEPS.map((step, index) => {
@@ -123,9 +141,21 @@ export function ProcessStages() {
                   aria-hidden={!isOpen}
                 >
                   <div className="pcard-pop-in">
-                    <b className="mb-1.5 block font-mono text-[9.5px] uppercase tracking-[0.14em]" style={{ color: step.color }}>
-                      Stage {step.number} · {step.subtitle}
-                    </b>
+                    <div className="mb-2 flex items-center justify-between gap-3">
+                      <b className="block font-mono text-[9.5px] uppercase tracking-[0.14em]" style={{ color: step.color }}>
+                        Stage {step.number} · {step.subtitle}
+                      </b>
+                      <span className="flex items-center gap-1.5" aria-hidden="true">
+                        {STEPS.map((s, di) => (
+                          <span
+                            key={s.number}
+                            className="proc-pop-step"
+                            data-done={di <= index}
+                            style={di === index ? ({ "--pc": step.color } as React.CSSProperties) : undefined}
+                          />
+                        ))}
+                      </span>
+                    </div>
                     {step.description}
                   </div>
                 </div>

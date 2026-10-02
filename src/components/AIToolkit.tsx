@@ -4,8 +4,8 @@ import { PLATFORM_ICON_PATHS } from "@/lib/platform-icons";
 
 /**
  * AI Development Assistance — the agentic engineering toolkit.
- * Static, server-rendered; movement is CSS-only (floating tiles + seek
- * pulse) and fully disabled under prefers-reduced-motion.
+ * Static, server-rendered; movement is CSS-only (floating tiles, seek
+ * pulse + travelling dots) and fully disabled under prefers-reduced-motion.
  */
 
 const TILE_FLOATS = [
@@ -48,25 +48,33 @@ export function AIToolkit() {
               <li
                 key={tool.name}
                 className="ait-tile"
-                style={{
-                  "--float-duration": TILE_FLOATS[i].d,
-                  "--float-delay": TILE_FLOATS[i].delay,
-                } as React.CSSProperties}
+                style={{ "--i": i } as React.CSSProperties}
               >
-                {tool.paths ? (
-                  <BrandIcon paths={tool.paths} className="ait-glyph" />
-                ) : (
-                  <span className="ait-glyph flex items-center justify-center font-mono text-[11px] font-bold text-slate-200" aria-hidden="true">
-                    {tool.glyph}
-                  </span>
-                )}
-                <b className="text-[12px] font-semibold text-slate-100">{tool.name}</b>
-                <small className="text-[9.5px] leading-snug text-slate-400">{tool.note}</small>
+                <span
+                  className="ait-float"
+                  style={{
+                    "--float-duration": TILE_FLOATS[i].d,
+                    "--float-delay": TILE_FLOATS[i].delay,
+                  } as React.CSSProperties}
+                >
+                  {tool.paths ? (
+                    <BrandIcon paths={tool.paths} className="ait-glyph" />
+                  ) : (
+                    <span className="ait-glyph flex items-center justify-center font-mono text-[11px] font-bold text-slate-200" aria-hidden="true">
+                      {tool.glyph}
+                    </span>
+                  )}
+                  <b className="text-[12px] font-semibold text-slate-100">{tool.name}</b>
+                  <small className="text-[9.5px] leading-snug text-slate-400">{tool.note}</small>
+                </span>
               </li>
             ))}
           </ul>
 
-          <div className="ait-seek" aria-hidden="true" />
+          <div className="ait-seek" aria-hidden="true">
+            <span className="ait-seek-dot" style={{ "--dot-duration": "5.5s", "--dot-delay": "0s" } as React.CSSProperties} />
+            <span className="ait-seek-dot ait-seek-dot--cyan" style={{ "--dot-duration": "7.5s", "--dot-delay": "-3.2s" } as React.CSSProperties} />
+          </div>
           <p className="relative mt-4 font-mono text-[10.5px] tracking-wide text-slate-500">
             {"// AI accelerates delivery; humans own the architecture, the review and the outcome."}
           </p>

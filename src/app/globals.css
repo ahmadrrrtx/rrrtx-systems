@@ -999,6 +999,7 @@ html.rrrtx-js [data-reveal].rrrtx-revealed {
 }
 .ait-tile {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   gap: 9px;
@@ -1007,12 +1008,20 @@ html.rrrtx-js [data-reveal].rrrtx-revealed {
   border-radius: .8125rem;
   background: rgba(2, 6, 23, .5);
   text-align: center;
-  animation: float-subtle var(--float-duration, 5.8s) ease-in-out infinite;
-  animation-delay: var(--float-delay, 0s);
   transition: transform var(--motion-base) var(--ease-premium), border-color var(--motion-base) ease;
 }
+.ait-float {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  animation: float-subtle var(--float-duration, 5.8s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
 @media (hover: hover) and (pointer: fine) {
-  .ait-tile:hover { transform: translateY(-5px) scale(1.03); border-color: rgba(167, 139, 250, .5); animation-play-state: paused; }
+  .ait-tile:hover { transform: translateY(-5px) scale(1.03); border-color: rgba(167, 139, 250, .5); }
+  .ait-tile:hover .ait-float { animation-play-state: paused; }
 }
 .ait-tile .ait-glyph { width: 26px; height: 26px; color: #e2e8f0; filter: drop-shadow(0 0 6px rgba(167, 139, 250, .5)); }
 .ait-seek {
@@ -1047,4 +1056,94 @@ html.rrrtx-js [data-reveal].rrrtx-revealed {
 .footer-link:hover {
   color: #67e8f9;
   background-size: 100% 1px;
+}
+
+/* ── Process v2 refinements: diamond stations + popover progress ── */
+.proc-diamond {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #0b1226;
+  border: 1.5px solid rgba(125, 211, 252, .65);
+  box-shadow: 0 0 10px rgba(56, 189, 248, .4);
+  z-index: 1;
+}
+.proc-diamond::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(125, 211, 252, .45);
+  transform: rotate(0deg);
+  animation: proc-diamond-ping 3.2s var(--ease-premium) infinite;
+}
+@keyframes proc-diamond-ping {
+  0%, 100% { opacity: 0; transform: scale(.6); }
+  50% { opacity: .8; transform: scale(1); }
+}
+.proc-pop-step {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  border: 1px solid rgba(148, 163, 184, .5);
+  background: transparent;
+}
+.proc-pop-step[data-done="true"] {
+  background: color-mix(in srgb, var(--pc, #22d3ee) 55%, transparent);
+  border-color: var(--pc, #22d3ee);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--pc, #22d3ee) 60%, transparent);
+}
+
+/* ── AI band: extra moving pulses ── */
+.ait-seek-dot {
+  position: absolute;
+  top: -1.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c4b5fd;
+  box-shadow: 0 0 10px #a78bfa, 0 0 20px rgba(167, 139, 250, .5);
+  animation: ait-dot-move var(--dot-duration, 6s) linear infinite;
+  animation-delay: var(--dot-delay, 0s);
+}
+.ait-seek-dot--cyan { background: #67e8f9; box-shadow: 0 0 10px #22d3ee, 0 0 20px rgba(34, 211, 238, .5); }
+@keyframes ait-dot-move {
+  0% { left: -2%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: 102%; opacity: 0; }
+}
+
+/* ── Entrance staggers (run when the section reveals) ── */
+@keyframes card-flip-in {
+  from { opacity: 0; transform: perspective(700px) rotateY(70deg) translateY(10px); }
+  to { opacity: 1; transform: perspective(700px) rotateY(0deg) translateY(0); }
+}
+@keyframes card-rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+html.rrrtx-js [data-reveal].rrrtx-revealed .stack-flip {
+  animation: card-flip-in .6s var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+html.rrrtx-js [data-reveal].rrrtx-revealed .ait-tile {
+  animation: card-rise-in .55s var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+html.rrrtx-js [data-reveal].rrrtx-revealed .svc-card {
+  animation: card-rise-in .55s var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+html.rrrtx-js [data-reveal].rrrtx-revealed .faq-item {
+  animation: card-rise-in .5s var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.rrrtx-js [data-reveal].rrrtx-revealed .stack-flip,
+  html.rrrtx-js [data-reveal].rrrtx-revealed .ait-tile,
+  html.rrrtx-js [data-reveal].rrrtx-revealed .svc-card,
+  html.rrrtx-js [data-reveal].rrrtx-revealed .faq-item { animation: none; }
+  .proc-diamond::after, .ait-seek-dot { display: none; }
 }

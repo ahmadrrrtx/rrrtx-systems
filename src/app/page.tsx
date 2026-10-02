@@ -13,6 +13,7 @@ import { TechStack } from "@/components/TechStack";
 import { AIToolkit } from "@/components/AIToolkit";
 import { PricingSection } from "@/components/PricingSection";
 import { BlogTeaser } from "@/components/BlogTeaser";
+import { HomeFAQSection } from "@/components/HomeFAQSection";
 import { ToolsCapsules } from "@/components/ToolsCapsules";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
@@ -157,6 +158,9 @@ export default async function Home() {
       </div>
       <div data-reveal>
         <BlogTeaser posts={dbPosts.slice(0, 3)} />
+      </div>
+      <div data-reveal>
+        <HomeFAQSection />
       </div>
       <div data-reveal>
         <CTASection />

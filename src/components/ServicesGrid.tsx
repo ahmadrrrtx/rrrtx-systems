@@ -120,7 +120,8 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
             return (
               <div
                 key={service.title}
-                className={featured ? "lg:col-span-3" : "lg:col-span-2"}
+                className={`svc-card ${featured ? "lg:col-span-3" : "lg:col-span-2"}`}
+                style={{ "--i": i } as React.CSSProperties}
               >
                 <Link
                   href={service.href}
@@ -184,7 +185,8 @@ export function ServicesGrid({ items }: { items?: ServiceItem[] }) {
           {supportingServices.map((service, i) => (
             <div
               key={service.title}
-              className={service.wide ? "lg:col-span-6" : "lg:col-span-2 md:col-span-1"}
+              className={`svc-card ${service.wide ? "lg:col-span-6" : "lg:col-span-2 md:col-span-1"}`}
+              style={{ "--i": services.length + i } as React.CSSProperties}
             >
               <Link
                 href={service.href}

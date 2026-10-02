@@ -21,7 +21,7 @@ const defaultStack: StackItem[] = [
   { name: "Next.js", category: "Framework" },
   { name: "React", category: "Frontend" },
   { name: "TypeScript", category: "Language" },
-  { name: "Tailwind CSS", category: "Styling" },
+  { name: "Tailwind", category: "Styling" },
   { name: "Framer", category: "Motion" },
   { name: "Node.js", category: "Runtime" },
   { name: "Python", category: "AI & Scripts" },
@@ -62,7 +62,7 @@ export function TechStack({ items }: { items?: StackItem[] }) {
 
         <div className="grid grid-cols-3 gap-3.5 sm:grid-cols-5 lg:grid-cols-7" role="list" aria-label="Technologies RRRTX works with">
           {stack.map((item, index) => (
-            <div key={`${item.name}-${item.category}`} role="listitem">
+            <div key={`${item.name}-${item.category}`} role="listitem" style={{ "--i": index } as React.CSSProperties}>
               <StackFlipCard
                 name={item.name}
                 category={item.category}
